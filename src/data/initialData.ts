@@ -24,8 +24,8 @@ export const BANK_ACCOUNTS: BankAccount[] = [
     id: 'bml-mvr',
     bankName: 'ބޭންކް އޮފް މޯލްޑިވްސް (BML)',
     bankCode: 'BML',
-    accountName: 'HEYO BINGAA NGO',
-    accountNumber: '7730000584219',
+    accountName: 'HEYO BINGAA',
+    accountNumber: '7770000179374',
     currency: 'MVR',
     badge: 'ދިވެހި ރުފިޔާ (MVR)'
   },
@@ -33,8 +33,8 @@ export const BANK_ACCOUNTS: BankAccount[] = [
     id: 'bml-usd',
     bankName: 'ބޭންކް އޮފް މޯލްޑިވްސް (BML)',
     bankCode: 'BML',
-    accountName: 'HEYO BINGAA NGO',
-    accountNumber: '7730000584220',
+    accountName: 'HEYO BINGAA',
+    accountNumber: '7770000179375',
     currency: 'USD',
     badge: 'ޔޫ.އެސް ޑޮލަރު (USD)'
   },
@@ -42,8 +42,8 @@ export const BANK_ACCOUNTS: BankAccount[] = [
     id: 'mib-mvr',
     bankName: 'މޯލްޑިވްސް އިސްލާމިކް ބޭންކް (MIB)',
     bankCode: 'MIB',
-    accountName: 'HEYO BINGAA NGO',
-    accountNumber: '901018421901',
+    accountName: 'HEYO BINGAA',
+    accountNumber: '90101555001661000',
     currency: 'MVR',
     badge: 'ދިވެހި ރުފިޔާ (MVR)'
   },
@@ -51,8 +51,8 @@ export const BANK_ACCOUNTS: BankAccount[] = [
     id: 'mib-usd',
     bankName: 'މޯލްޑިވްސް އިސްލާމިކް ބޭންކް (MIB)',
     bankCode: 'MIB',
-    accountName: 'HEYO BINGAA NGO',
-    accountNumber: '901018421902',
+    accountName: 'HEYO BINGAA',
+    accountNumber: '90101555001662000',
     currency: 'USD',
     badge: 'ޔޫ.އެސް ޑޮލަރު (USD)'
   }
