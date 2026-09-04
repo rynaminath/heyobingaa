@@ -68,9 +68,17 @@ export const PARTNERS: PartnerOrg[] = [
     accentColor: 'emerald'
   },
   {
+    id: 'salaf',
+    nameDv: 'ޖަމްޢިއްޔަތުއް ސަލަފް',
+    nameEn: 'Jamiyyathul Salaf',
+    role: 'ދީނީ ޕްރޮގްރާމްތަކާއި ދަރުސްތައް އިންތިޒާމުކުރުން',
+    tag: 'ދަޢުވަތީ ބައިވެރިޔާ',
+    accentColor: 'green'
+  },
+  {
     id: 'dhares-tv',
-    nameDv: 'ދާރެސް ޓީވީ',
-    nameEn: 'Dhares TV',
+    nameDv: 'ދާރިސް ޓީވީ',
+    nameEn: 'Dhaaris TV',
     role: 'ޓީވީ ޕްރޮގްރާމްތަކާއި އިޝާރާތުގެ ބަހުރުވަ އުފެއްދުން',
     tag: 'މީޑިއާ ބައިވެރިޔާ',
     accentColor: 'blue'
@@ -106,14 +114,6 @@ export const PARTNERS: PartnerOrg[] = [
     role: 'އިޖުތިމާޢީ އަދި ކާރިސާތަކުގައި ގުޅިގެން މަސައްކަތްކުރުން',
     tag: 'އިންސާނީ ބައިވެރިޔާ',
     accentColor: 'amber'
-  },
-  {
-    id: 'salaf',
-    nameDv: 'ޖަމްޢިއްޔަތުއް ސަލަފް',
-    nameEn: 'Jamiyyathul Salaf',
-    role: 'ދީނީ ޕްރޮގްރާމްތަކާއި ދަރުސްތައް އިންތިޒާމުކުރުން',
-    tag: 'ދަޢުވަތީ ބައިވެރިޔާ',
-    accentColor: 'cyan'
   }
 ];
 
