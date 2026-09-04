@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Faruma';
+  src: url('/Faruma.ttf') format('truetype'),
+       url('./Faruma.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --font-thaana: 'Faruma', 'Noto Sans Thaana', 'MV Waheed', 'A_Waheed', system-ui, -apple-system, sans-serif;
+    --font-latin: 'Plus Jakarta Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    
+    /* Harmonious Soft Color Theme: Green, Red, Blue, White */
+    --color-green: #1B6B52;
+    --color-green-hover: #145541;
+    --color-green-light: #EBF5F0;
+    --color-green-border: #C8E0D5;
+
+    --color-red: #B83244;
+    --color-red-hover: #9A2434;
+    --color-red-light: #FDF1F2;
+    --color-red-border: #F7D0D4;
+
+    --color-blue: #255D96;
+    --color-blue-hover: #1C4875;
+    --color-blue-light: #EDF4FC;
+    --color-blue-border: #CFE2F5;
+
+    --color-bg: #F8FAF9;
+    --color-card: #FFFFFF;
+    --color-text: #1C2622;
+    --color-text-muted: #556660;
+    --color-border: #E2E9E5;
+  }
+
+  /* Increase font sizes by 50% for optimal Faruma Dhivehi clarity */
+  html {
+    font-size: 150%;
+  }
+
+  body {
+    font-family: var(--font-thaana);
+    direction: rtl;
+    text-align: right;
+    line-height: 2.1;
+    letter-spacing: 0.015em;
+    background-color: #F8FAF9;
+    color: #1C2622;
+  }
+}
+
+.font-thaana {
+  font-family: var(--font-thaana);
+}
+
+.font-latin {
+  font-family: var(--font-latin);
+}
+
+/* Thaana-optimized line heights so fili (accents) never clip */
+.thaana-relaxed {
+  line-height: 2.3;
+}
+
+.thaana-loose {
+  line-height: 2.5;
+}
+
+/* Custom smooth scrollbar in soft sage tone */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F8FAF9;
+}
+::-webkit-scrollbar-thumb {
+  background: #C8E0D5;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9DBFA0;
+}
+
+
