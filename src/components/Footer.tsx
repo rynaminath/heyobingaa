@@ -40,7 +40,7 @@ export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#7360F2] hover:bg-[#604CE2] text-white font-semibold text-xs sm:text-sm shadow-md transition-colors"
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>ސްލިޕް ވައިބަރ ކުރައްވާ ({NGO_CONTACT.viberNumberFormatted})</span>
+                <span>ސްލިޕް ވައިބަރ ކުރައްވާ (<span dir="ltr" className="font-mono font-bold">{NGO_CONTACT.viberNumberFormatted}</span>)</span>
               </button>
 
               <button
@@ -54,13 +54,12 @@ export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
             </div>
           </div>
 
-          {/* Grid of Bank Account Cards with One-Touch Copy */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
+          {/* Grid of Bank Account Cards (2 Banks x 2 Accounts) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6">
             {BANK_ACCOUNTS.map((acc) => (
               <BankCard
                 key={acc.id}
                 account={acc}
-                onUploadReceipt={onOpenDonateModal}
               />
             ))}
           </div>
@@ -76,7 +75,7 @@ export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
             </p>
             <div className="pt-2 flex flex-wrap gap-2 text-xs text-[#A7F3D0]">
               <span className="px-3 py-1 rounded-md bg-[#18392F] border border-[#234A3E]">
-                ރަޖިސްޓްރީ: 15/01/2024
+                ރަޖިސްޓްރީ: <span dir="ltr" className="font-mono">15/01/2024</span>
               </span>
               <span className="px-3 py-1 rounded-md bg-[#18392F] border border-[#234A3E]">
                 ސިސްޓާސް-ލެޑް އެންޖީއޯ
@@ -139,17 +138,17 @@ export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
               <div className="flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-[#A7F3D0] shrink-0" />
                 <span className="font-thaana">ވައިބަރ: </span>
-                <a href={NGO_CONTACT.viberLink} target="_blank" rel="noopener noreferrer" dir="ltr" className="font-latin text-white hover:underline">
+                <a href={NGO_CONTACT.viberLink} target="_blank" rel="noopener noreferrer" dir="ltr" className="font-mono text-white hover:underline font-bold">
                   {NGO_CONTACT.viberNumberFormatted}
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-[#A7F3D0] shrink-0" />
-                <span dir="ltr" className="font-latin">{NGO_CONTACT.phone} / {NGO_CONTACT.secondaryPhone}</span>
+                <span dir="ltr" className="font-mono">{NGO_CONTACT.phone} / {NGO_CONTACT.secondaryPhone}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[#A7F3D0] shrink-0" />
-                <span dir="ltr" className="font-latin">{NGO_CONTACT.email}</span>
+                <span dir="ltr" className="font-mono">{NGO_CONTACT.email}</span>
               </div>
               <div className="pt-2">
                 <button
@@ -158,7 +157,7 @@ export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
                   className="text-xs text-[#A7F3D0] hover:text-white underline underline-offset-4 flex items-center gap-1.5"
                 >
                   <MessageSquare className="w-3.5 h-3.5" />
-                  <span>ޓްރާންސްފަރ ސްލިޕް ވައިބަރ އަށް ފޮނުއްވާ (+960 752-2778)</span>
+                  <span>ޓްރާންސްފަރ ސްލިޕް ވައިބަރ އަށް ފޮނުއްވާ (<span dir="ltr" className="font-mono">{NGO_CONTACT.viberNumberFormatted}</span>)</span>
                 </button>
               </div>
             </div>

@@ -1,4 +1,5 @@
-import { X, Play, Share2, Eye, Calendar, UserCheck } from 'lucide-react';
+import { useState } from 'react';
+import { X, Play, Share2, Eye, Calendar, UserCheck, ExternalLink } from 'lucide-react';
 import { MediaItem } from '../types';
 
 interface VideoPlayerModalProps {
@@ -7,7 +8,13 @@ interface VideoPlayerModalProps {
 }
 
 export default function VideoPlayerModal({ media, onClose }: VideoPlayerModalProps) {
+  const [isPlaying, setIsPlaying] = useState(true);
+
   if (!media) return null;
+
+  const youtubeWatchUrl = media.id === 'media-1' || media.videoEmbedUrl?.includes('3Q_Za7OtXNA')
+    ? 'https://www.youtube.com/watch?v=3Q_Za7OtXNA'
+    : 'https://www.youtube.com/@heyobingaa';
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -15,37 +22,37 @@ export default function VideoPlayerModal({ media, onClose }: VideoPlayerModalPro
         await navigator.share({
           title: media.title,
           text: `${media.title} - ހެޔޮބިންގާ & ދާރެސް ޓީވީ`,
-          url: window.location.href,
+          url: youtubeWatchUrl,
         });
       } catch {
         // Ignored
       }
     } else {
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(youtubeWatchUrl);
       alert('ލިންކް ކޮޕީ ކުރެވިއްޖެ!');
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
       <div 
-        className="relative w-full max-w-3xl bg-slate-900 text-slate-100 rounded-3xl shadow-2xl border border-slate-700 overflow-hidden my-6"
+        className="relative w-full max-w-3xl bg-[#171514] text-slate-100 rounded-3xl shadow-2xl border border-stone-800 overflow-hidden my-6"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 sm:p-5 flex items-center justify-between border-b border-slate-800 bg-[#171514]">
+        <div className="p-4 sm:p-5 flex items-center justify-between border-b border-stone-800 bg-[#141211]">
           <div className="text-right">
-            <div className="flex items-center gap-2">
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#8B2E34]/30 text-[#F9EDED] border border-[#8B2E34]/40 font-thaana">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#1B6B52]/30 text-[#A7F3D0] border border-[#1B6B52]/50 font-thaana">
                 {media.partner}
               </span>
               {media.isDeafAccessible && (
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#F27D26]/20 text-[#F27D26] border border-[#F27D26]/40 font-thaana flex items-center gap-1 font-bold">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#255D96]/30 text-[#CFE2F5] border border-[#255D96]/50 font-thaana flex items-center gap-1 font-bold">
                   <span>އިޝާރާތުގެ ބަހުރުވަ (Sign Language)</span>
                 </span>
               )}
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-white font-thaana mt-1">
+            <h3 className="text-base sm:text-lg font-bold text-white font-thaana mt-1 line-clamp-1">
               {media.title}
             </h3>
           </div>
@@ -53,98 +60,96 @@ export default function VideoPlayerModal({ media, onClose }: VideoPlayerModalPro
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-xl bg-[#292523] hover:bg-[#3D3734] text-[#D8D2C7] hover:text-white transition-colors"
+            className="p-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Video Simulation / Player Container */}
-        <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden group">
-          <img
-            src={media.thumbnailUrl}
-            alt={media.title}
-            className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500"
-          />
+        {/* Responsive Video Container */}
+        <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
+          {isPlaying && media.videoEmbedUrl ? (
+            <iframe
+              src={`${media.videoEmbedUrl}?autoplay=1&rel=0`}
+              title={media.title}
+              className="w-full h-full border-0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          ) : (
+            <div className="relative w-full h-full">
+              <img
+                src={media.thumbnailUrl}
+                alt={media.title}
+                className="w-full h-full object-cover opacity-80"
+              />
+              <button
+                type="button"
+                onClick={() => setIsPlaying(true)}
+                className="absolute inset-0 m-auto w-16 h-16 rounded-full bg-[#B83244] hover:bg-[#9A2434] text-white flex items-center justify-center shadow-2xl transition-transform hover:scale-110"
+              >
+                <Play className="w-8 h-8 fill-current translate-x-0.5" />
+              </button>
+            </div>
+          )}
+        </div>
 
-          {/* Player controls overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#171514] via-transparent to-transparent flex flex-col justify-between p-6">
-            <div className="flex justify-end">
-              <span className="text-xs font-mono bg-black/70 px-2.5 py-1 rounded text-slate-200">
+        {/* Video Information & Actions */}
+        <div className="p-5 sm:p-6 space-y-4 text-right font-thaana bg-[#1A1817]">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-stone-800">
+            <div className="flex items-center gap-4 text-xs text-stone-300">
+              <span className="flex items-center gap-1 font-mono" dir="ltr">
+                <Eye className="w-3.5 h-3.5 text-[#A7F3D0]" />
+                <span>{media.viewsCount || '4.8k'}</span>
+              </span>
+              <span className="flex items-center gap-1 font-mono" dir="ltr">
+                <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                <span>{media.publishedDate}</span>
+              </span>
+              <span className="px-2 py-0.5 rounded bg-stone-800 text-stone-300 text-xs font-mono" dir="ltr">
                 {media.duration}
               </span>
             </div>
 
-            {/* Play Button & Center Indicator */}
-            <div className="self-center flex flex-col items-center gap-3">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#8B2E34] hover:bg-[#702328] text-white flex items-center justify-center shadow-xl shadow-black/60 ring-4 ring-[#F27D26]/40 hover:scale-110 active:scale-95 transition-all cursor-pointer">
-                <Play className="w-8 h-8 fill-current translate-x-0.5" />
-              </div>
-              <span className="text-xs sm:text-sm font-thaana bg-black/60 px-3 py-1 rounded-full text-slate-200">
-                ދާރެސް ޓީވީ އަދި ހެޔޮބިންގާ ޕްރޮޑަކްޝަން
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between text-xs text-slate-300">
-              <div className="flex items-center gap-4">
-                <span className="flex items-center gap-1 font-mono">
-                  <Eye className="w-3.5 h-3.5 text-[#F27D26]" />
-                  <span>{media.viewsCount || '2.5k'} ބެލުންތެރިން</span>
-                </span>
-                <span className="flex items-center gap-1 font-mono">
-                  <Calendar className="w-3.5 h-3.5 text-[#BDB7AB]" />
-                  <span>{media.publishedDate}</span>
-                </span>
-              </div>
+            <div className="flex items-center gap-2">
+              <a
+                href={youtubeWatchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#CC0000] hover:bg-[#B30000] text-white font-thaana text-xs font-bold transition-all shadow-xs"
+              >
+                <span>ޔޫޓިއުބުން ބައްލަވާ</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
 
               <button
                 type="button"
                 onClick={handleShare}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-thaana transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 font-thaana text-xs transition-colors"
               >
                 <Share2 className="w-3.5 h-3.5" />
-                <span>ޙިއްޞާކުރައްވާ</span>
+                <span>ޙިއްޞާ</span>
               </button>
             </div>
           </div>
-        </div>
 
-        {/* Video Information & Accessibility metadata */}
-        <div className="p-6 space-y-4 text-right font-thaana bg-[#1F1C1B]">
           {media.interpreter && (
-            <div className="p-3 rounded-2xl bg-[#292523] border border-[#3D3734] flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 text-xs text-[#D8D2C7]">
-                <UserCheck className="w-4 h-4 text-[#F27D26]" />
+            <div className="p-3 rounded-xl bg-stone-900/80 border border-stone-800 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-xs text-stone-300">
+                <UserCheck className="w-4 h-4 text-[#A7F3D0] shrink-0" />
                 <span>އިޝާރާތުގެ ބަހުރުވައިގެ ތަރުޖަމާ: <strong className="text-white">{media.interpreter}</strong></span>
               </div>
-              <span className="text-[11px] px-2 py-0.5 rounded bg-[#8B2E34]/40 text-[#F9EDED] border border-[#8B2E34]/50">
+              <span className="text-[11px] px-2 py-0.5 rounded bg-[#1B6B52]/40 text-[#EBF5F0] border border-[#1B6B52]/50">
                 ބީރު މުޖުތަމަޢަށް ޚާއްޞަ
               </span>
             </div>
           )}
 
-          <div className="space-y-2">
-            <h4 className="text-sm font-bold text-slate-200">ޕްރޮގްރާމްގެ ޚުލާޞާ:</h4>
-            <p className="text-xs sm:text-sm text-[#BDB7AB] leading-relaxed">
+          <div className="space-y-1.5">
+            <h4 className="text-xs font-bold text-stone-400">ޕްރޮގްރާމްގެ ޚުލާޞާ:</h4>
+            <p className="text-xs sm:text-sm text-stone-300 leading-relaxed">
               {media.summary}
             </p>
-          </div>
-
-          <div className="pt-3 border-t border-[#38332F] flex flex-wrap items-center justify-between gap-3 text-xs text-[#BDB7AB]">
-            <div>
-              <span>ޕާޓްނަރ: </span>
-              <strong className="text-white">{media.partner}</strong>
-            </div>
-            <div>
-              <span>ސިލްސިލާ: </span>
-              <strong className="text-white">{media.series}</strong>
-            </div>
-            {media.speaker && (
-              <div>
-                <span>ބައިވެރިވެވަޑައިގަތީ: </span>
-                <strong className="text-white">{media.speaker}</strong>
-              </div>
-            )}
           </div>
         </div>
       </div>

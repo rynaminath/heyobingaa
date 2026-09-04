@@ -38,7 +38,16 @@ export const BANK_ACCOUNTS: BankAccount[] = [
     accountName: 'HEYO BINGAA NGO',
     accountNumber: '901018421901',
     currency: 'MVR',
-    badge: 'އިސްލާމިކް ބޭންކް (MVR)'
+    badge: 'ދިވެހި ރުފިޔާ (MVR)'
+  },
+  {
+    id: 'mib-usd',
+    bankName: 'މޯލްޑިވްސް އިސްލާމިކް ބޭންކް (MIB)',
+    bankCode: 'MIB',
+    accountName: 'HEYO BINGAA NGO',
+    accountNumber: '901018421902',
+    currency: 'USD',
+    badge: 'ޔޫ.އެސް ޑޮލަރު (USD)'
   }
 ];
 
@@ -155,20 +164,20 @@ export const INITIAL_EVENTS: EventItem[] = [
 export const INITIAL_MEDIA: MediaItem[] = [
   {
     id: 'media-1',
-    title: 'ނޫރުލް ހިދާޔާ: އިޝާރާތުގެ ބަހުރުވައިން ޠަހާރަތާއި ނަމާދު',
-    series: 'ނޫރުލް ހިދާޔާ (Noorul Hidhaaya)',
+    title: 'ރޯދަ ލީފްލެޓް: އިޝާރާތުގެ ބަހުރުވައިގެ ފުރިހަމަ ތަރުޖަމާއާއެކު',
+    series: 'ދާރެސް ޓީވީ & ހެޔޮބިންގާ',
     episodeNumber: 1,
-    duration: '28 މިނެޓު',
-    speaker: 'އައްޝައިޚް އަޙްމަދު ސަމީރު',
-    interpreter: 'ފާޠިމަތު ނަޢީމާ (ސައިން ލެންގުއޭޖް އިންޓަޕްރިޓަރ)',
+    duration: '10 މިނެޓު',
+    speaker: 'ހެޔޮބިންގާ ޓީމު',
+    interpreter: 'އިޝާރާތުގެ ބަހުރުވައިގެ ފުރިހަމަ ތަރުޖަމާ',
     isDeafAccessible: true,
     partner: 'ދާރެސް ޓީވީ (Dhares TV)',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=800&q=80',
-    videoEmbedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    summary: 'ދާރެސް ޓީވީއާ ގުޅިގެން އުފައްދާފައިވާ ބީރު މުޖުތަމަޢަށް ޚާއްޞަ ޕްރޮގްރާމް ސިލްސިލާ. ފުރަތަމަ އެޕިސޯޑުގައި ވުޟޫކުރުމާއި ނަމާދުގެ ރުކުންތައް އިޝާރާތުގެ ބަހުރުވައިން ގެނެސްދެވިފައިވެއެވެ.',
+    thumbnailUrl: 'https://i.ytimg.com/vi/3Q_Za7OtXNA/hqdefault.jpg',
+    videoEmbedUrl: 'https://www.youtube.com/embed/3Q_Za7OtXNA',
+    summary: 'ދާރެސް ޓީވީއާ ގުޅިގެން ހެޔޮބިންގާއިން ތައްޔާރުކޮށްފައިވާ ރޯދަ ލީފްލެޓް. ބީރު އަދި އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކަށް ޚާއްޞަކޮށް ފުރިހަމަ އިޝާރާތުގެ ބަހުރުވައިގެ ތަރުޖަމާއާއެކު ގެނެސްދެވިފައިވާ މުހިންމު ދަޢުވަތީ ޕްރޮގްރާމެއް.',
     category: 'deaf_accessible',
-    publishedDate: '2026-02-14',
-    viewsCount: '4.2k'
+    publishedDate: '2026-03-01',
+    viewsCount: '4.8k'
   },
   {
     id: 'media-2',

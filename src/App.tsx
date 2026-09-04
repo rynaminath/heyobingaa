@@ -24,6 +24,72 @@ export default function App() {
   const events = INITIAL_EVENTS;
   const mediaList = INITIAL_MEDIA;
 
+  // Dynamic Meta Tag Generator for Tab-Based Discoverability & SEO
+  useEffect(() => {
+    const tabMetaConfig: Record<NavigationTab, { title: string; description: string }> = {
+      home: {
+        title: 'Heyo Bingaa NGO | Official Portal (ހެޔޮބިންގާ)',
+        description: 'ހެޔޮބިންގާ - ދިވެހިރާއްޖޭގައި އިސްލާމީ ދަޢުވަތާއި، ބީރު މުޖުތަމަޢަށް އިޝާރާތުގެ ބަހުރުވައިން ދީނީ ހޭލުންތެރިކަން ފޯރުކޮށްދިނުމުގައި ޙަރަކާތްތެރިވާ އުޚުތުންގެ ޖަމްޢިއްޔާ.'
+      },
+      programs: {
+        title: 'Programs | Heyo Bingaa NGO',
+        description: 'ހެޔޮބިންގާގެ މައިގަނޑު ދަޢުވަތީ އަދި ތަރުބަވީ ޕްރޮގްރާމްތައް: ބީރު ކުދިންނަށް ދީނީ ތަޢުލީމު، ޢާއިލީ ދަރުސްތައް އަދި ދަޢުވާ ވަޞީލަތްތައް.'
+      },
+      about: {
+        title: 'About Us | Heyo Bingaa NGO',
+        description: 'ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ ތާރީޚު، ތަޞައްވުރު، މަޤްޞަދު އަދި ދަޢުވަތީ ޚިދުމަތްތައް.'
+      },
+      media: {
+        title: 'Media Archive | Heyo Bingaa NGO',
+        description: 'ދާރެސް ޓީވީއާއި ގުޅިގެން ތައްޔާރުކުރެވިފައިވާ އިޝާރާތުގެ ބަހުރުވައިގެ ވީޑިއޯތަކާއި ހެޔޮބިންގާގެ މީޑިއާ އާކައިވް.'
+      },
+      events: {
+        title: 'Events & Campaigns | Heyo Bingaa NGO',
+        description: 'ހެޔޮބިންގާއިން ރާވާ ހިންގާ ކުރިއަށް ހުރި ޙަރަކާތްތަކާއި ދަޢުވަތީ އިވެންޓްތައް.'
+      },
+      volunteer: {
+        title: 'Volunteer | Heyo Bingaa NGO',
+        description: 'ހެޔޮބިންގާގެ އިސްލާމީ އަދި އިޖުތިމާޢީ ޚިދުމަތްތަކުގައި ވޮލަންޓިއަރެއްގެ ގޮތުގައި ބައިވެރިވެވަޑައިގަންނަވާ.'
+      },
+      donate: {
+        title: 'Donate & Ehee | Heyo Bingaa NGO',
+        description: 'ހެޔޮބިންގާގެ ދަޢުވަތީ މަސައްކަތްތަކަށް މާލީ އެހީތެރިކަން ފޯރުކޮށްދެއްވާ. ބޭންކް އެކައުންޓްތަކާއި ވައިބަރ ސްލިޕް ހޮޓްލައިން.'
+      }
+    };
+
+    const currentMeta = tabMetaConfig[currentTab] || tabMetaConfig.home;
+
+    // Update document title
+    document.title = currentMeta.title;
+
+    // Update or inject <meta name="description">
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', currentMeta.description);
+
+    // Update or inject <meta property="og:title">
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (!ogTitle) {
+      ogTitle = document.createElement('meta');
+      ogTitle.setAttribute('property', 'og:title');
+      document.head.appendChild(ogTitle);
+    }
+    ogTitle.setAttribute('content', currentMeta.title);
+
+    // Update or inject <meta property="og:description">
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (!ogDesc) {
+      ogDesc = document.createElement('meta');
+      ogDesc.setAttribute('property', 'og:description');
+      document.head.appendChild(ogDesc);
+    }
+    ogDesc.setAttribute('content', currentMeta.description);
+  }, [currentTab]);
+
   // Sync /ehee hash route or path
   useEffect(() => {
     const handleHash = () => {

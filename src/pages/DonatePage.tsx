@@ -117,20 +117,20 @@ export default function DonatePage({}: DonatePageProps) {
       {/* Main Action Grid: Bank Accounts & Viber Slip Action */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left / Bank Accounts Column */}
-        <div className="lg:col-span-6 space-y-4 text-right">
+        <div className="lg:col-span-7 space-y-4 text-right">
           <div className="space-y-1">
             <span className="text-xs font-bold text-[#1B6B52] uppercase tracking-wider">
-              އެކައުންޓް މަޢުލޫމާތު
+              އެކައުންޓް މަޢުލޫމާތު (2 ބޭންކް • 4 އެކައުންޓް)
             </span>
             <h3 className="text-2xl font-bold text-[#1C2622]">
               ރަސްމީ ބޭންކް އެކައުންޓްތައް
             </h3>
             <p className="text-xs text-[#556660]">
-              އެކައުންޓް ނަންބަރު ކޮޕީކުރެއްވުމަށް 'ނަންބަރު ކޮޕީ' އަށް ފިއްތަވާލައްވާ.
+              ބީއެމްއެލް (BML) އަދި އެމްއައިބީ (MIB) ގެ ދިވެހި ރުފިޔާ އަދި ޑޮލަރު އެކައުންޓް.
             </p>
           </div>
 
-          <div className="space-y-4 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
             {BANK_ACCOUNTS.map((acc) => (
               <BankCard key={acc.id} account={acc} />
             ))}
@@ -142,13 +142,13 @@ export default function DonatePage({}: DonatePageProps) {
               <span>ހާމަކަން ބޮޑު އިތުބާރު އަދި ރަޖިސްޓްރީ</span>
             </div>
             <p className="leading-relaxed text-[11px] text-[#556660]">
-              ހެޔޮބިންގާ އަކީ ދިވެހި ސަރުކާރުގައި ޤާނޫނީ ގޮތުން ރަޖިސްޓްރީ ކުރެވިފައިވާ (15 ޖެނުއަރީ 2024)، އެންމެހައި އެހީގެ ފައިސާގެ އޮޑިޓް ހެދި، ޤަވާޢިދުން ކަމާބެހޭ އިދާރާތަކަށް ހުށަހެޅޭ ޖަމްޢިއްޔާއެކެވެ.
+              ހެޔޮބިންގާ އަކީ ދިވެހި ސަރުކާރުގައި ޤާނޫނީ ގޮތުން ރަޖިސްޓްރީ ކުރެވިފައިވާ (<span dir="ltr" className="font-mono">15/01/2024</span>)، އެންމެހައި އެހީގެ ފައިސާގެ އޮޑިޓް ހެދި، ޤަވާޢިދުން ކަމާބެހޭ އިދާރާތަކަށް ހުށަހެޅޭ ޖަމްޢިއްޔާއެކެވެ.
             </p>
           </div>
         </div>
 
         {/* Right / Viber Slip Action Column */}
-        <div className="lg:col-span-6 bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E9E5] shadow-md text-right space-y-6">
+        <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E9E5] shadow-md text-right space-y-6">
           <div className="p-6 rounded-2xl bg-gradient-to-br from-[#EBF5F0] via-[#F4F9F6] to-white border border-[#C8E0D5] space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1B6B52] text-white text-xs font-bold">
               <MessageSquare className="w-3.5 h-3.5" />

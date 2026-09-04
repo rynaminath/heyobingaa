@@ -6,27 +6,27 @@ interface LogoProps {
   showSubtitle?: boolean;
 }
 
-export default function Logo({ size = 'md', variant = 'colored', showSubtitle = true }: LogoProps) {
+export default function Logo({ size = 'md', variant = 'colored' }: LogoProps) {
   const iconSizes = {
     sm: 'w-9 h-9',
-    md: 'w-12 h-12',
-    lg: 'w-16 h-16'
+    md: 'w-11 h-11 sm:w-12 sm:h-12',
+    lg: 'w-14 h-14 sm:w-16 sm:h-16'
   };
 
   const titleSizes = {
-    sm: 'text-xl',
-    md: 'text-2xl sm:text-3xl',
-    lg: 'text-3xl sm:text-4xl'
+    sm: 'text-lg sm:text-xl',
+    md: 'text-xl sm:text-2xl',
+    lg: 'text-2xl sm:text-3xl'
   };
 
-  const subtitleSizes = {
-    sm: 'text-xs',
-    md: 'text-sm',
-    lg: 'text-base'
+  const englishSizes = {
+    sm: 'text-[11px]',
+    md: 'text-xs sm:text-sm',
+    lg: 'text-sm sm:text-base'
   };
 
   return (
-    <div className="flex items-center gap-3 select-none text-right">
+    <div className="flex items-center gap-2.5 sm:gap-3 select-none text-right">
       {/* Official Uploaded Logo */}
       <div className={`relative ${iconSizes[size]} flex items-center justify-center shrink-0`}>
         <img
@@ -36,21 +36,17 @@ export default function Logo({ size = 'md', variant = 'colored', showSubtitle = 
         />
       </div>
 
-      {/* Brand Typography in Faruma Thaana */}
+      {/* Brand Typography: Dhivehi on top, English below */}
       <div className="flex flex-col justify-center leading-tight">
-        <div className="flex items-baseline gap-2">
-          <span className={`font-bold tracking-tight font-thaana ${titleSizes[size]} ${variant === 'dark' ? 'text-white' : 'text-[#1E2623]'}`}>
-            ހެޔޮބިންގާ
-          </span>
-          <span className="text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#EBF5F0] text-[#1B6B52] border border-[#1B6B52]/20 font-latin">
-            NGO
-          </span>
-        </div>
-        {showSubtitle && (
-          <span className={`font-medium font-thaana ${subtitleSizes[size]} ${variant === 'dark' ? 'text-white/80' : 'text-[#1B6B52]'} mt-0.5`}>
-            އުޚުތުންގެ ޖަމްޢިއްޔާ • 13+ އަހަރުގެ ޚިދުމަތް
-          </span>
-        )}
+        <span className={`font-bold tracking-tight font-thaana ${titleSizes[size]} ${variant === 'dark' ? 'text-white' : 'text-[#1E2623]'}`}>
+          ހެޔޮބިންގާ
+        </span>
+        <span 
+          dir="ltr" 
+          className={`font-semibold font-latin tracking-wide ${englishSizes[size]} ${variant === 'dark' ? 'text-white/80' : 'text-[#1B6B52]'}`}
+        >
+          Heyo Bingaa
+        </span>
       </div>
     </div>
   );

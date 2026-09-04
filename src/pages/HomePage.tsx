@@ -48,11 +48,11 @@ export default function HomePage({
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#18392F] border border-[#234A3E] text-[#EBF5F0] text-xs font-semibold shadow-xs">
               <img src={logoImg} alt="Logo" className="w-5 h-5 object-contain" />
-              <span>ހެޔޮބިންގާ • 15 ޖެނުއަރީ 2024 ގައި ރަޖިސްޓްރީ ކުރެވުނު ޖަމްޢިއްޔާ</span>
+              <span>ހެޔޮބިންގާ • <span dir="ltr" className="font-mono">15/01/2024</span> ގައި ރަޖިސްޓްރީ ކުރެވުނު ޖަމްޢިއްޔާ</span>
             </div>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#B83244]/30 border border-[#B83244]/50 text-[#FEE2E2] text-xs font-medium">
               <Sparkles className="w-3.5 h-3.5 text-[#FED7AA]" />
-              <span>13+ އަހަރުގެ ދަޢުވަތީ އަދި އިޖުތިމާޢީ ތަޖުރިބާ</span>
+              <span><span dir="ltr" className="font-mono">13+</span> އަހަރުގެ ދަޢުވަތީ އަދި އިޖުތިމާޢީ ތަޖުރިބާ</span>
             </span>
           </div>
 
@@ -325,10 +325,10 @@ export default function HomePage({
             </div>
           </div>
 
-          {/* Bank cards row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
+          {/* Bank cards row: 4 accounts (2 banks x 2 currencies) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6">
             {BANK_ACCOUNTS.map((acc) => (
-              <BankCard key={acc.id} account={acc} onUploadReceipt={onOpenDonateModal} />
+              <BankCard key={acc.id} account={acc} />
             ))}
           </div>
         </div>
