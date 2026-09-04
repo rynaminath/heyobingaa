@@ -10,6 +10,7 @@ import VideoPlayerModal from './components/VideoPlayerModal';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import MediaArchivePage from './pages/MediaArchivePage';
+import GalleryPage from './pages/GalleryPage';
 import ProgramsPage from './pages/ProgramsPage';
 import EventsPage from './pages/EventsPage';
 import VolunteerPage from './pages/VolunteerPage';
@@ -39,9 +40,17 @@ export default function App() {
         title: 'About Us | Heyo Bingaa NGO',
         description: 'ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ ތާރީޚު، ތަޞައްވުރު، މަޤްޞަދު އަދި ދަޢުވަތީ ޚިދުމަތްތައް.'
       },
+      videos: {
+        title: 'Videos | Heyo Bingaa NGO',
+        description: 'ހެޔޮބިންގާގެ ޔޫޓިއުބް ވީޑިއޯތަކާއި، ދާރެސް ޓީވީއާ ގުޅިގެން ތައްޔާރުކުރެވިފައިވާ އިޝާރާތުގެ ބަހުރުވައިގެ ދަރުސްތައް.'
+      },
       media: {
-        title: 'Media Archive | Heyo Bingaa NGO',
+        title: 'Videos & Media | Heyo Bingaa NGO',
         description: 'ދާރެސް ޓީވީއާއި ގުޅިގެން ތައްޔާރުކުރެވިފައިވާ އިޝާރާތުގެ ބަހުރުވައިގެ ވީޑިއޯތަކާއި ހެޔޮބިންގާގެ މީޑިއާ އާކައިވް.'
+      },
+      gallery: {
+        title: 'Photo Gallery | Heyo Bingaa NGO',
+        description: 'ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ ދަޢުވަތީ އަދި އިޖުތިމާޢީ ޙަރަކާތްތަކުގެ ފޮޓޯ ގެލެރީ އަދި ސްލައިޑްޝޯ.'
       },
       events: {
         title: 'Events & Campaigns | Heyo Bingaa NGO',
@@ -98,8 +107,10 @@ export default function App() {
         setCurrentTab('donate');
       } else if (hash === '#/about' || hash === '#about') {
         setCurrentTab('about');
-      } else if (hash === '#/media' || hash === '#media') {
-        setCurrentTab('media');
+      } else if (hash === '#/videos' || hash === '#videos' || hash === '#/media' || hash === '#media') {
+        setCurrentTab('videos');
+      } else if (hash === '#/gallery' || hash === '#gallery') {
+        setCurrentTab('gallery');
       } else if (hash === '#/programs' || hash === '#programs') {
         setCurrentTab('programs');
       } else if (hash === '#/events' || hash === '#events') {
@@ -118,11 +129,12 @@ export default function App() {
   }, []);
 
   const handleNavigate = (tab: NavigationTab) => {
-    setCurrentTab(tab);
-    if (tab === 'donate') {
+    const targetTab = tab === 'media' ? 'videos' : tab;
+    setCurrentTab(targetTab);
+    if (targetTab === 'donate') {
       window.location.hash = '/ehee';
     } else {
-      window.location.hash = `#/${tab}`;
+      window.location.hash = `#/${targetTab}`;
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -130,12 +142,12 @@ export default function App() {
   const featuredEvent = events.find(e => e.isFeatured) || events[0];
 
   return (
-    <div className="min-h-screen bg-[#F8FAF9] text-[#1C2622] flex flex-col selection:bg-[#1B6B52] selection:text-white font-thaana">
+    <div className="min-h-screen bg-[#FAFCFB] text-[#1C2622] flex flex-col selection:bg-[#1B6B52] selection:text-white font-thaana">
       {/* 1. Global Navigation Header */}
       <Header
         currentTab={currentTab}
         onSelectTab={handleNavigate}
-        onOpenDonateModal={() => setIsDonateModalOpen(false || true)}
+        onOpenDonateModal={() => setIsDonateModalOpen(true)}
       />
 
       {/* 2. Main Page Content */}
@@ -154,11 +166,15 @@ export default function App() {
           <AboutPage onNavigate={handleNavigate} />
         )}
 
-        {currentTab === 'media' && (
+        {(currentTab === 'videos' || currentTab === 'media') && (
           <MediaArchivePage
             mediaList={mediaList}
             onSelectMedia={(media) => setActiveMediaModal(media)}
           />
+        )}
+
+        {currentTab === 'gallery' && (
+          <GalleryPage onNavigate={handleNavigate} />
         )}
 
         {currentTab === 'programs' && (

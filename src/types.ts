@@ -1,7 +1,9 @@
 export type NavigationTab = 
   | 'home' 
   | 'about' 
-  | 'media' 
+  | 'videos'
+  | 'media' // alias for backwards compatibility
+  | 'gallery'
   | 'programs' 
   | 'events' 
   | 'volunteer' 

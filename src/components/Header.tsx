@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavigationTab } from '../types';
 import Logo from './Logo';
-import { HeartHandshake, Menu, X, MessageSquare, Tv, Calendar, Users, BookOpen, Home } from 'lucide-react';
+import { HeartHandshake, Menu, X, MessageSquare, Video, Calendar, Users, BookOpen, Home, Images, Facebook, Instagram, Youtube, Mail } from 'lucide-react';
 import { NGO_CONTACT } from '../data/initialData';
 
 interface HeaderProps {
@@ -16,7 +16,8 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
   const navItems: { id: NavigationTab; label: string; icon: React.ReactNode }[] = [
     { id: 'home', label: 'ފުރަތަމަ ޞަފްޙާ', icon: <Home className="w-4 h-4" /> },
     { id: 'about', label: 'ތަޢާރަފް', icon: <BookOpen className="w-4 h-4" /> },
-    { id: 'media', label: 'ޓީވީ / މީޑިއާ', icon: <Tv className="w-4 h-4" /> },
+    { id: 'videos', label: 'ވީޑިއޯ', icon: <Video className="w-4 h-4" /> },
+    { id: 'gallery', label: 'ގެލެރީ', icon: <Images className="w-4 h-4" /> },
     { id: 'programs', label: 'ޕްރޮގްރާމްތައް', icon: <Users className="w-4 h-4" /> },
     { id: 'events', label: 'ދަރުސްތައް', icon: <Calendar className="w-4 h-4" /> },
     { id: 'volunteer', label: 'ގުޅުއްވުމަށް', icon: <Users className="w-4 h-4" /> }
@@ -29,34 +30,82 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E2E9E5] shadow-xs transition-all">
-      {/* Top Banner Notice: Only Viber number and Donation link */}
-      <div className="bg-[#1B6B52] text-[#EBF5F0] text-xs py-2 px-4 border-b border-[#145541]">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <a
-            href={NGO_CONTACT.viberLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-xs text-[#EBF5F0] hover:text-white transition-colors bg-white/10 hover:bg-white/20 px-3 py-1 rounded-lg font-mono font-medium"
-            title="Viber"
-          >
-            <MessageSquare className="w-3.5 h-3.5 text-[#A7F3D0]" />
-            <span dir="ltr">Viber: {NGO_CONTACT.viberNumberFormatted}</span>
-          </a>
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5ECE8] shadow-xs transition-all">
+      {/* Top Banner Notice: Contact & Social Media */}
+      <div className="bg-[#1B6B52] text-[#EBF5F0] text-xs py-1.5 px-3 sm:px-4 border-b border-[#145541]">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+          {/* Left / Contact & Social Links */}
+          <div className="flex items-center gap-2 sm:gap-4 overflow-x-auto py-0.5 no-scrollbar">
+            <a
+              href={NGO_CONTACT.viberLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-[11px] sm:text-xs text-[#EBF5F0] hover:text-white transition-colors bg-white/10 hover:bg-white/20 px-2 sm:px-2.5 py-0.5 rounded-md font-mono shrink-0"
+              title="Viber"
+            >
+              <MessageSquare className="w-3 h-3 text-[#A7F3D0]" />
+              <span dir="ltr">{NGO_CONTACT.viberNumberFormatted}</span>
+            </a>
 
-          <button
-            type="button"
-            onClick={() => handleNavClick('donate')}
-            className="flex items-center gap-1.5 text-xs text-[#EBF5F0] hover:text-white transition-colors bg-white/10 hover:bg-white/20 px-3 py-1 rounded-lg font-thaana font-semibold"
-          >
-            <HeartHandshake className="w-3.5 h-3.5 text-[#FED7AA]" />
-            <span>އެހީތެރިވެލައްވާ (Donate)</span>
-          </button>
+            <a
+              href={`mailto:${NGO_CONTACT.email}`}
+              className="hidden md:flex items-center gap-1 text-[11px] text-[#EBF5F0] hover:text-white transition-colors font-mono shrink-0"
+            >
+              <Mail className="w-3 h-3 text-[#A7F3D0]" />
+              <span>{NGO_CONTACT.email}</span>
+            </a>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-1.5 shrink-0 border-r border-white/20 pr-2 mr-1">
+              <a
+                href={NGO_CONTACT.socialMedia.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-6 h-6 rounded flex items-center justify-center hover:bg-white/20 text-white/90 hover:text-white transition-colors"
+                title="Facebook"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href={NGO_CONTACT.socialMedia.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-6 h-6 rounded flex items-center justify-center hover:bg-white/20 text-white/90 hover:text-white transition-colors"
+                title="Instagram"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href={NGO_CONTACT.socialMedia.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-6 h-6 rounded flex items-center justify-center hover:bg-white/20 text-white/90 hover:text-white transition-colors"
+                title="YouTube"
+                aria-label="YouTube"
+              >
+                <Youtube className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Right / Donate button in top bar */}
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => handleNavClick('donate')}
+              className="flex items-center gap-1.5 text-[11px] sm:text-xs text-white hover:text-[#FED7AA] transition-colors bg-white/15 hover:bg-white/25 px-2.5 sm:px-3 py-0.5 rounded-md font-thaana font-semibold"
+            >
+              <HeartHandshake className="w-3.5 h-3.5 text-[#FED7AA]" />
+              <span>އެހީ (Donate)</span>
+            </button>
+          </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Mobile Hamburger Menu Button on the Right (RTL start) */}
           <div className="flex items-center lg:hidden">
             <button
@@ -78,15 +127,15 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1.5 xl:gap-2">
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
             {navItems.map((item) => {
-              const isActive = currentTab === item.id;
+              const isActive = currentTab === item.id || (item.id === 'videos' && currentTab === 'media');
               return (
                 <button
                   key={item.id}
                   id={`nav-link-${item.id}`}
                   onClick={() => handleNavClick(item.id)}
-                  className={`relative px-4 py-2 rounded-xl text-sm font-semibold font-thaana transition-all duration-200 flex items-center gap-1.5 ${
+                  className={`relative px-3.5 py-1.5 rounded-xl text-sm font-semibold font-thaana transition-all duration-200 flex items-center gap-1.5 ${
                     isActive
                       ? 'text-[#1B6B52] bg-[#EBF5F0] font-bold shadow-xs'
                       : 'text-[#556660] hover:text-[#1B6B52] hover:bg-[#EBF5F0]/60'
@@ -94,20 +143,20 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
                 >
                   <span>{item.label}</span>
                   {isActive && (
-                    <span className="absolute bottom-1 left-4 right-4 h-0.5 bg-[#1B6B52] rounded-full" />
+                    <span className="absolute bottom-0.5 left-3.5 right-3.5 h-0.5 bg-[#1B6B52] rounded-full" />
                   )}
                 </button>
               );
             })}
           </nav>
 
-          {/* Header Action: High-contrast Donate button */}
+          {/* Header Action: Donate button */}
           <div className="flex items-center gap-2">
             <button
               id="header-donate-button"
               type="button"
               onClick={() => handleNavClick('donate')}
-              className="group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-[#B83244] hover:bg-[#9A2434] text-white font-bold text-xs sm:text-sm font-thaana shadow-md shadow-[#B83244]/20 hover:shadow-lg hover:shadow-[#B83244]/30 active:scale-95 transition-all duration-200 border border-[#B83244]/40"
+              className="group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-[#B83244] hover:bg-[#9A2434] text-white font-bold text-xs sm:text-sm font-thaana shadow-sm hover:shadow-md active:scale-95 transition-all duration-200"
             >
               <HeartHandshake className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
               <span>އެހީތެރިވެލައްވާ</span>
@@ -118,21 +167,21 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-[#E2E9E5] px-4 pt-3 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top-4 duration-200">
+        <div className="lg:hidden bg-white border-b border-[#E5ECE8] px-4 pt-3 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top-4 duration-200">
           <div className="grid grid-cols-1 gap-1">
             {navItems.map((item) => {
-              const isActive = currentTab === item.id;
+              const isActive = currentTab === item.id || (item.id === 'videos' && currentTab === 'media');
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-right font-thaana text-sm font-medium transition-colors ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-right font-thaana text-sm font-medium transition-colors ${
                     isActive
                       ? 'bg-[#EBF5F0] text-[#1B6B52] font-bold border-r-4 border-[#1B6B52]'
-                      : 'text-[#556660] hover:bg-[#F8FAF9]'
+                      : 'text-[#556660] hover:bg-[#FAFCFB]'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2.5">
                     <span className="text-[#1B6B52]">{item.icon}</span>
                     <span>{item.label}</span>
                   </div>
@@ -140,17 +189,49 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
               );
             })}
 
-            <div className="pt-3 mt-2 border-t border-[#E2E9E5] flex flex-col gap-2">
+            {/* Social media in mobile drawer */}
+            <div className="flex items-center justify-center gap-3 pt-3 pb-1 border-t border-[#E5ECE8]">
+              <span className="text-xs text-[#556660] font-thaana">ސޯޝަލް މީޑިއާ:</span>
+              <a
+                href={NGO_CONTACT.socialMedia.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center hover:bg-[#1B6B52] hover:text-white transition-colors"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a
+                href={NGO_CONTACT.socialMedia.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center hover:bg-[#1B6B52] hover:text-white transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a
+                href={NGO_CONTACT.socialMedia.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-lg bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center hover:bg-[#1B6B52] hover:text-white transition-colors"
+                aria-label="YouTube"
+              >
+                <Youtube className="w-4 h-4" />
+              </a>
+            </div>
+
+            <div className="pt-2 flex flex-col gap-2">
               <button
                 type="button"
                 onClick={() => handleNavClick('donate')}
-                className="w-full py-3 rounded-xl bg-[#B83244] hover:bg-[#9A2434] text-white font-bold font-thaana text-sm shadow-md flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-xl bg-[#B83244] hover:bg-[#9A2434] text-white font-bold font-thaana text-sm shadow-md flex items-center justify-center gap-2"
               >
                 <HeartHandshake className="w-4 h-4" />
                 <span>އެހީތެރިވެލައްވާ (Donate)</span>
               </button>
 
-              <div className="flex items-center justify-between pt-2 px-1 text-xs text-[#556660] font-thaana">
+              <div className="flex items-center justify-between pt-1 px-1 text-xs text-[#556660] font-thaana">
                 <button
                   type="button"
                   onClick={() => {

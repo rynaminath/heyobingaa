@@ -30,25 +30,25 @@
     --color-blue-light: #EDF4FC;
     --color-blue-border: #CFE2F5;
 
-    --color-bg: #F8FAF9;
+    --color-bg: #FAFCFB;
     --color-card: #FFFFFF;
     --color-text: #1C2622;
     --color-text-muted: #556660;
-    --color-border: #E2E9E5;
+    --color-border: #E5ECE8;
   }
 
-  /* Increase font sizes by 50% for optimal Faruma Dhivehi clarity */
   html {
-    font-size: 150%;
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
     font-family: var(--font-thaana);
     direction: rtl;
     text-align: right;
-    line-height: 2.1;
-    letter-spacing: 0.015em;
-    background-color: #F8FAF9;
+    line-height: 1.85;
+    letter-spacing: 0.01em;
+    background-color: #FAFCFB;
     color: #1C2622;
   }
 }
