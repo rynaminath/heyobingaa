@@ -113,45 +113,45 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14 font-thaana">
-      {/* Header Banner */}
-      <div className="bg-gradient-to-l from-[#1F1C1B] via-[#2A2523] to-[#171514] text-white p-8 sm:p-10 rounded-3xl border border-[#38332F] shadow-xl text-right space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B2E34]/50 border border-[#8B2E34] text-[#F9EDED] text-xs font-semibold">
-          <Users className="w-3.5 h-3.5 text-[#F27D26]" />
+      {/* Header Banner with Harmonized Emerald Theme */}
+      <div className="bg-gradient-to-l from-[#134e3e] via-[#1B6B52] to-[#124b3b] text-white p-8 sm:p-10 rounded-3xl border border-[#145541] shadow-xl text-right space-y-3">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 text-[#A7F3D0] text-xs font-semibold">
+          <Users className="w-3.5 h-3.5 text-[#A7F3D0]" />
           <span>ހެޔޮ ޢަމަލުގައި ބައިވެރިވެލައްވާ</span>
         </div>
         <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
           ވޮލަންޓިއަރ ވުމާއި ގުޅުއްވުމަށް
         </h1>
-        <p className="text-sm text-[#D8D2C7] max-w-3xl leading-relaxed">
+        <p className="text-sm sm:text-base text-[#EBF5F0] max-w-3xl leading-relaxed">
           ހެޔޮބިންގާއަކީ އުޚުތުންގެ ލީޑަރޝިޕްގައި ހިންގޭ ޖަމްޢިއްޔާއަކަށްވާއިރު، އިވެންޓްތަކުގެ ލޮޖިސްޓިކްސްއާއި ބޮޑެތި ޙަރަކާތްތަކުގައި ފިރިހެން ވޮލަންޓިއަރުންގެ އެހީތެރިކަން މަރުޙަބާ ކިޔަމެވެ.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* Volunteer Registration Form - Primary Focus */}
-        <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E4DC] shadow-sm text-right space-y-6">
+        <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E9E5] shadow-sm text-right space-y-6">
           <div>
-            <div className="flex items-center gap-2 text-[#8B2E34] font-bold text-sm">
-              <HeartHandshake className="w-4 h-4 text-[#F27D26]" />
+            <div className="flex items-center gap-2 text-[#1B6B52] font-bold text-sm">
+              <HeartHandshake className="w-4 h-4 text-[#1B6B52]" />
               <span>ވޮލަންޓިއަރ ރަޖިސްޓްރޭޝަން</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-[#2D2926] mt-1">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#1C2622] mt-1">
               ހެޔޮބިންގާގެ ވޮލަންޓިއަރ ޓީމާ ގުޅިވަޑައިގަންނަވާ
             </h2>
-            <p className="text-xs sm:text-sm text-[#6E6963] mt-1 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#556660] mt-1 leading-relaxed">
               ތިޔަބޭފުޅާގެ ވަގުތާއި ހުނަރު އިސްލާމީ ދަޢުވަތަށާއި މުޖުތަމަޢުގެ ޚިދުމަތުގައި ހޭދަކުރައްވާ.
             </p>
           </div>
 
           {/* Track Selector: Sisters vs Brothers */}
-          <div className="p-1.5 rounded-2xl bg-[#FCFBF8] border border-[#E8E4DC] grid grid-cols-2 gap-2">
+          <div className="p-1.5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5] grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => { setTrack('sisters'); setSelectedInterests([]); }}
               className={`py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex flex-col items-center justify-center gap-1 ${
                 track === 'sisters'
-                  ? 'bg-[#8B2E34] text-white shadow-md'
-                  : 'text-[#6E6963] hover:text-[#2D2926]'
+                  ? 'bg-[#1B6B52] text-white shadow-md'
+                  : 'text-[#556660] hover:text-[#1C2622]'
               }`}
             >
               <span>1. އުޚުތުންގެ ޓްރެކް (Sisters)</span>
@@ -163,8 +163,8 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
               onClick={() => { setTrack('brothers'); setSelectedInterests([]); }}
               className={`py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex flex-col items-center justify-center gap-1 ${
                 track === 'brothers'
-                  ? 'bg-[#2D2926] text-white shadow-md'
-                  : 'text-[#6E6963] hover:text-[#2D2926]'
+                  ? 'bg-[#1C2622] text-white shadow-md'
+                  : 'text-[#556660] hover:text-[#1C2622]'
               }`}
             >
               <span>2. އަޚުންގެ ޓްރެކް (Brothers)</span>
@@ -214,7 +214,7 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-[#2D2926] mb-1">
+                  <label className="block text-xs font-semibold text-[#1C2622] mb-1">
                     ފުރިހަމަ ނަން <span className="text-rose-500">*</span>
                   </label>
                   <input
@@ -223,12 +223,12 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="ނަން ލިޔުއްވާ"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8E4DC] text-sm focus:ring-2 focus:ring-[#8B2E34] focus:outline-none text-right"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E9E5] text-sm focus:ring-2 focus:ring-[#1B6B52] focus:border-[#1B6B52] focus:outline-none text-right bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#2D2926] mb-1">
+                  <label className="block text-xs font-semibold text-[#1C2622] mb-1">
                     ފޯނު ނަންބަރު <span className="text-rose-500">*</span>
                   </label>
                   <input
@@ -238,14 +238,14 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="7789012"
                     dir="ltr"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8E4DC] text-sm font-latin focus:ring-2 focus:ring-[#8B2E34] focus:outline-none text-right"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E9E5] text-sm font-latin focus:ring-2 focus:ring-[#1B6B52] focus:border-[#1B6B52] focus:outline-none text-right bg-white"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-[#2D2926] mb-1">
+                  <label className="block text-xs font-semibold text-[#1C2622] mb-1">
                     އީމެއިލް (އިޚްތިޔާރީ)
                   </label>
                   <input
@@ -254,12 +254,12 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@example.com"
                     dir="ltr"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8E4DC] text-sm font-latin focus:ring-2 focus:ring-[#8B2E34] focus:outline-none text-right"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E9E5] text-sm font-latin focus:ring-2 focus:ring-[#1B6B52] focus:border-[#1B6B52] focus:outline-none text-right bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#2D2926] mb-1">
+                  <label className="block text-xs font-semibold text-[#1C2622] mb-1">
                     ދިރިއުޅޭ ރަށް / އަވަށް
                   </label>
                   <input
@@ -267,14 +267,14 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
                     value={islandCity}
                     onChange={(e) => setIslandCity(e.target.value)}
                     placeholder="މިސާލު: މާލެ، ހުޅުމާލެ"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8E4DC] text-sm focus:ring-2 focus:ring-[#8B2E34] focus:outline-none text-right"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E9E5] text-sm focus:ring-2 focus:ring-[#1B6B52] focus:border-[#1B6B52] focus:outline-none text-right bg-white"
                   />
                 </div>
               </div>
 
               {/* Interests Checklist */}
               <div>
-                <label className="block text-xs font-semibold text-[#2D2926] mb-2">
+                <label className="block text-xs font-semibold text-[#1C2622] mb-2">
                   އެހީތެރިވެދެވޭނެ ދާއިރާތައް:
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -285,13 +285,13 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
                       onClick={() => toggleInterest(interest)}
                       className={`p-2.5 rounded-xl text-xs text-right border transition-all flex items-center justify-between gap-2 ${
                         selectedInterests.includes(interest)
-                          ? 'bg-[#F9EDED] border-[#8B2E34] text-[#8B2E34] font-bold'
-                          : 'bg-[#FCFBF8] border-[#E8E4DC] text-[#6E6963] hover:bg-[#F9EDED]/40'
+                          ? 'bg-[#EBF5F0] border-[#1B6B52] text-[#1B6B52] font-bold'
+                          : 'bg-[#F8FAF9] border-[#E2E9E5] text-[#556660] hover:bg-[#EBF5F0]/50'
                       }`}
                     >
                       <span>{interest}</span>
                       {selectedInterests.includes(interest) && (
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#8B2E34] shrink-0" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#1B6B52] shrink-0" />
                       )}
                     </button>
                   ))}
@@ -300,13 +300,13 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
 
               {/* Availability */}
               <div>
-                <label className="block text-xs font-semibold text-[#2D2926] mb-1">
+                <label className="block text-xs font-semibold text-[#1C2622] mb-1">
                   ވަގުތު ދެވޭނެ ގަޑިތައް
                 </label>
                 <select
                   value={availability}
                   onChange={(e) => setAvailability(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8E4DC] text-sm focus:ring-2 focus:ring-[#8B2E34] bg-white text-right"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2E9E5] text-sm focus:ring-2 focus:ring-[#1B6B52] bg-white text-right"
                 >
                   <option value="ހަވީރު އަދި ރޭގަނޑު">ހަވީރު އަދި ރޭގަނޑު</option>
                   <option value="ހަމައެކަނި ބަންދު ދުވަސްތަކުގައި">ހަމައެކަނި ބަންދު ދުވަސްތަކުގައި (ހުކުރު / ހޮނިހިރު)</option>
@@ -317,7 +317,7 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
 
               {/* Notes */}
               <div>
-                <label className="block text-xs font-semibold text-[#2D2926] mb-1">
+                <label className="block text-xs font-semibold text-[#1C2622] mb-1">
                   އިތުރު މަޢުލޫމާތު ނުވަތަ ތަޖުރިބާ (އިޚްތިޔާރީ)
                 </label>
                 <textarea
@@ -325,14 +325,14 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="ކުރިން ވޮލަންޓިއަރ ކޮށްފައިވާ ދާއިރާތައް ނުވަތަ ޚާއްޞަ ހުނަރު..."
-                  className="w-full px-3.5 py-2 rounded-xl border border-[#E8E4DC] text-sm focus:ring-2 focus:ring-[#8B2E34] focus:outline-none text-right"
+                  className="w-full px-3.5 py-2 rounded-xl border border-[#E2E9E5] text-sm focus:ring-2 focus:ring-[#1B6B52] focus:border-[#1B6B52] focus:outline-none text-right bg-white"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmittingVol}
-                className="w-full py-3 rounded-xl bg-[#8B2E34] hover:bg-[#702328] text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-[#1B6B52] hover:bg-[#145541] text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-98"
               >
                 {isSubmittingVol ? (
                   <span>ފޯމު ފޮނުވެނީ...</span>
@@ -350,23 +350,23 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
         {/* General Inquiry Form & Contact Info */}
         <div className="lg:col-span-5 space-y-6 text-right">
           {/* General Inquiry Form */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E4DC] shadow-sm space-y-4">
-            <div className="flex items-center gap-2 text-[#2D2926] font-bold text-sm">
-              <Mail className="w-4 h-4 text-[#8B2E34]" />
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E9E5] shadow-sm space-y-4">
+            <div className="flex items-center gap-2 text-[#1B6B52] font-bold text-sm">
+              <Mail className="w-4 h-4 text-[#1B6B52]" />
               <span>ޢާންމު ސުވާލާއި މެސެޖް (Inquiry)</span>
             </div>
-            <h3 className="text-lg font-bold text-[#2D2926]">
+            <h3 className="text-lg font-bold text-[#1C2622]">
               ޖަމިއްޔާއަށް މެސެޖެއް ފޮނުއްވާ
             </h3>
 
             {inqSuccess ? (
-              <div className="p-4 bg-[#FCFBF8] border border-[#E8E4DC] rounded-xl text-[#2D2926] text-xs text-center">
+              <div className="p-4 bg-[#EBF5F0] border border-[#C8E0D5] rounded-xl text-[#1B6B52] text-xs text-center font-semibold">
                 ޝުކުރިއްޔާ! ތިޔަ ފޮނުއްވި މެސެޖަށް އަޅުގަނޑުމެން އަވަހަށް ޖަވާބުދާރީވާނަމެވެ.
               </div>
             ) : (
               <form onSubmit={handleInquirySubmit} className="space-y-3">
                 <div>
-                  <label className="block text-xs font-semibold text-[#2D2926] mb-1">
+                  <label className="block text-xs font-semibold text-[#1C2622] mb-1">
                     ނަން
                   </label>
                   <input
@@ -375,12 +375,12 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
                     value={inqName}
                     onChange={(e) => setInqName(e.target.value)}
                     placeholder="ފުރިހަމަ ނަން"
-                    className="w-full px-3 py-2 rounded-xl border border-[#E8E4DC] text-xs focus:ring-2 focus:ring-[#8B2E34] focus:outline-none text-right"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E2E9E5] text-xs focus:ring-2 focus:ring-[#1B6B52] focus:border-[#1B6B52] focus:outline-none text-right bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#2D2926] mb-1">
+                  <label className="block text-xs font-semibold text-[#1C2622] mb-1">
                     ފޯނު ނަންބަރު
                   </label>
                   <input
@@ -390,12 +390,12 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
                     onChange={(e) => setInqPhone(e.target.value)}
                     placeholder="7789012"
                     dir="ltr"
-                    className="w-full px-3 py-2 rounded-xl border border-[#E8E4DC] text-xs font-latin focus:ring-2 focus:ring-[#8B2E34] focus:outline-none text-right"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E2E9E5] text-xs font-latin focus:ring-2 focus:ring-[#1B6B52] focus:border-[#1B6B52] focus:outline-none text-right bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#2D2926] mb-1">
+                  <label className="block text-xs font-semibold text-[#1C2622] mb-1">
                     މައުޟޫޢު
                   </label>
                   <input
@@ -403,12 +403,12 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
                     value={inqSubject}
                     onChange={(e) => setInqSubject(e.target.value)}
                     placeholder="ސުވާލު ނުވަތަ ޚިޔާލު"
-                    className="w-full px-3 py-2 rounded-xl border border-[#E8E4DC] text-xs focus:ring-2 focus:ring-[#8B2E34] focus:outline-none text-right"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E2E9E5] text-xs focus:ring-2 focus:ring-[#1B6B52] focus:border-[#1B6B52] focus:outline-none text-right bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#2D2926] mb-1">
+                  <label className="block text-xs font-semibold text-[#1C2622] mb-1">
                     މެސެޖް
                   </label>
                   <textarea
@@ -417,13 +417,13 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
                     value={inqMessage}
                     onChange={(e) => setInqMessage(e.target.value)}
                     placeholder="ތިޔަބޭފުޅާގެ މެސެޖް ލިޔުއްވާ..."
-                    className="w-full px-3 py-2 rounded-xl border border-[#E8E4DC] text-xs focus:ring-2 focus:ring-[#8B2E34] focus:outline-none text-right"
+                    className="w-full px-3 py-2 rounded-xl border border-[#E2E9E5] text-xs focus:ring-2 focus:ring-[#1B6B52] focus:border-[#1B6B52] focus:outline-none text-right bg-white"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-2.5 rounded-xl bg-[#2D2926] hover:bg-black text-white font-bold text-xs shadow-sm transition-colors"
+                  className="w-full py-2.5 rounded-xl bg-[#1B6B52] hover:bg-[#145541] text-white font-bold text-xs shadow-sm transition-colors active:scale-98"
                 >
                   މެސެޖް ފޮނުއްވާ
                 </button>
@@ -432,25 +432,25 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
           </div>
 
           {/* Contact Details Card */}
-          <div className="bg-[#1F1C1B] text-white rounded-3xl p-6 border border-[#38332F] space-y-4">
-            <h4 className="font-bold text-sm text-[#F27D26]">
+          <div className="bg-gradient-to-br from-[#0F231D] via-[#142E26] to-[#0A1612] text-white rounded-3xl p-6 sm:p-7 border border-[#234A3E] space-y-4 shadow-lg">
+            <h4 className="font-bold text-sm text-[#A7F3D0] border-b border-white/10 pb-2.5">
               ރަސްމީ އޮފީސް & ގުޅޭނެ ގޮތްތައް
             </h4>
-            <div className="space-y-3 text-xs text-[#D8D2C7]">
+            <div className="space-y-3.5 text-xs text-[#EBF5F0]">
               <div className="flex items-center gap-3">
-                <MapPin className="w-4 h-4 text-[#F27D26] shrink-0" />
+                <MapPin className="w-4 h-4 text-[#38D39F] shrink-0" />
                 <span>މާލެ، ދިވެހިރާއްޖެ (ހެޔޮބިންގާ އެންޖީއޯ)</span>
               </div>
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-[#F27D26] shrink-0" />
-                <span dir="ltr" className="font-latin">+960 773-4219 / 991-8421</span>
+                <Phone className="w-4 h-4 text-[#38D39F] shrink-0" />
+                <span dir="ltr" className="font-latin">{NGO_CONTACT.phone}</span>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-[#F27D26] shrink-0" />
-                <span dir="ltr" className="font-latin">info@heyobingaa.org</span>
+                <Mail className="w-4 h-4 text-[#38D39F] shrink-0" />
+                <span dir="ltr" className="font-latin">{NGO_CONTACT.email}</span>
               </div>
             </div>
-            <div className="pt-2 border-t border-[#38332F] text-[11px] text-[#A8A29E]">
+            <div className="pt-3 border-t border-white/10 text-[11px] text-[#A7F3D0]/80">
               ރަސްމީ ރަޖިސްޓްރޭޝަން: CR/12/2024 (15 ޖެނުއަރީ 2024)
             </div>
           </div>

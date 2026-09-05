@@ -33,7 +33,7 @@ export default function MediaArchivePage({ mediaList, onSelectMedia }: MediaArch
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 font-thaana">
-      {/* Header with YouTube Channel & Dhares TV Collab Hub */}
+      {/* Header with YouTube Channel & Dhaaris TV Collab Hub */}
       <div className="bg-linear-to-r from-[#0F231D] via-[#142E26] to-[#0A1612] text-white p-6 sm:p-10 rounded-3xl border border-[#234A3E] shadow-xl text-right space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#1B6B52]/50 border border-[#1B6B52] text-[#EBF5F0] text-xs font-semibold">
@@ -57,16 +57,16 @@ export default function MediaArchivePage({ mediaList, onSelectMedia }: MediaArch
           ވީޑިއޯތައް (Videos & YouTube Channel)
         </h1>
 
-        <p className="text-xs sm:text-sm text-[#A8C4B8] max-w-3xl leading-relaxed">
-          ދާރެސް ޓީވީއާ ގުޅިގެންނާއި ހެޔޮބިންގާގެ ޔޫޓިއުބް ޗެނަލް މެދުވެރިކޮށް އުފައްދާފައިވާ ޚާއްޞަ ޓީވީ ސިލްސިލާތަކާއި، ބީރު އަދި އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ މުޖުތަމަޢަށް އަމާޒުކޮށް އިޝާރާތުގެ ބަހުރުވައިން ތައްޔާރުކޮށްފައިވާ އެންމެހައި ވީޑިއޯތައް.
+        <p className="text-sm sm:text-base text-[#A8C4B8] max-w-3xl leading-relaxed">
+          ދާރިސް ޓީވީއާ ގުޅިގެންނާއި ހެޔޮބިންގާގެ ޔޫޓިއުބް ޗެނަލް މެދުވެރިކޮށް އުފައްދާފައިވާ ޚާއްޞަ ޓީވީ ސިލްސިލާތަކާއި، އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް އަމާޒުކޮށް އިޝާރާތުގެ ބަހުރުވައިން ތައްޔާރުކޮށްފައިވާ އެންމެހައި ވީޑިއޯތައް.
         </p>
 
         {/* Deaf accessibility alert callout */}
-        <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm">
           <div className="flex items-center gap-2 text-[#EBF5F0]">
             <CheckCircle2 className="w-5 h-5 text-[#38D39F] shrink-0" />
             <span>
-              ބީރު މުޖުތަމަޢަށް ޚާއްޞަކޮށް <strong>{deafCount} ޕްރޮގްރާމް</strong> އިޝާރާތުގެ ބަހުރުވައިން ތައްޔާރުކުރެވިފައިވެއެވެ.
+              އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް ޚާއްޞަކޮށް <strong>{deafCount} ޕްރޮގްރާމް</strong> އިޝާރާތުގެ ބަހުރުވައިން ތައްޔާރުކުރެވިފައިވެއެވެ.
             </span>
           </div>
           <button
@@ -77,7 +77,7 @@ export default function MediaArchivePage({ mediaList, onSelectMedia }: MediaArch
             }}
             className="px-3.5 py-1.5 rounded-lg bg-[#1B6B52] hover:bg-[#145541] text-white font-bold transition-colors shrink-0 text-center"
           >
-            ބީރު މީހުންގެ ވީޑިއޯތައް އެކަނި ބައްލަވާ
+            އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކުގެ ވީޑިއޯތައް އެކަނި ބައްލަވާ
           </button>
         </div>
       </div>

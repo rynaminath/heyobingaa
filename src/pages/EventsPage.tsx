@@ -57,16 +57,16 @@ END:VCALENDAR`;
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 font-thaana">
       {/* Header Banner */}
-      <div className="bg-gradient-to-l from-[#1F1C1B] via-[#2A2523] to-[#171514] text-white p-8 sm:p-10 rounded-3xl border border-[#38332F] shadow-xl text-right space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B2E34]/50 border border-[#8B2E34] text-[#F9EDED] text-xs font-semibold">
-          <Calendar className="w-3.5 h-3.5 text-[#F27D26]" />
+      <div className="bg-gradient-to-l from-[#134e3e] via-[#1B6B52] to-[#124b3b] text-white p-8 sm:p-10 rounded-3xl border border-[#145541] shadow-xl text-right space-y-3">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-[#A7F3D0] text-xs font-semibold">
+          <Calendar className="w-3.5 h-3.5 text-[#FDE68A]" />
           <span>އާންމު ދަރުސްތަކާއި ސެޝަންތައް</span>
         </div>
         <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
           ދަރުސްތަކާއި ޙަރަކާތްތައް
         </h1>
-        <p className="text-sm text-[#D8D2C7] max-w-3xl leading-relaxed">
-          މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް އަދި ދާރެސް ޓީވީގެ އެއްބާރުލުމާއެކު އިންތިޒާމުކުރެވޭ ބޮޑެތި ޢާންމު ދަރުސްތަކާއި، ސެމިނާރތަކުގެ މަޢުލޫމާތު.
+        <p className="text-sm sm:text-base text-[#EBF5F0] max-w-3xl leading-relaxed">
+          މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް އަދި ދާރިސް ޓީވީގެ އެއްބާރުލުމާއެކު އިންތިޒާމުކުރެވޭ ބޮޑެތި ޢާންމު ދަރުސްތަކާއި، ސެމިނާރތަކުގެ މަޢުލޫމާތު.
         </p>
       </div>
 
@@ -89,13 +89,13 @@ END:VCALENDAR`;
       )}
 
       {/* Events Filter Tabs */}
-      <div className="flex items-center gap-3 border-b border-[#E8E4DC] pb-3">
+      <div className="flex items-center gap-3 border-b border-[#E5ECE8] pb-3">
         <button
           onClick={() => setFilter('upcoming')}
           className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
             filter === 'upcoming'
-              ? 'bg-[#8B2E34] text-white shadow-xs'
-              : 'bg-[#FCFBF8] border border-[#E8E4DC] text-[#6E6963] hover:text-[#2D2926]'
+              ? 'bg-[#1B6B52] text-white shadow-xs'
+              : 'bg-[#FAFCFB] border border-[#E5ECE8] text-[#556660] hover:text-[#1C2622]'
           }`}
         >
           ކުރިއަށް ހުރި ޙަރަކާތްތައް
@@ -104,8 +104,8 @@ END:VCALENDAR`;
           onClick={() => setFilter('all')}
           className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
             filter === 'all'
-              ? 'bg-[#8B2E34] text-white shadow-xs'
-              : 'bg-[#FCFBF8] border border-[#E8E4DC] text-[#6E6963] hover:text-[#2D2926]'
+              ? 'bg-[#1B6B52] text-white shadow-xs'
+              : 'bg-[#FAFCFB] border border-[#E5ECE8] text-[#556660] hover:text-[#1C2622]'
           }`}
         >
           ހުރިހާ ދަރުސްތަކެއް ({events.length})
@@ -116,20 +116,20 @@ END:VCALENDAR`;
       {events.filter(e => e.isFeatured).map((ev) => (
         <div
           key={ev.id}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1F1C1B] via-[#2A2523] to-[#171514] text-white border-2 border-[#8B2E34]/60 shadow-2xl p-6 sm:p-10 space-y-6 text-right"
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0F231D] via-[#142E26] to-[#0A1612] text-white border-2 border-[#1B6B52]/60 shadow-2xl p-6 sm:p-10 space-y-6 text-right"
         >
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-4">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-[#8B2E34] text-white font-bold text-xs">
+              <span className="px-3 py-1 rounded-full bg-[#1B6B52] text-white font-bold text-xs">
                 ޚާއްޞަ އިވެންޓް
               </span>
-              <span className="text-xs text-[#F27D26] font-bold">
+              <span className="text-xs text-[#A7F3D0] font-bold">
                 {ev.partnerOrganization}
               </span>
             </div>
-            <div className="flex items-center gap-2 text-xs font-mono text-[#F9EDED] bg-[#8B2E34]/30 px-3 py-1 rounded-lg border border-[#8B2E34]/50">
-              <Radio className="w-3.5 h-3.5 text-[#F27D26] animate-ping" />
-              <span>ދާރެސް ޓީވީން ލައިވް ދެއްކުން</span>
+            <div className="flex items-center gap-2 text-xs font-mono text-[#EBF5F0] bg-[#18392F] px-3 py-1 rounded-lg border border-[#234A3E]">
+              <Radio className="w-3.5 h-3.5 text-[#38D39F] animate-ping" />
+              <span>ދާރިސް ޓީވީން ލައިވް ދެއްކުން</span>
             </div>
           </div>
 

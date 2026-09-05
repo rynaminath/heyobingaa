@@ -10,7 +10,7 @@ interface FooterProps {
 
 export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
   return (
-    <footer className="bg-[#0F231D] text-[#D1E0D9] pt-12 pb-16 lg:pb-12 border-t border-[#1C3B32] font-thaana relative overflow-hidden">
+    <footer className="bg-[#0F231D] text-[#D1E0D9] py-12 border-t border-[#1C3B32] font-thaana relative overflow-hidden">
       {/* Decorative backdrop elements */}
       <div className="absolute top-0 right-1/4 w-96 h-96 rounded-full bg-[#1B6B52]/15 blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-96 h-96 rounded-full bg-[#255D96]/10 blur-3xl pointer-events-none" />
@@ -22,7 +22,7 @@ export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
           <div className="md:col-span-2 space-y-4">
             <Logo variant="dark" size="lg" />
             <p className="text-xs sm:text-sm text-[#A8C4B8] leading-relaxed max-w-lg">
-              ހެޔޮބިންގާ އަކީ އުޚުތުންގެ އިސްނެގުމާއި ލީޑަރޝިޕްގެ ދަށުން ހިންގޭ ދިވެހި ޖަމްޢިއްޔާއެކެވެ. އިވެންޓްތަކާއި ލޮޖިސްޓިކްސްގެ މަސައްކަތްތަކުގައި ފިރިހެން ވޮލަންޓިއަރުންގެ އެހީތެރިކަން ލިބިގެންދެއެވެ. ވޭތުވެދިޔަ 13+ އަހަރުގެ ދަޢުވަތީ އަދި އިޖުތިމާޢީ މައިދާނުގެ ތަޖުރިބާއާއެކު ރަސްމީކޮށް ރަޖިސްޓްރީ ކުރެވުނީ 15 ޖެނުއަރީ 2024 ގައެވެ.
+              ހެޔޮބިންގާ އަކީ އުޚުތުންގެ އިސްނެގުމާއި ލީޑަރޝިޕްގެ ދަށުން ހިންގޭ ދިވެހި ޖަމްޢިއްޔާއެކެވެ. އިވެންޓްތަކާއި ލޮޖިސްޓިކްސްގެ މަސައްކަތްތަކުގައި ފިރިހެން ވޮލަންޓިއަރުންގެ އެހީތެރިކަން ލިބިގެންދެއެވެ. ވޭތުވެދިޔަ <span dir="ltr" className="inline-block font-mono font-bold text-[#A7F3D0]">13+</span> އަހަރުގެ ދަޢުވަތީ އަދި އިޖުތިމާޢީ މައިދާނުގެ ތަޖުރިބާއާއެކު ރަސްމީކޮށް ރަޖިސްޓްރީ ކުރެވުނީ 15 ޖެނުއަރީ 2024 ގައެވެ.
             </p>
             
             {/* Social Media Links */}

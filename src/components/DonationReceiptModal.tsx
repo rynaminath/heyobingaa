@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, Copy, Check, MessageSquare, Phone, HeartHandshake, ArrowUpRight } from 'lucide-react';
-import { BANK_ACCOUNTS, NGO_CONTACT } from '../data/initialData';
+import { BANK_GROUPS, NGO_CONTACT } from '../data/initialData';
 
 interface DonationReceiptModalProps {
   isOpen: boolean;
@@ -132,46 +132,71 @@ export default function DonationReceiptModal({
             </div>
           </div>
 
-          {/* Bank Accounts List with Instant Copy */}
-          <div className="space-y-2">
+          {/* Bank Accounts List: 2 Main Boxes (BML and MIB) */}
+          <div className="space-y-3">
             <span className="text-xs font-bold text-[#1B6B52] uppercase tracking-wider block">
-              ހެޔޮބިންގާ ރަސްމީ އެކައުންޓްތައް:
+              ހެޔޮބިންގާ ރަސްމީ އެކައުންޓްތައް (BML & MIB):
             </span>
-            <div className="space-y-2.5">
-              {BANK_ACCOUNTS.map((acc) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {BANK_GROUPS.map((bank) => (
                 <div
-                  key={acc.id}
-                  className="p-3.5 rounded-xl border border-[#E2E9E5] bg-[#F8FAF9] flex items-center justify-between gap-2"
+                  key={bank.id}
+                  className="p-3.5 rounded-2xl border border-[#E2E9E5] bg-[#F8FAF9] space-y-2.5 text-right"
                 >
-                  <div className="text-right">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-[#1C2622]">{acc.bankName}</span>
-                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-white border border-[#E2E9E5] text-[#556660]">
-                        {acc.badge}
-                      </span>
-                    </div>
-                    <span className="text-sm font-bold font-mono text-[#1B6B52] tracking-wider block mt-0.5" dir="ltr">
-                      {acc.accountNumber}
+                  <div className="flex items-center justify-between border-b border-[#E2E9E5] pb-2">
+                    <span
+                      dir="ltr"
+                      className={`text-[11px] font-bold font-latin px-2 py-0.5 rounded-md ${
+                        bank.bankCode === 'BML'
+                          ? 'bg-[#DC2626] text-white'
+                          : 'bg-[#EA580C] text-white'
+                      }`}
+                    >
+                      {bank.bankCode}
+                    </span>
+                    <span className="text-xs font-bold text-[#1C2622]">
+                      {bank.bankName}
                     </span>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handleCopyAccount(acc.accountNumber)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-[#EBF5F0] text-[#1C2622] border border-[#E2E9E5] transition-colors shrink-0"
-                  >
-                    {copiedAccount === acc.accountNumber ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-[#1B6B52]" />
-                        <span>ކޮޕީ ވެއްޖެ</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5 text-[#556660]" />
-                        <span>ކޮޕީ</span>
-                      </>
-                    )}
-                  </button>
+                  <div className="space-y-2">
+                    {bank.accounts.map((acc) => (
+                      <div
+                        key={acc.id}
+                        className="bg-white p-2.5 rounded-xl border border-[#E2E9E5] flex items-center justify-between gap-2"
+                      >
+                        <div className="text-right">
+                          <span className="text-[10px] font-semibold text-[#556660]">
+                            {acc.currency === 'USD' ? 'ޔޫ.އެސް ޑޮލަރު' : 'ދިވެހި ރުފިޔާ'} ({acc.currency})
+                          </span>
+                          <span
+                            className="text-xs sm:text-sm font-bold font-mono text-[#1B6B52] block tracking-wider"
+                            dir="ltr"
+                          >
+                            {acc.accountNumber}
+                          </span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => handleCopyAccount(acc.accountNumber)}
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#F8FAF9] hover:bg-[#EBF5F0] text-[#1C2622] border border-[#E2E9E5] transition-colors shrink-0"
+                        >
+                          {copiedAccount === acc.accountNumber ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-[#1B6B52]" />
+                              <span>ކޮޕީ ވެއްޖެ!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3.5 h-3.5 text-[#556660]" />
+                              <span>ކޮޕީ</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>

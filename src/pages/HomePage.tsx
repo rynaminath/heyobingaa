@@ -1,5 +1,5 @@
 import { EventItem, MediaItem, NavigationTab } from '../types';
-import { BANK_ACCOUNTS, PARTNERS } from '../data/initialData';
+import { BANK_ACCOUNTS, BANK_GROUPS, PARTNERS } from '../data/initialData';
 import BankCard from '../components/BankCard';
 import logoImg from '../images/logo.png';
 import { 
@@ -66,8 +66,8 @@ export default function HomePage({
                 <h1 className="text-3xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                   ހެޔޮ ޖީލެއް، <span className="text-[#A7F3D0]">ހެޔޮބިންގަލެއް</span> ގެ މަތީގައި
                 </h1>
-                <p className="text-sm sm:text-base text-[#D1E0D9] leading-relaxed max-w-2xl pt-2">
-                  ހެޔޮބިންގާ އަކީ އުޚުތުންގެ ފުރިހަމަ ލީޑަރޝިޕްގައި، މުޖުތަމަޢުގެ އިސްލާމީ ހޭލުންތެރިކަން އިތުރުކުރުމަށާއި، ބީރު މުޖުތަމަޢަށް ދީނީ ޢިލްމު ފޯރުކޮށްދިނުމަށާއި، ތުއްތުކުދިންނާއި ޒުވާނުން ތަރުބިއްޔަތުކުރުމަށް ހިންގޭ ދިވެހި ޖަމްޢިއްޔާއެކެވެ.
+                <p className="text-base sm:text-lg text-[#D1E0D9] leading-relaxed max-w-2xl pt-2">
+                  ހެޔޮބިންގާ އަކީ އުޚުތުންގެ ފުރިހަމަ ލީޑަރޝިޕްގައި، މުޖުތަމަޢުގެ އިސްލާމީ ހޭލުންތެރިކަން އިތުރުކުރުމަށާއި، އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް ދީނީ ޢިލްމު ފޯރުކޮށްދިނުމަށާއި، ތުއްތުކުދިންނާއި ޒުވާނުން ތަރުބިއްޔަތުކުރުމަށް ހިންގޭ ދިވެހި ޖަމްޢިއްޔާއެކެވެ.
                 </p>
               </div>
 
@@ -79,7 +79,7 @@ export default function HomePage({
                       އިސް ޙަރަކާތް
                     </span>
                     <span className="text-xs text-[#CFE2F5]">
-                      މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް & ދާރެސް ޓީވީ ގުޅިގެން
+                      މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް & ދާރިސް ޓީވީ ގުޅިގެން
                     </span>
                   </div>
                   <span className="text-xs font-mono text-[#D1E0D9]">
@@ -158,13 +158,13 @@ export default function HomePage({
               </div>
             </div>
 
-            {/* Left Column: Featured Dhares TV Deaf-Accessible Production Card */}
+            {/* Left Column: Featured Dhaaris TV Deaf-Accessible Production Card */}
             <div className="lg:col-span-5 space-y-4">
               <div className="bg-[#142E26] border border-[#234A3E] rounded-3xl p-5 shadow-2xl backdrop-blur-sm space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#255D96] animate-pulse" />
-                    <span className="text-xs font-bold text-[#CFE2F5] font-latin">DHARES TV × HEYO BINGAA</span>
+                    <span className="text-xs font-bold text-[#CFE2F5] font-latin">DHAARIS TV × HEYO BINGAA</span>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-[#255D96] text-white text-xs font-bold shadow-xs">
                     އިޝާރާތުގެ ބަހުރުވަ
@@ -200,9 +200,9 @@ export default function HomePage({
                   </div>
                 </div>
 
-                <div className="text-right space-y-2 text-xs text-[#D1E0D9]">
+                <div className="text-right space-y-2 text-xs sm:text-sm text-[#D1E0D9]">
                   <p className="leading-relaxed">
-                    ދާރެސް ޓީވީއާ ގުޅިގެން، ރާއްޖޭގެ ބީރު އަދި އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ މުޖުތަމަޢަށް އިސްލާމީ ޢިލްމާއި ތަރުބިއްޔަތު އިޝާރާތުގެ ބަހުރުވައިން ފޯރުކޮށްދިނުމުގެ މުހިންމު ސިލްސިލާ.
+                    ދާރިސް ޓީވީއާ ގުޅިގެން، ރާއްޖޭގެ އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް އިސްލާމީ ޢިލްމާއި ތަރުބިއްޔަތު އިޝާރާތުގެ ބަހުރުވައިން ފޯރުކޮށްދިނުމުގެ މުހިންމު ސިލްސިލާ.
                   </p>
                   <div className="pt-2 flex items-center justify-between border-t border-[#234A3E]">
                     <span className="text-[#A7F3D0] text-xs">
@@ -210,7 +210,7 @@ export default function HomePage({
                     </span>
                     <button
                       type="button"
-                      onClick={() => onNavigate('media')}
+                      onClick={() => onNavigate('videos')}
                       className="text-xs text-[#CFE2F5] hover:text-white underline underline-offset-4"
                     >
                       ހުރިހާ ވީޑިއޯއެއް ބައްލަވާ
@@ -233,10 +233,10 @@ export default function HomePage({
                 <span>ޖަމިއްޔާގެ އަސާސީ ވަނަވަރު</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold text-[#1C2622] tracking-tight">
-                13+ އަހަރުގެ މައިދާނީ ޚިދުމަތް، ރަސްމީ ބިންގަލެއްގެ މަތީގައި
+                <span dir="ltr" className="inline-block font-mono">13+</span> އަހަރުގެ މައިދާނީ ޚިދުމަތް، ރަސްމީ ބިންގަލެއްގެ މަތީގައި
               </h2>
               <p className="text-sm sm:text-base text-[#556660] leading-relaxed">
-                ހެޔޮބިންގާ އަކީ 15 ޖެނުއަރީ 2024 ގައި ރަސްމީކޮށް ރަޖިސްޓްރީ ކުރެވުނު ޖަމްޢިއްޔާއެއް ނަމަވެސް، މި ޖަމްޢިއްޔާގެ ފަހަތުގައިވަނީ އިސްލާމީ ދަޢުވަތާއި އިޖުތިމާޢީ ޚިދުމަތުގައި ވޭތުވެދިޔަ 13 އަހަރަށް ވުރެ ގިނަ ދުވަހު މައިދާނުގައި ހަރަކާތްތެރިވެފައިވާ ތަޖުރިބާކާރު ޓީމެކެވެ.
+                ހެޔޮބިންގާ އަކީ 15 ޖެނުއަރީ 2024 ގައި ރަސްމީކޮށް ރަޖިސްޓްރީ ކުރެވުނު ޖަމްޢިއްޔާއެއް ނަމަވެސް، މި ޖަމްޢިއްޔާގެ ފަހަތުގައިވަނީ އިސްލާމީ ދަޢުވަތާއި އިޖުތިމާޢީ ޚިދުމަތުގައި ވޭތުވެދިޔަ <span dir="ltr" className="inline-block font-mono font-bold">13+</span> އަހަރަށް ވުރެ ގިނަ ދުވަހު މައިދާނުގައި ހަރަކާތްތެރިވެފައިވާ ތަޖުރިބާކާރު ޓީމެކެވެ.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                 <div className="p-4 rounded-xl bg-[#F8FAF9] border border-[#E2E9E5] flex items-start gap-3">
@@ -325,10 +325,10 @@ export default function HomePage({
             </div>
           </div>
 
-          {/* Bank cards row: 4 accounts (2 banks x 2 currencies) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6">
-            {BANK_ACCOUNTS.map((acc) => (
-              <BankCard key={acc.id} account={acc} />
+          {/* Bank cards row: 2 main boxes (1 for BML, 1 for MIB) with MVR and USD inside */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+            {BANK_GROUPS.map((bank) => (
+              <BankCard key={bank.id} bankGroup={bank} />
             ))}
           </div>
         </div>
@@ -388,10 +388,10 @@ export default function HomePage({
               <Tv className="w-5 h-5" />
             </div>
             <h4 className="text-base font-bold text-[#1C2622]">
-              ބީރު މުޖުތަމަޢަށް ދާރެސް ޓީވީ ޕްރޮގްރާމްތައް
+              އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކަށް ދާރިސް ޓީވީ ޕްރޮގްރާމްތައް
             </h4>
-            <p className="text-xs text-[#556660] leading-relaxed">
-              އިޝާރާތުގެ ބަހުރުވައިން ދީނީ ޢިލްމު ގެނެސްދިނުމަށް ޚާއްޞަ ޓީވީ ސީރީޒްތައް ދާރެސް ޓީވީއާ ގުޅިގެން އުފެއްދުން.
+            <p className="text-xs sm:text-sm text-[#556660] leading-relaxed">
+              އިޝާރާތުގެ ބަހުރުވައިން ދީނީ ޢިލްމު ގެނެސްދިނުމަށް ޚާއްޞަ ޓީވީ ސީރީޒްތައް ދާރިސް ޓީވީއާ ގުޅިގެން އުފެއްދުން.
             </p>
           </div>
         </div>

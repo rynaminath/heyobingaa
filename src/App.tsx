@@ -3,7 +3,6 @@ import { NavigationTab, MediaItem } from './types';
 import { INITIAL_EVENTS, INITIAL_MEDIA } from './data/initialData';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import StickyMobileDonateBar from './components/StickyMobileDonateBar';
 import DonationReceiptModal from './components/DonationReceiptModal';
 import VideoPlayerModal from './components/VideoPlayerModal';
 
@@ -18,6 +17,7 @@ import DonatePage from './pages/DonatePage';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<NavigationTab>('home');
+  const [selectedProgramCategory, setSelectedProgramCategory] = useState<string | null>(null);
   const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
   const [activeMediaModal, setActiveMediaModal] = useState<MediaItem | null>(null);
 
@@ -30,11 +30,11 @@ export default function App() {
     const tabMetaConfig: Record<NavigationTab, { title: string; description: string }> = {
       home: {
         title: 'Heyo Bingaa NGO | Official Portal (ހެޔޮބިންގާ)',
-        description: 'ހެޔޮބިންގާ - ދިވެހިރާއްޖޭގައި އިސްލާމީ ދަޢުވަތާއި، ބީރު މުޖުތަމަޢަށް އިޝާރާތުގެ ބަހުރުވައިން ދީނީ ހޭލުންތެރިކަން ފޯރުކޮށްދިނުމުގައި ޙަރަކާތްތެރިވާ އުޚުތުންގެ ޖަމްޢިއްޔާ.'
+        description: 'ހެޔޮބިންގާ - ދިވެހިރާއްޖޭގައި އިސްލާމީ ދަޢުވަތާއި، އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް އިޝާރާތުގެ ބަހުރުވައިން ދީނީ ހޭލުންތެރިކަން ފޯރުކޮށްދިނުމުގައި ޙަރަކާތްތެރިވާ އުޚުތުންގެ ޖަމްޢިއްޔާ.'
       },
       programs: {
         title: 'Programs | Heyo Bingaa NGO',
-        description: 'ހެޔޮބިންގާގެ މައިގަނޑު ދަޢުވަތީ އަދި ތަރުބަވީ ޕްރޮގްރާމްތައް: ބީރު ކުދިންނަށް ދީނީ ތަޢުލީމު، ޢާއިލީ ދަރުސްތައް އަދި ދަޢުވާ ވަޞީލަތްތައް.'
+        description: 'ހެޔޮބިންގާގެ މައިގަނޑު ދަޢުވަތީ އަދި ތަރުބަވީ ޕްރޮގްރާމްތައް: އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނަށް ދީނީ ތަޢުލީމު، ޢާއިލީ ދަރުސްތައް، އޯޑިއޯ ފޮތްތައް އަދި ދަޢުވާ ވަޞީލަތްތައް.'
       },
       about: {
         title: 'About Us | Heyo Bingaa NGO',
@@ -42,11 +42,11 @@ export default function App() {
       },
       videos: {
         title: 'Videos | Heyo Bingaa NGO',
-        description: 'ހެޔޮބިންގާގެ ޔޫޓިއުބް ވީޑިއޯތަކާއި، ދާރެސް ޓީވީއާ ގުޅިގެން ތައްޔާރުކުރެވިފައިވާ އިޝާރާތުގެ ބަހުރުވައިގެ ދަރުސްތައް.'
+        description: 'ހެޔޮބިންގާގެ ޔޫޓިއުބް ވީޑިއޯތަކާއި، ދާރިސް ޓީވީއާ ގުޅިގެން ތައްޔާރުކުރެވިފައިވާ އިޝާރާތުގެ ބަހުރުވައިގެ ދަރުސްތައް.'
       },
       media: {
         title: 'Videos & Media | Heyo Bingaa NGO',
-        description: 'ދާރެސް ޓީވީއާއި ގުޅިގެން ތައްޔާރުކުރެވިފައިވާ އިޝާރާތުގެ ބަހުރުވައިގެ ވީޑިއޯތަކާއި ހެޔޮބިންގާގެ މީޑިއާ އާކައިވް.'
+        description: 'ދާރިސް ޓީވީއާއި ގުޅިގެން ތައްޔާރުކުރެވިފައިވާ އިޝާރާތުގެ ބަހުރުވައިގެ ވީޑިއޯތަކާއި ހެޔޮބިންގާގެ މީޑިއާ އާކައިވް.'
       },
       gallery: {
         title: 'Photo Gallery | Heyo Bingaa NGO',
@@ -139,6 +139,11 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleSelectProgramCategory = (cat: string) => {
+    setSelectedProgramCategory(cat);
+    handleNavigate('programs');
+  };
+
   const featuredEvent = events.find(e => e.isFeatured) || events[0];
 
   return (
@@ -146,7 +151,11 @@ export default function App() {
       {/* 1. Global Navigation Header */}
       <Header
         currentTab={currentTab}
-        onSelectTab={handleNavigate}
+        onSelectTab={(tab) => {
+          setSelectedProgramCategory(null);
+          handleNavigate(tab);
+        }}
+        onSelectProgramCategory={handleSelectProgramCategory}
         onOpenDonateModal={() => setIsDonateModalOpen(true)}
       />
 
@@ -181,6 +190,8 @@ export default function App() {
           <ProgramsPage
             onNavigate={handleNavigate}
             onOpenDonateModal={() => setIsDonateModalOpen(true)}
+            initialCategory={selectedProgramCategory}
+            onSelectCategory={(cat) => setSelectedProgramCategory(cat)}
           />
         )}
 
@@ -207,19 +218,13 @@ export default function App() {
         onOpenDonateModal={() => setIsDonateModalOpen(true)}
       />
 
-      {/* 4. Sticky Mobile Donate Action Bar (Anchored during scroll) */}
-      <StickyMobileDonateBar
-        onOpenDonateModal={() => setIsDonateModalOpen(true)}
-        onNavigateToDonate={() => handleNavigate('donate')}
-      />
-
-      {/* 5. Transfer & Viber Slip Modal */}
+      {/* 4. Transfer & Viber Slip Modal */}
       <DonationReceiptModal
         isOpen={isDonateModalOpen}
         onClose={() => setIsDonateModalOpen(false)}
       />
 
-      {/* 6. Video Player Modal for Dhares TV & Sign Language Media */}
+      {/* 6. Video Player Modal for Dhaaris TV & Sign Language Media */}
       <VideoPlayerModal
         media={activeMediaModal}
         onClose={() => setActiveMediaModal(null)}

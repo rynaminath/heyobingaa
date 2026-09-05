@@ -1,4 +1,4 @@
-import { BankAccount, EventItem, MediaItem, ProgramItem, PartnerOrg, DonationSlip, VolunteerApplication } from '../types';
+import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg, DonationSlip, VolunteerApplication } from '../types';
 
 export const NGO_CONTACT = {
   viberNumber: '+9607522778',
@@ -58,6 +58,31 @@ export const BANK_ACCOUNTS: BankAccount[] = [
   }
 ];
 
+export const BANK_GROUPS: BankGroup[] = [
+  {
+    id: 'bml',
+    bankCode: 'BML',
+    bankName: 'ބޭންކް އޮފް މޯލްޑިވްސް (BML)',
+    bankNameEn: 'Bank of Maldives',
+    accountName: 'HEYO BINGAA',
+    accounts: [
+      BANK_ACCOUNTS[0], // BML MVR (7770000179374)
+      BANK_ACCOUNTS[1]  // BML USD (7770000179375)
+    ]
+  },
+  {
+    id: 'mib',
+    bankCode: 'MIB',
+    bankName: 'މޯލްޑިވްސް އިސްލާމިކް ބޭންކް (MIB)',
+    bankNameEn: 'Maldives Islamic Bank',
+    accountName: 'HEYO BINGAA',
+    accounts: [
+      BANK_ACCOUNTS[2], // MIB MVR (90101555001661000)
+      BANK_ACCOUNTS[3]  // MIB USD (90101555001662000)
+    ]
+  }
+];
+
 export const PARTNERS: PartnerOrg[] = [
   {
     id: 'islamic-affairs',
@@ -76,7 +101,7 @@ export const PARTNERS: PartnerOrg[] = [
     accentColor: 'green'
   },
   {
-    id: 'dhares-tv',
+    id: 'dhaaris-tv',
     nameDv: 'ދާރިސް ޓީވީ',
     nameEn: 'Dhaaris TV',
     role: 'ޓީވީ ޕްރޮގްރާމްތަކާއި އިޝާރާތުގެ ބަހުރުވަ އުފެއްދުން',
@@ -128,11 +153,11 @@ export const INITIAL_EVENTS: EventItem[] = [
     time: 'ރޭގަނޑު 8:45',
     dayText: 'ރޯދަ މަހުގެ 28 ވާ ބުދަ ދުވަހުގެ ރޭގަނޑު',
     audience: 'އާންމުކޮށް ހުރިހާ ފަރާތްތަކަށް (އަންހެނުން، ފިރިހެނުން އަދި ހުރިހާ އުމުރުފުރާއެއް)',
-    broadcast: 'ދާރެސް ޓީވީ (Dhares TV) އިން ވަގުތުން ލައިވްކޮށް ދުރަށް ދައްކާނެ',
+    broadcast: 'ދާރިސް ޓީވީ (Dhaaris TV) އިން ވަގުތުން ލައިވްކޮށް ދުރަށް ދައްކާނެ',
     description: 'ބަރަކާތްތެރި ރޯދަމަހުގެ ފަހު ދިހައިގެ ހެޔޮ ދަރުމައާއި ޘަވާބު ޙާޞިލުކުރުމަށާއި، ރޯދައިގެ ޙަޤީޤީ ރޫޙު ދިރިއުޅުމަށް ގެނައުމާ ގުޅޭގޮތުން ޚާއްޞަ ދަރުހެއް. މިއީ މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒްގެ އެއްބާރުލުމާއެކު ހެޔޮބިންގާ އިން އިންތިޒާމުކުރާ ޚާއްޞަ ޙަރަކާތެކެވެ.',
     isFeatured: true,
     status: 'upcoming',
-    partnerOrganization: 'މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް & ދާރެސް ޓީވީ'
+    partnerOrganization: 'މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް & ދާރިސް ޓީވީ'
   },
   {
     id: 'event-2',
@@ -152,19 +177,19 @@ export const INITIAL_EVENTS: EventItem[] = [
   },
   {
     id: 'event-3',
-    title: 'ބީރު އަދި އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކަށް: ނަމާދުގެ ފިޤުހު',
+    title: 'އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް: ނަމާދުގެ ފިޤުހު',
     titleEn: 'Fiqh of Salah with Sign Language',
     speaker: 'އުސްތާޛު ޢަލީ ޒައިދް (އިޝާރާތުގެ ބަހުރުވައިގެ ތަރުޖަމާއާއެކު)',
     venue: 'އިސްލާމީ މަރުކަޒުގެ ޖަލްސާކުރާ މާލަން',
     date: '2026-04-25',
     time: 'ރޭގަނޑު 8:30',
     dayText: 'ހުކުރު ދުވަހުގެ ރޭގަނޑު',
-    audience: 'ބީރު މުޖުތަމަޢާއި އެބޭފުޅުންގެ ޢާއިލާތަކަށް',
-    broadcast: 'ދާރެސް ޓީވީ އަދި ސޯޝަލް މީޑިއާ',
+    audience: 'އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކާއި އެބޭފުޅުންގެ ޢާއިލާތަކަށް',
+    broadcast: 'ދާރިސް ޓީވީ އަދި ސޯޝަލް މީޑިއާ',
     description: 'ނަމާދުގެ ރުކުންތަކާއި ވާޖިބުތައް އިޝާރާތުގެ ބަހުރުވައިން ތަފްޞީލުކޮށް ބަޔާންކޮށްދޭ ޚާއްޞަ މަޢުލޫމާތު ސެޝަން.',
     isFeatured: false,
     status: 'upcoming',
-    partnerOrganization: 'ދާރެސް ޓީވީ'
+    partnerOrganization: 'ދާރިސް ޓީވީ'
   }
 ];
 
@@ -181,7 +206,7 @@ export const INITIAL_MEDIA: MediaItem[] = [
     partner: 'Heyo Bingaa Official',
     thumbnailUrl: 'https://i.ytimg.com/vi/3Q_Za7OtXNA/hqdefault.jpg',
     videoEmbedUrl: 'https://www.youtube.com/embed/3Q_Za7OtXNA',
-    summary: 'ދާރެސް ޓީވީއާ ގުޅިގެން ހެޔޮބިންގާއިން ތައްޔާރުކޮށްފައިވާ ރޯދަ ލީފްލެޓް. ބީރު އަދި އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކަށް ޚާއްޞަކޮށް ފުރިހަމަ އިޝާރާތުގެ ބަހުރުވައިގެ ތަރުޖަމާއާއެކު ގެނެސްދެވިފައިވާ މުހިންމު ދަޢުވަތީ ޕްރޮގްރާމެއް.',
+    summary: 'ދާރިސް ޓީވީއާ ގުޅިގެން ހެޔޮބިންގާއިން ތައްޔާރުކޮށްފައިވާ ރޯދަ ލީފްލެޓް. އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް ޚާއްޞަކޮށް ފުރިހަމަ އިޝާރާތުގެ ބަހުރުވައިގެ ތަރުޖަމާއާއެކު ގެނެސްދެވިފައިވާ މުހިންމު ދަޢުވަތީ ޕްރޮގްރާމެއް.',
     category: 'deaf_accessible',
     publishedDate: '2026-03-01',
     viewsCount: 'Official'
@@ -360,7 +385,7 @@ export const PROGRAMS: ProgramItem[] = [
     format: 'ކުޅިވަރާއި، ކުލަޖެއްސުމާއި، ޢިބުރަތްތެރި ވާހަކަތަކުގެ ޒަރީޢާއިން',
     description: 'ކުޑަކުދިންގެ ހިތްތަކުގައި ﷲ ތަޢާލާއަށް ލޯބިޖެއްސުމާއި، ރިވެތި އަޚްލާޤާއި ސަލާމްގޮވުމާއި ކެއިންބުއިމުގެ އަދަބުތައް ޝައުޤުވެރި ޙަރަކާތްތަކުގެ ތެރެއިން އުނގަންނައިދިނުން.',
     impactMetrics: '800+ ތުއްތު ކުދިންނަށް ބާއްވާފައިވާ ސެޝަންތައް',
-    collaborators: ['ދާރެސް ޓީވީ'],
+    collaborators: ['ދާރިސް ޓީވީ'],
     features: [
       'މަލާމަލި އިސްލާމީ ވާހަކަ ކިޔައިދިނުމުގެ ސެޝަންތައް',
       'ހެޔޮ ޢަމަލުތަކުގެ އެކްޓިވިޓީ ފޮތްތަކާއި ވޯކްޝީޓް',
@@ -368,6 +393,42 @@ export const PROGRAMS: ProgramItem[] = [
       'ދަރިންނާއެކު މައިންބަފައިން ބައިވެރިވާ ޚާއްޞަ ވަގުތު'
     ],
     imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'prog-audiobooks',
+    title: 'އޯޑިއޯ ފޮތްތަކާއި އަޑުއަހާ ވާހަކަތައް (Islamic Audiobooks Collection)',
+    category: 'audiobooks',
+    categoryLabel: 'އޯޑިއޯ ފޮތްތައް (Audiobooks)',
+    targetAudience: 'ޢާއިލާތައް، ކުޑަކުދިން، ލޯފަން ފަރާތްތައް އަދި ދަތުރުމަތީގައި އަޑުއަހާ ފަރާތްތައް',
+    format: 'ހައި-ކޮލިޓީ އޯޑިއޯ ރެކޯޑިންގްސް، ޕޮޑްކާސްޓް އަދި ޑިޖިޓަލް އޯޑިއޯ',
+    description: 'ކީރިތި ޤުރްއާނުގެ ޢިބުރަތްތެރި ވާހަކަތަކާއި، ނަބިއްޔުންގެ ޙަޔާތްޕުޅާއި، އިސްލާމީ އަޚްލާޤާއި ތާރީޚާ ގުޅޭ ފޮތްތައް ފަސޭހަކަމާއެކު އަޑުއަހާލެވޭ ގޮތަށް ތައްޔާރުކުރެވިފައިވާ ޚާއްޞަ އޯޑިއޯ ލައިބްރަރީ.',
+    impactMetrics: '20+ އޯޑިއޯ ފޮތާއި ވާހަކަ ރެކޯޑްކޮށް ޝާއިޢުކުރެވިފައިވޭ',
+    collaborators: ['ދާރިސް ޓީވީ', 'ހެޔޮބިންގާ އޯޑިއޯ ޓީމު'],
+    features: [
+      'ސާފު ދިވެހި އަޑުން ރެކޯޑްކުރެވިފައިވާ ފޮތްތައް',
+      'ކުޑަކުދިންގެ ޝައުޤުވެރިކަން ދަމައިގަންނަ ވާހަކަ ކިޔުން',
+      'ބަސްމަގާއި އަދަބުތައް ދަސްކޮށްދޭ ޒަމާނީ ފޯމެޓް',
+      'އިންޓަނެޓް ނެތް ޙާލަތްތަކުގައިވެސް ޑައުންލޯޑްކޮށް އަޑުއެހުން'
+    ],
+    imageUrl: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 'prog-lectures',
+    title: 'ދަރުސްތަކާއި ޢިލްމީ މަޖިލިސްތައް (Lectures & Knowledge Seminars)',
+    category: 'lectures',
+    categoryLabel: 'ދަރުސްތައް (Lectures)',
+    targetAudience: 'ޒުވާނުން، ކަނބަލުން އަދި ޢާންމު ރައްޔިތުން',
+    format: 'ޢާންމު ދަރުސް، ސެމިނާރ، ޕެނަލް ޑިސްކަޝަން އަދި ލައިވް ބްރޯޑްކާސްޓް',
+    description: 'ދިވެހިރާއްޖޭގެ ފުންނާބުއުސް ޢިލްމުވެރިންނާ ގުޅިގެން މުޅި ރާއްޖެއަށް ހުޅުވާލައިގެން ބޭއްވޭ ޢާންމު ބޮޑެތި ދަރުސްތަކާއި، ސުވާލާއި ޖަވާބު އަދި މުހިންމު ދީނީ ޤަޟިއްޔާތަކަށް ހޭލުންތެރިކަން އިތުރުކުރުމުގެ ސިލްސިލާ.',
+    impactMetrics: '50+ ދަރުސް އަދި 30,000+ ބައިވެރިން ޙާޟިރުވެފައިވޭ',
+    collaborators: ['މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް', 'ދާރިސް ޓީވީ', 'ޖަމްޢިއްޔަތުއް ސަލަފް'],
+    features: [
+      'މާލެއާއި އަތޮޅުތަކުގައި ޢާންމުކޮށް ހުޅުވާލައިގެން ބޭއްވުން',
+      'އިޝާރާތުގެ ބަހުރުވައިގެ ލައިވް ތަރުޖަމާ ފޯރުކޮށްދިނުން',
+      'ސުވާލުކުރުމާއި ވަގުތުން ޖަވާބު ލިބޭ ސެގްމެންޓް',
+      'ޓީވީ އަދި ސޯޝަލް މީޑިއާއިން ވަގުތުން ލައިވްކޮށް ދުރަށް ދެއްކުން'
+    ],
+    imageUrl: 'https://images.unsplash.com/photo-1544928141-565c08492432?auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 'prog-teenagers',
@@ -414,9 +475,9 @@ export const INITIAL_DONATION_SLIPS: DonationSlip[] = [
     phone: '7789012',
     amount: 500,
     currency: 'MVR',
-    bankAccount: 'BML MVR (7730000584219)',
+    bankAccount: 'BML MVR (7770000179374)',
     referenceNumber: 'TXN-984210',
-    notes: 'ބީރު މީހުންގެ ޓީވީ ޕްރޮގްރާމްތަކަށް ހޭދަކޮށްދެއްވުން އެދެން',
+    notes: 'އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކުގެ ޓީވީ ޕްރޮގްރާމްތަކަށް ހޭދަކޮށްދެއްވުން އެދެން',
     date: '2026-03-01',
     verified: true
   },
@@ -426,7 +487,7 @@ export const INITIAL_DONATION_SLIPS: DonationSlip[] = [
     phone: '9912345',
     amount: 1500,
     currency: 'MVR',
-    bankAccount: 'MIB MVR (901018421901)',
+    bankAccount: 'MIB MVR (90101555001661000)',
     referenceNumber: 'MIB-883192',
     notes: 'ރޯދައިގެ ހިޔަލުގައި ދަރުސް އިންތިޒާމުކުރުމަށް',
     date: '2026-03-02',

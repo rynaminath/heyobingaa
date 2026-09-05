@@ -19,6 +19,15 @@ export interface BankAccount {
   badge: string;
 }
 
+export interface BankGroup {
+  id: 'bml' | 'mib';
+  bankCode: 'BML' | 'MIB';
+  bankName: string;
+  bankNameEn: string;
+  accountName: string;
+  accounts: BankAccount[];
+}
+
 export interface EventItem {
   id: string;
   title: string;
@@ -46,7 +55,7 @@ export interface MediaItem {
   speaker?: string;
   interpreter?: string; // Sign language interpreter name
   isDeafAccessible: boolean; // Sign language integrated
-  partner: string; // e.g. Dhares TV
+  partner: string; // e.g. Dhaaris TV
   thumbnailUrl: string;
   videoEmbedUrl?: string;
   summary: string;
@@ -58,7 +67,7 @@ export interface MediaItem {
 export interface ProgramItem {
   id: string;
   title: string;
-  category: 'women' | 'toddlers' | 'teenagers' | 'joint_ngo' | 'community';
+  category: 'women' | 'toddlers' | 'teenagers' | 'joint_ngo' | 'community' | 'audiobooks' | 'lectures';
   categoryLabel: string;
   targetAudience: string;
   format: string; // Interactive workshop, lecture, outdoor, etc.

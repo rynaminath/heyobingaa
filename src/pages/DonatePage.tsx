@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BANK_ACCOUNTS, NGO_CONTACT } from '../data/initialData';
+import { BANK_ACCOUNTS, BANK_GROUPS, NGO_CONTACT } from '../data/initialData';
 import BankCard from '../components/BankCard';
 import { 
   HeartHandshake, 
@@ -120,19 +120,19 @@ export default function DonatePage({}: DonatePageProps) {
         <div className="lg:col-span-7 space-y-4 text-right">
           <div className="space-y-1">
             <span className="text-xs font-bold text-[#1B6B52] uppercase tracking-wider">
-              އެކައުންޓް މަޢުލޫމާތު (2 ބޭންކް • 4 އެކައުންޓް)
+              އެކައުންޓް މަޢުލޫމާތު (2 މައި ބޭންކް: BML އަދި MIB)
             </span>
             <h3 className="text-2xl font-bold text-[#1C2622]">
               ރަސްމީ ބޭންކް އެކައުންޓްތައް
             </h3>
             <p className="text-xs text-[#556660]">
-              ބީއެމްއެލް (BML) އަދި އެމްއައިބީ (MIB) ގެ ދިވެހި ރުފިޔާ އަދި ޑޮލަރު އެކައުންޓް.
+              ބީއެމްއެލް (BML) އަދި އެމްއައިބީ (MIB) ގެ ދިވެހި ރުފިޔާ (MVR) އަދި ޑޮލަރު (USD) އެކައުންޓްތައް.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
-            {BANK_ACCOUNTS.map((acc) => (
-              <BankCard key={acc.id} account={acc} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            {BANK_GROUPS.map((bank) => (
+              <BankCard key={bank.id} bankGroup={bank} />
             ))}
           </div>
 
@@ -267,10 +267,10 @@ export default function DonatePage({}: DonatePageProps) {
               <Tv className="w-5 h-5" />
             </div>
             <h3 className="text-base font-bold text-[#1C2622]">
-              ބީރު މުޖުތަމަޢަށް ޚާއްޞަ ޓީވީ ޕްރޮޑަކްޝަން
+              އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް ޚާއްޞަ ޓީވީ ޕްރޮޑަކްޝަން
             </h3>
-            <p className="text-xs text-[#556660] leading-relaxed">
-              ދާރެސް ޓީވީއާ ގުޅިގެން އިޝާރާތުގެ ބަހުރުވައިން ދީނީ ޢިލްމު ގެނެސްދޭ ސިލްސިލާ ޕްރޮގްރާމްތައް އުފެއްދުމާއި، ސައިން ލެންގުއޭޖް އިންޓަޕްރިޓަރުންގެ ޚަރަދުތައް ހަމަޖެއްސުން.
+            <p className="text-xs sm:text-sm text-[#556660] leading-relaxed">
+              ދާރިސް ޓީވީއާ ގުޅިގެން އިޝާރާތުގެ ބަހުރުވައިން ދީނީ ޢިލްމު ގެނެސްދޭ ސިލްސިލާ ޕްރޮގްރާމްތައް އުފެއްދުމާއި، ސައިން ލެންގުއޭޖް އިންޓަޕްރިޓަރުންގެ ޚަރަދުތައް ހަމަޖެއްސުން.
             </p>
           </div>
 

@@ -10,6 +10,8 @@ interface VideoPlayerModalProps {
 export default function VideoPlayerModal({ media, onClose }: VideoPlayerModalProps) {
   const [isPlaying, setIsPlaying] = useState(true);
 
+  const [copiedLink, setCopiedLink] = useState(false);
+
   if (!media) return null;
 
   const youtubeWatchUrl = media.id === 'media-1' || media.videoEmbedUrl?.includes('3Q_Za7OtXNA')
@@ -21,7 +23,7 @@ export default function VideoPlayerModal({ media, onClose }: VideoPlayerModalPro
       try {
         await navigator.share({
           title: media.title,
-          text: `${media.title} - ހެޔޮބިންގާ & ދާރެސް ޓީވީ`,
+          text: `${media.title} - ހެޔޮބިންގާ & ދާރިސް ޓީވީ`,
           url: youtubeWatchUrl,
         });
       } catch {
@@ -29,7 +31,8 @@ export default function VideoPlayerModal({ media, onClose }: VideoPlayerModalPro
       }
     } else {
       navigator.clipboard.writeText(youtubeWatchUrl);
-      alert('ލިންކް ކޮޕީ ކުރެވިއްޖެ!');
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2500);
     }
   };
 
@@ -128,7 +131,7 @@ export default function VideoPlayerModal({ media, onClose }: VideoPlayerModalPro
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 font-thaana text-xs transition-colors"
               >
                 <Share2 className="w-3.5 h-3.5" />
-                <span>ޙިއްޞާ</span>
+                <span>{copiedLink ? 'ލިންކް ކޮޕީ ވެއްޖެ!' : 'ޙިއްޞާ'}</span>
               </button>
             </div>
           </div>
@@ -140,7 +143,7 @@ export default function VideoPlayerModal({ media, onClose }: VideoPlayerModalPro
                 <span>އިޝާރާތުގެ ބަހުރުވައިގެ ތަރުޖަމާ: <strong className="text-white">{media.interpreter}</strong></span>
               </div>
               <span className="text-[11px] px-2 py-0.5 rounded bg-[#1B6B52]/40 text-[#EBF5F0] border border-[#1B6B52]/50">
-                ބީރު މުޖުތަމަޢަށް ޚާއްޞަ
+                އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކަށް ޚާއްޞަ
               </span>
             </div>
           )}
