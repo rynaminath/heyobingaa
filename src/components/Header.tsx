@@ -309,7 +309,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
               className="group relative inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#B83244] hover:bg-[#9A2434] text-white font-bold text-sm sm:text-base font-thaana shadow-sm hover:shadow-md active:scale-95 transition-all duration-200"
             >
               <HeartHandshake className="w-4 h-4 text-white group-hover:scale-110 transition-transform shrink-0" />
-              <span>އެހީތެރިވެލައްވާ</span>
+              <span>އެހީދެއްވުމަށް</span>
             </button>
           </div>
         </div>
@@ -415,7 +415,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                 className="w-full py-3 rounded-xl bg-[#B83244] hover:bg-[#9A2434] text-white font-bold font-thaana text-base shadow-md flex items-center justify-center gap-2"
               >
                 <HeartHandshake className="w-4 h-4" />
-                <span>އެހީތެރިވެލައްވާ (Donate)</span>
+                <span>އެހީދެއްވުމަށް (Donate)</span>
               </button>
 
               <div className="flex items-center justify-between pt-1 px-1 text-xs text-[#556660] font-thaana">

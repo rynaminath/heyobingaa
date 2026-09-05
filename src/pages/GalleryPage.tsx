@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ChevronRight, ChevronLeft, Play, Pause, Maximize2, X, Grid, Film, UploadCloud, HeartHandshake } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Play, Pause, Maximize2, X, Grid, Film } from 'lucide-react';
 import { NavigationTab } from '../types';
 
 interface GalleryPageProps {
@@ -13,68 +13,67 @@ interface GalleryItem {
   title: string;
 }
 
+// Pre-configured list of the 13 uploaded gallery images in /public/images
+const UPLOADED_GALLERY_IMAGES: GalleryItem[] = Array.from({ length: 13 }, (_, i) => {
+  const num = i + 1;
+  const filename = `gallery (${num}).jpg`;
+  return {
+    id: `gallery-${num}`,
+    url: `/images/${encodeURIComponent(filename)}`,
+    filename,
+    title: `ހެޔޮބިންގާ ޙަރަކާތްތައް • ތަޞްވީރު ${num}`
+  };
+});
+
 export default function GalleryPage({ onNavigate }: GalleryPageProps) {
-  // Read all images dynamically from public/images using Vite's glob
-  const [images, setImages] = useState<GalleryItem[]>([]);
+  // Read all 13 images instantly, with dynamic scan support
+  const [images, setImages] = useState<GalleryItem[]>(UPLOADED_GALLERY_IMAGES);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [viewMode, setViewMode] = useState<'slideshow' | 'grid'>('slideshow');
 
   useEffect(() => {
-    // Scan all images in public/images
-    const modules = import.meta.glob<{ default: string }>(
-      ['/public/images/*.{jpg,jpeg,png,webp,svg,JPG,JPEG,PNG,WEBP,SVG}', '/images/*.{jpg,jpeg,png,webp,svg,JPG,JPEG,PNG,WEBP,SVG}'],
-      { eager: true, query: '?url', import: 'default' }
-    );
-
-    const detected: GalleryItem[] = [];
-    for (const [path, urlValue] of Object.entries(modules)) {
-      // Clean path to get public URL and clean filename
-      const cleanPath = path.replace(/^\/public/, '');
-      const filename = cleanPath.split('/').pop() || '';
-      // Format a readable title from filename
-      const readableTitle = filename
-        .replace(/\.[^/.]+$/, '')
-        .replace(/^[0-9]+[_-]?/, '')
-        .replace(/[_-]+/g, ' ');
-
-      detected.push({
-        id: path,
-        url: typeof urlValue === 'string' ? urlValue : cleanPath,
-        filename,
-        title: readableTitle || filename
-      });
-    }
-
-    // Sort naturally by filename
-    detected.sort((a, b) => a.filename.localeCompare(b.filename, undefined, { numeric: true }));
-
-    // Fallback if none loaded
-    if (detected.length === 0) {
-      detected.push(
-        {
-          id: 'fallback-1',
-          url: '/images/1_lecture_event.jpg',
-          filename: '1_lecture_event.jpg',
-          title: 'Lecture & Islamic Event'
-        },
-        {
-          id: 'fallback-2',
-          url: '/images/2_community_gathering.jpg',
-          filename: '2_community_gathering.jpg',
-          title: 'Community Gathering'
-        },
-        {
-          id: 'fallback-3',
-          url: '/images/3_kids_learning.jpg',
-          filename: '3_kids_learning.jpg',
-          title: 'Kids Learning Workshop'
-        }
+    try {
+      // Scan all images in public/images
+      const modules = import.meta.glob<{ default: string }>(
+        ['/public/images/*.*', '/images/*.*'],
+        { eager: true, query: '?url', import: 'default' }
       );
-    }
 
-    setImages(detected);
+      const detected: GalleryItem[] = [];
+      for (const [path, urlValue] of Object.entries(modules)) {
+        const cleanPath = path.replace(/^\/public/, '');
+        const filename = cleanPath.split('/').pop() || '';
+        if (!filename) continue;
+
+        // Skip non-image files if any
+        if (!/\.(jpg|jpeg|png|webp|svg)$/i.test(filename)) continue;
+
+        const matchNumber = filename.match(/\(([0-9]+)\)/);
+        const readableTitle = matchNumber
+          ? `ހެޔޮބިންގާ ޙަރަކާތްތައް • ތަޞްވީރު ${matchNumber[1]}`
+          : filename
+              .replace(/\.[^/.]+$/, '')
+              .replace(/^[0-9]+[_-]?/, '')
+              .replace(/[_-]+/g, ' ');
+
+        detected.push({
+          id: path,
+          url: typeof urlValue === 'string' ? urlValue : `/images/${encodeURIComponent(filename)}`,
+          filename,
+          title: readableTitle || filename
+        });
+      }
+
+      // If detected images found via glob, sort naturally
+      if (detected.length > 0) {
+        detected.sort((a, b) => a.filename.localeCompare(b.filename, undefined, { numeric: true }));
+        setImages(detected);
+      }
+    } catch {
+      // Fallback is already initialized to UPLOADED_GALLERY_IMAGES
+    }
   }, []);
 
   const total = images.length;
@@ -167,23 +166,6 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
               {total} Photos
             </div>
           </div>
-        </div>
-
-        {/* Informational tip on uploading images */}
-        <div className="bg-[#EBF5F0]/70 border border-[#C8E0D5] rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#145541]">
-          <div className="flex items-center gap-2.5">
-            <UploadCloud className="w-4 h-4 text-[#1B6B52] shrink-0" />
-            <span>
-              <strong>ފޮޓޯ އަޕްލޯޑް ކުރެއްވުމަށް:</strong> ތިޔަބޭފުޅުން <code className="font-mono bg-white/80 px-1.5 py-0.5 rounded text-[#1B6B52]" dir="ltr">public/images</code> ފޯލްޑަރަށް އަޅުއްވާ ހުރިހާ ފޮޓޯއެއް މި ގެލެރީ ސްލައިޑްޝޯއިން އޮޓޮމެޓިކުން ދައްކައިދޭނެއެވެ.
-            </span>
-          </div>
-          <button
-            onClick={() => onNavigate('donate')}
-            className="flex items-center gap-1.5 text-xs font-bold text-[#B83244] hover:underline shrink-0"
-          >
-            <HeartHandshake className="w-3.5 h-3.5" />
-            <span>އެހީތެރިވެލައްވާ</span>
-          </button>
         </div>
 
         {/* VIEW MODE 1: SLIDESHOW */}

@@ -144,7 +144,7 @@ export default function HomePage({
                   className="px-6 py-3 rounded-xl bg-[#B83244] hover:bg-[#9A2434] text-white font-bold text-sm shadow-lg shadow-[#B83244]/25 active:scale-95 transition-all flex items-center gap-2 border border-[#B83244]/40"
                 >
                   <HeartHandshake className="w-4 h-4 text-white" />
-                  <span>އެހީތެރިވެލައްވާ (Donate Now)</span>
+                  <span>އެހީދެއްވުމަށް (Donate Now)</span>
                 </button>
 
                 <button

@@ -70,7 +70,7 @@ export default function StickyMobileDonateBar({
           className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#B83244] hover:bg-[#9A2434] active:bg-[#7E1A27] text-white font-bold font-thaana text-xs shadow-md shadow-[#B83244]/20"
         >
           <HeartHandshake className="w-4 h-4 text-white" />
-          <span>އެހީތެރިވެލައްވާ (Donate)</span>
+          <span>އެހީދެއްވުމަށް (Donate)</span>
         </button>
       </div>
     </div>
