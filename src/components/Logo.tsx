@@ -37,13 +37,13 @@ export default function Logo({ size = 'md', variant = 'colored' }: LogoProps) {
       </div>
 
       {/* Brand Typography: Dhivehi on top, English below */}
-      <div className="flex flex-col justify-center leading-tight">
-        <span className={`font-bold tracking-tight font-thaana ${titleSizes[size]} ${variant === 'dark' ? 'text-white' : 'text-[#1E2623]'}`}>
+      <div className="flex flex-col justify-center leading-tight text-right items-start">
+        <span className={`font-bold tracking-tight font-thaana text-right ${titleSizes[size]} ${variant === 'dark' ? 'text-white' : 'text-[#1E2623]'}`}>
           ހެޔޮބިންގާ
         </span>
         <span 
           dir="ltr" 
-          className={`font-semibold font-latin tracking-wide ${englishSizes[size]} ${variant === 'dark' ? 'text-white/80' : 'text-[#1B6B52]'}`}
+          className={`font-semibold font-latin tracking-wide text-right ${englishSizes[size]} ${variant === 'dark' ? 'text-white/80' : 'text-[#1B6B52]'}`}
         >
           Heyo Bingaa
         </span>

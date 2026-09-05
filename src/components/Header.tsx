@@ -198,7 +198,101 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Mobile Hamburger Menu Button on the Right (RTL start) */}
+          {/* Right Side (RTL Start): Logo & Desktop Navigation - Kept right-aligned on all screen sizes */}
+          <div className="flex items-center gap-6 xl:gap-8">
+            {/* Logo: Anchored on the right across mobile, tablet, and desktop */}
+            <div 
+              onClick={() => handleNavClick('home')}
+              className="cursor-pointer py-2 focus:outline-none shrink-0"
+            >
+              <Logo size="md" />
+            </div>
+
+            {/* Desktop Navigation Links with Icons (Right-aligned immediately next to logo) */}
+            <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+              {navItems.map((item) => {
+                const isActive = currentTab === item.id || (item.id === 'videos' && currentTab === 'media');
+
+                if (item.id === 'programs') {
+                  return (
+                    <div
+                      key={item.id}
+                      className="relative"
+                      onMouseEnter={handleDropdownEnter}
+                      onMouseLeave={handleDropdownLeave}
+                    >
+                      <button
+                        id={`nav-link-${item.id}`}
+                        type="button"
+                        onClick={() => handleNavClick('programs')}
+                        className={`relative px-3.5 py-2 rounded-xl text-lg font-semibold font-thaana transition-all duration-200 flex items-center gap-2 ${
+                          isActive
+                            ? 'text-[#1B6B52] bg-[#EBF5F0] font-bold shadow-xs'
+                            : 'text-[#556660] hover:text-[#1B6B52] hover:bg-[#EBF5F0]/60'
+                        }`}
+                        aria-expanded={programsDropdownOpen}
+                        aria-haspopup="true"
+                      >
+                        <span className="text-[#1B6B52] shrink-0">{item.icon}</span>
+                        <span>{item.label}</span>
+                        <ChevronDown className={`w-3.5 h-3.5 text-[#556660] transition-transform duration-200 ${programsDropdownOpen ? 'rotate-180 text-[#1B6B52]' : ''}`} />
+                        {isActive && (
+                          <span className="absolute bottom-0.5 left-3.5 right-3.5 h-0.5 bg-[#1B6B52] rounded-full" />
+                        )}
+                      </button>
+
+                      {/* Programs Dropdown Menu (Desktop) */}
+                      {programsDropdownOpen && (
+                        <div
+                          className="absolute top-full right-0 mt-1 w-64 bg-white rounded-2xl shadow-xl border border-[#E5ECE8] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                          onMouseEnter={handleDropdownEnter}
+                          onMouseLeave={handleDropdownLeave}
+                        >
+                          <div className="px-3.5 py-1.5 border-b border-[#E5ECE8]/60 mb-1 text-xs font-bold text-[#556660]">
+                            ޕްރޮގްރާމްތަކުގެ ބާވަތްތައް
+                          </div>
+                          {programSubCategories.map((sub) => (
+                            <button
+                              key={sub.id}
+                              type="button"
+                              onClick={() => handleSubCategoryClick(sub.id)}
+                              className="w-full px-3.5 py-2 text-right text-base font-semibold font-thaana text-[#1C2622] hover:bg-[#EBF5F0] hover:text-[#1B6B52] flex items-center justify-between transition-colors"
+                            >
+                              <div className="flex items-center gap-2.5">
+                                {sub.icon}
+                                <span>{sub.label}</span>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                return (
+                  <button
+                    key={item.id}
+                    id={`nav-link-${item.id}`}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`relative px-3.5 py-2 rounded-xl text-lg font-semibold font-thaana transition-all duration-200 flex items-center gap-2 ${
+                      isActive
+                        ? 'text-[#1B6B52] bg-[#EBF5F0] font-bold shadow-xs'
+                        : 'text-[#556660] hover:text-[#1B6B52] hover:bg-[#EBF5F0]/60'
+                    }`}
+                  >
+                    <span className="text-[#1B6B52] shrink-0">{item.icon}</span>
+                    <span>{item.label}</span>
+                    {isActive && (
+                      <span className="absolute bottom-0.5 left-3.5 right-3.5 h-0.5 bg-[#1B6B52] rounded-full" />
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Left Side (RTL End): Mobile & Tablet Hamburger Menu Button */}
           <div className="flex items-center lg:hidden">
             <button
               type="button"
@@ -209,97 +303,6 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
-
-          {/* Logo */}
-          <div 
-            onClick={() => handleNavClick('home')}
-            className="cursor-pointer py-2 focus:outline-none"
-          >
-            <Logo size="md" />
-          </div>
-
-          {/* Desktop Navigation Links with Icons and Increased Font (+2pt: text-base) */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-            {navItems.map((item) => {
-              const isActive = currentTab === item.id || (item.id === 'videos' && currentTab === 'media');
-
-              if (item.id === 'programs') {
-                return (
-                  <div
-                    key={item.id}
-                    className="relative"
-                    onMouseEnter={handleDropdownEnter}
-                    onMouseLeave={handleDropdownLeave}
-                  >
-                    <button
-                      id={`nav-link-${item.id}`}
-                      type="button"
-                      onClick={() => handleNavClick('programs')}
-                      className={`relative px-3.5 py-2 rounded-xl text-lg font-semibold font-thaana transition-all duration-200 flex items-center gap-2 ${
-                        isActive
-                          ? 'text-[#1B6B52] bg-[#EBF5F0] font-bold shadow-xs'
-                          : 'text-[#556660] hover:text-[#1B6B52] hover:bg-[#EBF5F0]/60'
-                      }`}
-                      aria-expanded={programsDropdownOpen}
-                      aria-haspopup="true"
-                    >
-                      <span className="text-[#1B6B52] shrink-0">{item.icon}</span>
-                      <span>{item.label}</span>
-                      <ChevronDown className={`w-3.5 h-3.5 text-[#556660] transition-transform duration-200 ${programsDropdownOpen ? 'rotate-180 text-[#1B6B52]' : ''}`} />
-                      {isActive && (
-                        <span className="absolute bottom-0.5 left-3.5 right-3.5 h-0.5 bg-[#1B6B52] rounded-full" />
-                      )}
-                    </button>
-
-                    {/* Programs Dropdown Menu (Desktop) */}
-                    {programsDropdownOpen && (
-                      <div
-                        className="absolute top-full right-0 mt-1 w-64 bg-white rounded-2xl shadow-xl border border-[#E5ECE8] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
-                        onMouseEnter={handleDropdownEnter}
-                        onMouseLeave={handleDropdownLeave}
-                      >
-                        <div className="px-3.5 py-1.5 border-b border-[#E5ECE8]/60 mb-1 text-xs font-bold text-[#556660]">
-                          ޕްރޮގްރާމްތަކުގެ ބާވަތްތައް
-                        </div>
-                        {programSubCategories.map((sub) => (
-                          <button
-                            key={sub.id}
-                            type="button"
-                            onClick={() => handleSubCategoryClick(sub.id)}
-                            className="w-full px-3.5 py-2 text-right text-base font-semibold font-thaana text-[#1C2622] hover:bg-[#EBF5F0] hover:text-[#1B6B52] flex items-center justify-between transition-colors"
-                          >
-                            <div className="flex items-center gap-2.5">
-                              {sub.icon}
-                              <span>{sub.label}</span>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-
-              return (
-                <button
-                  key={item.id}
-                  id={`nav-link-${item.id}`}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`relative px-3.5 py-2 rounded-xl text-lg font-semibold font-thaana transition-all duration-200 flex items-center gap-2 ${
-                    isActive
-                      ? 'text-[#1B6B52] bg-[#EBF5F0] font-bold shadow-xs'
-                      : 'text-[#556660] hover:text-[#1B6B52] hover:bg-[#EBF5F0]/60'
-                  }`}
-                >
-                  <span className="text-[#1B6B52] shrink-0">{item.icon}</span>
-                  <span>{item.label}</span>
-                  {isActive && (
-                    <span className="absolute bottom-0.5 left-3.5 right-3.5 h-0.5 bg-[#1B6B52] rounded-full" />
-                  )}
-                </button>
-              );
-            })}
-          </nav>
         </div>
       </div>
 
