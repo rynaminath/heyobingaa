@@ -9,6 +9,18 @@
   font-display: swap;
 }
 
+@theme {
+  /* 2-point font size increase for normal, menu, and body text */
+  --text-xs: 0.875rem; /* ~14px, up by 2pt from 12px */
+  --text-xs--line-height: 1.5rem;
+  --text-sm: 1rem; /* ~16px, up by 2pt from 14px */
+  --text-sm--line-height: 1.75rem;
+  --text-base: 1.125rem; /* ~18px, up by 2pt from 16px */
+  --text-base--line-height: 1.9rem;
+  --text-lg: 1.25rem; /* ~20px, up by 2pt for menu items */
+  --text-lg--line-height: 2rem;
+}
+
 @layer base {
   :root {
     --font-thaana: 'Faruma', 'Noto Sans Thaana', 'MV Waheed', 'A_Waheed', system-ui, -apple-system, sans-serif;
@@ -46,10 +58,15 @@
     font-family: var(--font-thaana);
     direction: rtl;
     text-align: right;
-    line-height: 1.85;
+    font-size: 1.125rem; /* Raised base font size to 18px (2 points increase) */
+    line-height: 1.9;
     letter-spacing: 0.01em;
     background-color: #FAFCFB;
     color: #1C2622;
+  }
+
+  p {
+    line-height: 1.9;
   }
 }
 

@@ -181,15 +181,16 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
             </div>
           </div>
 
-          {/* Right / Donate button in top bar */}
+          {/* Top Bar Donate Button */}
           <div className="flex items-center gap-2 shrink-0">
             <button
+              id="topbar-donate-button"
               type="button"
               onClick={() => handleNavClick('donate')}
-              className="flex items-center gap-1.5 text-[11px] sm:text-xs text-white hover:text-[#FED7AA] transition-colors bg-white/15 hover:bg-white/25 px-2.5 sm:px-3 py-0.5 rounded-md font-thaana font-semibold"
+              className="group inline-flex items-center gap-1.5 px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-lg bg-[#B83244] hover:bg-[#9A2434] active:bg-[#7E1A27] text-white font-bold text-xs sm:text-sm font-thaana shadow-sm hover:shadow active:scale-95 transition-all duration-200 border border-[#B83244]/40"
             >
-              <HeartHandshake className="w-3.5 h-3.5 text-[#FED7AA]" />
-              <span>އެހީ (Donate)</span>
+              <HeartHandshake className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white group-hover:scale-110 transition-transform shrink-0" />
+              <span>އެހީދެއްވުމަށް</span>
             </button>
           </div>
         </div>
@@ -234,7 +235,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                       id={`nav-link-${item.id}`}
                       type="button"
                       onClick={() => handleNavClick('programs')}
-                      className={`relative px-3.5 py-2 rounded-xl text-base font-semibold font-thaana transition-all duration-200 flex items-center gap-2 ${
+                      className={`relative px-3.5 py-2 rounded-xl text-lg font-semibold font-thaana transition-all duration-200 flex items-center gap-2 ${
                         isActive
                           ? 'text-[#1B6B52] bg-[#EBF5F0] font-bold shadow-xs'
                           : 'text-[#556660] hover:text-[#1B6B52] hover:bg-[#EBF5F0]/60'
@@ -257,7 +258,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                         onMouseEnter={handleDropdownEnter}
                         onMouseLeave={handleDropdownLeave}
                       >
-                        <div className="px-3 py-1.5 border-b border-[#E5ECE8]/60 mb-1 text-[11px] font-bold text-[#556660]">
+                        <div className="px-3.5 py-1.5 border-b border-[#E5ECE8]/60 mb-1 text-xs font-bold text-[#556660]">
                           ޕްރޮގްރާމްތަކުގެ ބާވަތްތައް
                         </div>
                         {programSubCategories.map((sub) => (
@@ -265,7 +266,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                             key={sub.id}
                             type="button"
                             onClick={() => handleSubCategoryClick(sub.id)}
-                            className="w-full px-3.5 py-2 text-right text-sm font-semibold font-thaana text-[#1C2622] hover:bg-[#EBF5F0] hover:text-[#1B6B52] flex items-center justify-between transition-colors"
+                            className="w-full px-3.5 py-2 text-right text-base font-semibold font-thaana text-[#1C2622] hover:bg-[#EBF5F0] hover:text-[#1B6B52] flex items-center justify-between transition-colors"
                           >
                             <div className="flex items-center gap-2.5">
                               {sub.icon}
@@ -284,7 +285,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                   key={item.id}
                   id={`nav-link-${item.id}`}
                   onClick={() => handleNavClick(item.id)}
-                  className={`relative px-3.5 py-2 rounded-xl text-base font-semibold font-thaana transition-all duration-200 flex items-center gap-2 ${
+                  className={`relative px-3.5 py-2 rounded-xl text-lg font-semibold font-thaana transition-all duration-200 flex items-center gap-2 ${
                     isActive
                       ? 'text-[#1B6B52] bg-[#EBF5F0] font-bold shadow-xs'
                       : 'text-[#556660] hover:text-[#1B6B52] hover:bg-[#EBF5F0]/60'
@@ -299,19 +300,6 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
               );
             })}
           </nav>
-
-          {/* Header Action: Donate button */}
-          <div className="flex items-center gap-2">
-            <button
-              id="header-donate-button"
-              type="button"
-              onClick={() => handleNavClick('donate')}
-              className="group relative inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#B83244] hover:bg-[#9A2434] text-white font-bold text-sm sm:text-base font-thaana shadow-sm hover:shadow-md active:scale-95 transition-all duration-200"
-            >
-              <HeartHandshake className="w-4 h-4 text-white group-hover:scale-110 transition-transform shrink-0" />
-              <span>އެހީދެއްވުމަށް</span>
-            </button>
-          </div>
         </div>
       </div>
 
@@ -327,7 +315,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                   <div key={item.id} className="space-y-1">
                     <button
                       onClick={() => handleNavClick(item.id)}
-                      className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-right font-thaana text-base font-semibold transition-colors ${
+                      className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-right font-thaana text-lg font-semibold transition-colors ${
                         isActive
                           ? 'bg-[#EBF5F0] text-[#1B6B52] font-bold border-r-4 border-[#1B6B52]'
                           : 'text-[#556660] hover:bg-[#FAFCFB]'
@@ -347,7 +335,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                           key={sub.id}
                           type="button"
                           onClick={() => handleSubCategoryClick(sub.id)}
-                          className="w-full flex items-center gap-2.5 py-2 text-right text-sm font-thaana text-[#556660] hover:text-[#1B6B52]"
+                          className="w-full flex items-center gap-2.5 py-2 text-right text-base font-thaana text-[#556660] hover:text-[#1B6B52]"
                         >
                           <span className="shrink-0">{sub.icon}</span>
                           <span>{sub.label}</span>
@@ -362,7 +350,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-right font-thaana text-base font-semibold transition-colors ${
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-right font-thaana text-lg font-semibold transition-colors ${
                     isActive
                       ? 'bg-[#EBF5F0] text-[#1B6B52] font-bold border-r-4 border-[#1B6B52]'
                       : 'text-[#556660] hover:bg-[#FAFCFB]'
