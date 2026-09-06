@@ -1,0 +1,412 @@
+{
+  "entities": {
+    "admin": {
+      "title": "Admin",
+      "description": "Authorized administrator profiles with access to manage organization content.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Administrator email address.",
+          "maxLength": 100
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "superadmin"],
+          "description": "Role level for permissions."
+        },
+        "addedAt": {
+          "type": "string",
+          "description": "Timestamp when admin was added."
+        }
+      },
+      "required": ["email", "role"]
+    },
+    "event": {
+      "title": "Event",
+      "description": "Events, lectures, and workshops organized by Heyo Bingaa NGO.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Dhivehi title of the event.",
+          "maxLength": 200
+        },
+        "titleEn": {
+          "type": "string",
+          "description": "English title of the event.",
+          "maxLength": 200
+        },
+        "speaker": {
+          "type": "string",
+          "description": "Key speaker or scholar name.",
+          "maxLength": 120
+        },
+        "venue": {
+          "type": "string",
+          "description": "Event location or hall.",
+          "maxLength": 150
+        },
+        "date": {
+          "type": "string",
+          "description": "Event calendar date in YYYY-MM-DD format.",
+          "maxLength": 30
+        },
+        "time": {
+          "type": "string",
+          "description": "Time string in Dhivehi or English.",
+          "maxLength": 50
+        },
+        "dayText": {
+          "type": "string",
+          "description": "Friendly descriptive day text.",
+          "maxLength": 100
+        },
+        "audience": {
+          "type": "string",
+          "description": "Target attendee audience.",
+          "maxLength": 150
+        },
+        "broadcast": {
+          "type": "string",
+          "description": "Broadcast channels (TV/Web).",
+          "maxLength": 150
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the event.",
+          "maxLength": 2000
+        },
+        "isFeatured": {
+          "type": "boolean",
+          "description": "Whether this event is featured on the homepage banner."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["upcoming", "ongoing", "completed"],
+          "description": "Current lifecycle status of the event."
+        },
+        "partnerOrganization": {
+          "type": "string",
+          "description": "Partner NGO or sponsor.",
+          "maxLength": 150
+        },
+        "registrationUrl": {
+          "type": "string",
+          "description": "Optional registration URL.",
+          "maxLength": 300
+        }
+      },
+      "required": ["title", "speaker", "venue", "date", "status"]
+    },
+    "media": {
+      "title": "Media",
+      "description": "Videos, lectures, and sign language programs.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the video or lecture.",
+          "maxLength": 250
+        },
+        "series": {
+          "type": "string",
+          "description": "Series name.",
+          "maxLength": 120
+        },
+        "episodeNumber": {
+          "type": "number",
+          "description": "Episode number in the series."
+        },
+        "duration": {
+          "type": "string",
+          "description": "Duration string (e.g. 10 މިނެޓު).",
+          "maxLength": 50
+        },
+        "speaker": {
+          "type": "string",
+          "description": "Speaker name.",
+          "maxLength": 120
+        },
+        "interpreter": {
+          "type": "string",
+          "description": "Sign language interpreter.",
+          "maxLength": 120
+        },
+        "isDeafAccessible": {
+          "type": "boolean",
+          "description": "Whether video has sign language translation."
+        },
+        "partner": {
+          "type": "string",
+          "description": "Broadcast partner name.",
+          "maxLength": 120
+        },
+        "thumbnailUrl": {
+          "type": "string",
+          "description": "Image URL for video thumbnail.",
+          "maxLength": 500
+        },
+        "videoEmbedUrl": {
+          "type": "string",
+          "description": "YouTube or media embed URL.",
+          "maxLength": 500
+        },
+        "summary": {
+          "type": "string",
+          "description": "Brief overview of the video.",
+          "maxLength": 2000
+        },
+        "category": {
+          "type": "string",
+          "enum": ["deaf_accessible", "sisters_family", "kids_youth", "ramadan", "dawah"],
+          "description": "Media topic category."
+        },
+        "publishedDate": {
+          "type": "string",
+          "description": "Publish date in YYYY-MM-DD.",
+          "maxLength": 30
+        },
+        "viewsCount": {
+          "type": "string",
+          "description": "Optional views badge or text.",
+          "maxLength": 50
+        }
+      },
+      "required": ["title", "thumbnailUrl", "category", "isDeafAccessible"]
+    },
+    "program": {
+      "title": "Program",
+      "description": "Ongoing educational, family, and welfare programs by the NGO.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Program title in Dhivehi.",
+          "maxLength": 200
+        },
+        "category": {
+          "type": "string",
+          "enum": ["women", "toddlers", "teenagers", "joint_ngo", "community", "audiobooks", "lectures"],
+          "description": "Category identifier."
+        },
+        "categoryLabel": {
+          "type": "string",
+          "description": "Human-readable label for the category in Dhivehi.",
+          "maxLength": 100
+        },
+        "targetAudience": {
+          "type": "string",
+          "description": "Target demographic.",
+          "maxLength": 150
+        },
+        "format": {
+          "type": "string",
+          "description": "Program delivery format.",
+          "maxLength": 150
+        },
+        "description": {
+          "type": "string",
+          "description": "Comprehensive program description.",
+          "maxLength": 2500
+        },
+        "impactMetrics": {
+          "type": "string",
+          "description": "Statistical summary or reach.",
+          "maxLength": 150
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Featured cover image URL.",
+          "maxLength": 500
+        }
+      },
+      "required": ["title", "category", "categoryLabel", "description"]
+    },
+    "donationSlip": {
+      "title": "DonationSlip",
+      "description": "Donation transfer receipts submitted by contributors.",
+      "type": "object",
+      "properties": {
+        "donorName": {
+          "type": "string",
+          "description": "Name or anonymous label of donor.",
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact phone number.",
+          "maxLength": 30
+        },
+        "amount": {
+          "type": "number",
+          "description": "Donation amount transferred."
+        },
+        "currency": {
+          "type": "string",
+          "enum": ["MVR", "USD"],
+          "description": "Currency of donation."
+        },
+        "bankAccount": {
+          "type": "string",
+          "description": "Target bank account used.",
+          "maxLength": 120
+        },
+        "referenceNumber": {
+          "type": "string",
+          "description": "Bank transaction reference or slip ID.",
+          "maxLength": 100
+        },
+        "slipImageUrl": {
+          "type": "string",
+          "description": "Uploaded slip image URL or base64 data URI.",
+          "maxLength": 500000
+        },
+        "slipFileName": {
+          "type": "string",
+          "description": "Filename of uploaded slip.",
+          "maxLength": 100
+        },
+        "notes": {
+          "type": "string",
+          "description": "Donor intention or special notes.",
+          "maxLength": 1000
+        },
+        "date": {
+          "type": "string",
+          "description": "Date of donation.",
+          "maxLength": 30
+        },
+        "verified": {
+          "type": "boolean",
+          "description": "Whether slip was verified by finance admin."
+        }
+      },
+      "required": ["donorName", "phone", "amount", "currency", "bankAccount"]
+    },
+    "volunteerApplication": {
+      "title": "VolunteerApplication",
+      "description": "Volunteer applications submitted by brothers and sisters.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Applicant full name.",
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact phone number.",
+          "maxLength": 30
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Optional email address.",
+          "maxLength": 100
+        },
+        "islandCity": {
+          "type": "string",
+          "description": "Residential island or city.",
+          "maxLength": 100
+        },
+        "track": {
+          "type": "string",
+          "enum": ["sisters", "brothers"],
+          "description": "Volunteer track."
+        },
+        "availability": {
+          "type": "string",
+          "description": "Available times.",
+          "maxLength": 150
+        },
+        "notes": {
+          "type": "string",
+          "description": "Skills and previous volunteer experience.",
+          "maxLength": 1500
+        },
+        "submittedAt": {
+          "type": "string",
+          "description": "Submission date string.",
+          "maxLength": 30
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "reviewed", "contacted"],
+          "description": "Application review status."
+        }
+      },
+      "required": ["name", "phone", "islandCity", "track", "availability", "status"]
+    },
+    "siteSettings": {
+      "title": "SiteSettings",
+      "description": "Global organization contact information and bank accounts.",
+      "type": "object",
+      "properties": {
+        "viberNumber": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "viberNumberFormatted": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 30
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "facebook": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "instagram": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "youtube": {
+          "type": "string",
+          "maxLength": 200
+        }
+      }
+    }
+  },
+  "firestore": {
+    "/admins/{adminId}": {
+      "schema": "admin",
+      "description": "List of authorized administrator users."
+    },
+    "/events/{eventId}": {
+      "schema": "event",
+      "description": "Events, lectures, and community gatherings."
+    },
+    "/media/{mediaId}": {
+      "schema": "media",
+      "description": "Videos and sign language translated lecture catalog."
+    },
+    "/programs/{programId}": {
+      "schema": "program",
+      "description": "Programs and workshops run by the NGO."
+    },
+    "/donationSlips/{slipId}": {
+      "schema": "donationSlip",
+      "description": "Submitted bank transfer donation slips."
+    },
+    "/volunteerApplications/{appId}": {
+      "schema": "volunteerApplication",
+      "description": "Submitted volunteer applications."
+    },
+    "/siteSettings/{settingId}": {
+      "schema": "siteSettings",
+      "description": "Global website settings, contact info, and bank accounts."
+    }
+  }
+}

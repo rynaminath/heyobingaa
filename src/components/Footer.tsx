@@ -195,6 +195,13 @@ export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
               އަސާސީ ޤަވާޢިދު
             </button>
             <span>•</span>
+            <button
+              onClick={() => onNavigate('admin')}
+              className="hover:text-white text-[#A7F3D0] transition-colors"
+            >
+              އެޑްމިން (Admin)
+            </button>
+            <span>•</span>
             <a
               href="https://www.heyobingaa.com"
               target="_blank"

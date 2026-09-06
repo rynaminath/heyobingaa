@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { VolunteerApplication } from '../types';
 import { NGO_CONTACT } from '../data/initialData';
+import { submitVolunteerApplication } from '../services/firestoreService';
 import { 
   Users, 
   Send, 
@@ -64,7 +65,7 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
     }
   };
 
-  const handleVolunteerSubmit = (e: React.FormEvent) => {
+  const handleVolunteerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim()) {
       setVolError('އިލްތިމާސް: ނަމާއި ފޯނު ނަންބަރު ފުރިހަމަކުރައްވާ');
@@ -74,28 +75,40 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
     setIsSubmittingVol(true);
     setVolError('');
 
-    const newApp: VolunteerApplication = {
-      id: `vol-${Date.now()}`,
-      name: name.trim(),
-      phone: phone.trim(),
-      email: email.trim() || undefined,
-      islandCity: islandCity.trim(),
-      track,
-      interests: selectedInterests.length > 0 ? selectedInterests : ['ޢާންމު ވޮލަންޓިއަރ މަސައްކަތް'],
-      availability,
-      notes: notes.trim() || undefined,
-      submittedAt: new Date().toISOString().split('T')[0],
-      status: 'pending'
-    };
+    try {
+      const newAppPayload = {
+        name: name.trim(),
+        phone: phone.trim(),
+        email: email.trim() || undefined,
+        islandCity: islandCity.trim(),
+        track,
+        interests: selectedInterests.length > 0 ? selectedInterests : ['ޢާންމު ވޮލަންޓިއަރ މަސައްކަތް'],
+        availability,
+        notes: notes.trim() || undefined,
+        submittedAt: new Date().toISOString().split('T')[0]
+      };
 
-    setTimeout(() => {
+      const newId = await submitVolunteerApplication(newAppPayload);
+
       if (onVolunteerRegistered) {
-        onVolunteerRegistered(newApp);
+        onVolunteerRegistered({
+          ...newAppPayload,
+          id: newId,
+          status: 'pending'
+        });
       }
 
       setIsSubmittingVol(false);
       setVolSuccess(true);
-    }, 400);
+      setName('');
+      setPhone('');
+      setEmail('');
+      setNotes('');
+    } catch (err) {
+      console.error(err);
+      setIsSubmittingVol(false);
+      setVolError('އެޕްލިކޭޝަން ފޮނުވުމުގައި މައްސަލައެއް ދިމާވެއްޖެ. އަލުން މަސައްކަތްކޮށްލައްވާ.');
+    }
   };
 
   const handleInquirySubmit = (e: React.FormEvent) => {

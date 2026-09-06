@@ -1,0 +1,156 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Common Hardened Helpers
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (request.auth.token.email == 'ryn@azmans.com' && request.auth.token.email_verified == true)
+      );
+    }
+
+    // Entity Validation Helpers
+    function isValidEvent(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 200 &&
+             data.speaker is string && data.speaker.size() > 0 && data.speaker.size() <= 120 &&
+             data.venue is string && data.venue.size() > 0 && data.venue.size() <= 150 &&
+             data.date is string && data.date.size() > 0 && data.date.size() <= 30 &&
+             data.status in ['upcoming', 'ongoing', 'completed'] &&
+             (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
+             (!('isFeatured' in data) || data.isFeatured is bool) &&
+             (!('partnerOrganization' in data) || (data.partnerOrganization is string && data.partnerOrganization.size() <= 150));
+    }
+
+    function isValidMedia(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 250 &&
+             data.thumbnailUrl is string && data.thumbnailUrl.size() > 0 && data.thumbnailUrl.size() <= 500 &&
+             data.category in ['deaf_accessible', 'sisters_family', 'kids_youth', 'ramadan', 'dawah'] &&
+             data.isDeafAccessible is bool &&
+             (!('series' in data) || (data.series is string && data.series.size() <= 120)) &&
+             (!('duration' in data) || (data.duration is string && data.duration.size() <= 50)) &&
+             (!('speaker' in data) || (data.speaker is string && data.speaker.size() <= 120)) &&
+             (!('videoEmbedUrl' in data) || (data.videoEmbedUrl is string && data.videoEmbedUrl.size() <= 500)) &&
+             (!('summary' in data) || (data.summary is string && data.summary.size() <= 2000));
+    }
+
+    function isValidProgram(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 200 &&
+             data.category in ['women', 'toddlers', 'teenagers', 'joint_ngo', 'community', 'audiobooks', 'lectures'] &&
+             data.categoryLabel is string && data.categoryLabel.size() > 0 && data.categoryLabel.size() <= 100 &&
+             data.description is string && data.description.size() > 0 && data.description.size() <= 2500 &&
+             (!('targetAudience' in data) || (data.targetAudience is string && data.targetAudience.size() <= 150)) &&
+             (!('format' in data) || (data.format is string && data.format.size() <= 150)) &&
+             (!('impactMetrics' in data) || (data.impactMetrics is string && data.impactMetrics.size() <= 150)) &&
+             (!('imageUrl' in data) || (data.imageUrl is string && data.imageUrl.size() <= 500));
+    }
+
+    function isValidDonationSlip(data) {
+      return data.donorName is string && data.donorName.size() > 0 && data.donorName.size() <= 100 &&
+             data.phone is string && data.phone.size() > 0 && data.phone.size() <= 30 &&
+             data.amount is number && data.amount > 0 &&
+             data.currency in ['MVR', 'USD'] &&
+             data.bankAccount is string && data.bankAccount.size() > 0 && data.bankAccount.size() <= 120 &&
+             (!('referenceNumber' in data) || (data.referenceNumber is string && data.referenceNumber.size() <= 100)) &&
+             (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000)) &&
+             (!('verified' in data) || data.verified is bool);
+    }
+
+    function isValidVolunteerApp(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.phone is string && data.phone.size() > 0 && data.phone.size() <= 30 &&
+             data.islandCity is string && data.islandCity.size() > 0 && data.islandCity.size() <= 100 &&
+             data.track in ['sisters', 'brothers'] &&
+             data.availability is string && data.availability.size() > 0 && data.availability.size() <= 150 &&
+             data.status in ['pending', 'reviewed', 'contacted'] &&
+             (!('email' in data) || (data.email is string && data.email.size() <= 100)) &&
+             (!('notes' in data) || (data.notes is string && data.notes.size() <= 1500));
+    }
+
+    function isValidSiteSettings(data) {
+      return (!('phone' in data) || (data.phone is string && data.phone.size() <= 30)) &&
+             (!('email' in data) || (data.email is string && data.email.size() <= 100)) &&
+             (!('address' in data) || (data.address is string && data.address.size() <= 200)) &&
+             (!('viberNumber' in data) || (data.viberNumber is string && data.viberNumber.size() <= 30));
+    }
+
+    // Collection Rules
+
+    // 1. Admins Collection
+    match /admins/{adminId} {
+      allow get: if isSignedIn();
+      allow list: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // 2. Events Collection - Public read, Admin write
+    match /events/{eventId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidId(eventId) && isValidEvent(incoming());
+      allow update: if isAdmin() && isValidEvent(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // 3. Media Collection - Public read, Admin write
+    match /media/{mediaId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidId(mediaId) && isValidMedia(incoming());
+      allow update: if isAdmin() && isValidMedia(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // 4. Programs Collection - Public read, Admin write
+    match /programs/{programId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidId(programId) && isValidProgram(incoming());
+      allow update: if isAdmin() && isValidProgram(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // 5. Site Settings Collection - Public read, Admin write
+    match /siteSettings/{settingId} {
+      allow get, list: if true;
+      allow create, update: if isAdmin() && isValidId(settingId) && isValidSiteSettings(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // 6. Donation Slips Collection - Anyone can submit; only Admin can read, verify, delete
+    match /donationSlips/{slipId} {
+      allow get, list: if isAdmin();
+      allow create: if isValidId(slipId) && isValidDonationSlip(incoming()) &&
+                       (!('verified' in incoming()) || incoming().verified == false || isAdmin());
+      allow update: if isAdmin() && isValidDonationSlip(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // 7. Volunteer Applications Collection - Anyone can submit; only Admin can view & process
+    match /volunteerApplications/{appId} {
+      allow get, list: if isAdmin();
+      allow create: if isValidId(appId) && isValidVolunteerApp(incoming()) &&
+                       incoming().status == 'pending';
+      allow update: if isAdmin() && isValidVolunteerApp(incoming());
+      allow delete: if isAdmin();
+    }
+  }
+}

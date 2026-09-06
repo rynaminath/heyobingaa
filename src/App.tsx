@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
-import { NavigationTab, MediaItem } from './types';
-import { INITIAL_EVENTS, INITIAL_MEDIA } from './data/initialData';
+import { NavigationTab, MediaItem, EventItem, ProgramItem } from './types';
+import { INITIAL_EVENTS, INITIAL_MEDIA, PROGRAMS } from './data/initialData';
+import { AuthProvider } from './context/AuthContext';
+import { subscribeToEvents, subscribeToMedia, subscribeToPrograms } from './services/firestoreService';
+
 import Header from './components/Header';
 import Footer from './components/Footer';
 import DonationReceiptModal from './components/DonationReceiptModal';
@@ -14,6 +17,7 @@ import ProgramsPage from './pages/ProgramsPage';
 import EventsPage from './pages/EventsPage';
 import VolunteerPage from './pages/VolunteerPage';
 import DonatePage from './pages/DonatePage';
+import AdminPage from './pages/AdminPage';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<NavigationTab>('home');
@@ -21,9 +25,29 @@ export default function App() {
   const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
   const [activeMediaModal, setActiveMediaModal] = useState<MediaItem | null>(null);
 
-  // Static content driven directly from initialData (no database required)
-  const events = INITIAL_EVENTS;
-  const mediaList = INITIAL_MEDIA;
+  // Firestore real-time state with initial data fallback
+  const [events, setEvents] = useState<EventItem[]>(INITIAL_EVENTS);
+  const [mediaList, setMediaList] = useState<MediaItem[]>(INITIAL_MEDIA);
+  const [programs, setPrograms] = useState<ProgramItem[]>(PROGRAMS);
+
+  // Live Firebase Subscriptions
+  useEffect(() => {
+    const unsubEvents = subscribeToEvents((data) => {
+      if (data && data.length > 0) setEvents(data);
+    });
+    const unsubMedia = subscribeToMedia((data) => {
+      if (data && data.length > 0) setMediaList(data);
+    });
+    const unsubPrograms = subscribeToPrograms((data) => {
+      if (data && data.length > 0) setPrograms(data);
+    });
+
+    return () => {
+      unsubEvents();
+      unsubMedia();
+      unsubPrograms();
+    };
+  }, []);
 
   // Dynamic Meta Tag Generator for Tab-Based Discoverability & SEO
   useEffect(() => {
@@ -63,15 +87,17 @@ export default function App() {
       donate: {
         title: 'Donate & Ehee | Heyo Bingaa NGO',
         description: 'ހެޔޮބިންގާގެ ދަޢުވަތީ މަސައްކަތްތަކަށް މާލީ އެހީތެރިކަން ފޯރުކޮށްދެއްވާ. ބޭންކް އެކައުންޓްތަކާއި ވައިބަރ ސްލިޕް ހޮޓްލައިން.'
+      },
+      admin: {
+        title: 'Admin Portal | Heyo Bingaa NGO',
+        description: 'ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ ވެބްސައިޓް ކޮންޓެންޓާއި ޑޭޓާ ބެލެހެއްޓެވުމުގެ އެޑްމިން ޕެނަލް.'
       }
     };
 
     const currentMeta = tabMetaConfig[currentTab] || tabMetaConfig.home;
 
-    // Update document title
     document.title = currentMeta.title;
 
-    // Update or inject <meta name="description">
     let metaDesc = document.querySelector('meta[name="description"]');
     if (!metaDesc) {
       metaDesc = document.createElement('meta');
@@ -80,7 +106,6 @@ export default function App() {
     }
     metaDesc.setAttribute('content', currentMeta.description);
 
-    // Update or inject <meta property="og:title">
     let ogTitle = document.querySelector('meta[property="og:title"]');
     if (!ogTitle) {
       ogTitle = document.createElement('meta');
@@ -89,7 +114,6 @@ export default function App() {
     }
     ogTitle.setAttribute('content', currentMeta.title);
 
-    // Update or inject <meta property="og:description">
     let ogDesc = document.querySelector('meta[property="og:description"]');
     if (!ogDesc) {
       ogDesc = document.createElement('meta');
@@ -99,12 +123,14 @@ export default function App() {
     ogDesc.setAttribute('content', currentMeta.description);
   }, [currentTab]);
 
-  // Sync /ehee hash route or path
+  // Sync hash route or path
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.toLowerCase();
       if (hash === '#/ehee' || hash === '#ehee' || window.location.pathname === '/ehee') {
         setCurrentTab('donate');
+      } else if (hash === '#/admin' || hash === '#admin') {
+        setCurrentTab('admin');
       } else if (hash === '#/about' || hash === '#about') {
         setCurrentTab('about');
       } else if (hash === '#/videos' || hash === '#videos' || hash === '#/media' || hash === '#media') {
@@ -144,91 +170,98 @@ export default function App() {
     handleNavigate('programs');
   };
 
-  const featuredEvent = events.find(e => e.isFeatured) || events[0];
+  const featuredEvent = events.find((e) => e.isFeatured) || events[0];
 
   return (
-    <div className="min-h-screen bg-[#FAFCFB] text-[#1C2622] flex flex-col selection:bg-[#1B6B52] selection:text-white font-thaana">
-      {/* 1. Global Navigation Header */}
-      <Header
-        currentTab={currentTab}
-        onSelectTab={(tab) => {
-          setSelectedProgramCategory(null);
-          handleNavigate(tab);
-        }}
-        onSelectProgramCategory={handleSelectProgramCategory}
-        onOpenDonateModal={() => setIsDonateModalOpen(true)}
-      />
+    <AuthProvider>
+      <div className="min-h-screen bg-[#FAFCFB] text-[#1C2622] flex flex-col selection:bg-[#1B6B52] selection:text-white font-thaana">
+        {/* 1. Global Navigation Header */}
+        <Header
+          currentTab={currentTab}
+          onSelectTab={(tab) => {
+            setSelectedProgramCategory(null);
+            handleNavigate(tab);
+          }}
+          onSelectProgramCategory={handleSelectProgramCategory}
+          onOpenDonateModal={() => setIsDonateModalOpen(true)}
+        />
 
-      {/* 2. Main Page Content */}
-      <main className="flex-1">
-        {currentTab === 'home' && (
-          <HomePage
-            onNavigate={handleNavigate}
-            onOpenDonateModal={() => setIsDonateModalOpen(true)}
-            onSelectMedia={(media) => setActiveMediaModal(media)}
-            featuredEvent={featuredEvent}
-            featuredMediaList={mediaList}
-          />
-        )}
+        {/* 2. Main Page Content */}
+        <main className="flex-1">
+          {currentTab === 'home' && (
+            <HomePage
+              onNavigate={handleNavigate}
+              onOpenDonateModal={() => setIsDonateModalOpen(true)}
+              onSelectMedia={(media) => setActiveMediaModal(media)}
+              featuredEvent={featuredEvent}
+              featuredMediaList={mediaList}
+            />
+          )}
 
-        {currentTab === 'about' && (
-          <AboutPage onNavigate={handleNavigate} />
-        )}
+          {currentTab === 'about' && (
+            <AboutPage onNavigate={handleNavigate} />
+          )}
 
-        {(currentTab === 'videos' || currentTab === 'media') && (
-          <MediaArchivePage
-            mediaList={mediaList}
-            onSelectMedia={(media) => setActiveMediaModal(media)}
-          />
-        )}
+          {(currentTab === 'videos' || currentTab === 'media') && (
+            <MediaArchivePage
+              mediaList={mediaList}
+              onSelectMedia={(media) => setActiveMediaModal(media)}
+            />
+          )}
 
-        {currentTab === 'gallery' && (
-          <GalleryPage onNavigate={handleNavigate} />
-        )}
+          {currentTab === 'gallery' && (
+            <GalleryPage onNavigate={handleNavigate} />
+          )}
 
-        {currentTab === 'programs' && (
-          <ProgramsPage
-            onNavigate={handleNavigate}
-            onOpenDonateModal={() => setIsDonateModalOpen(true)}
-            initialCategory={selectedProgramCategory}
-            onSelectCategory={(cat) => setSelectedProgramCategory(cat)}
-          />
-        )}
+          {currentTab === 'programs' && (
+            <ProgramsPage
+              onNavigate={handleNavigate}
+              onOpenDonateModal={() => setIsDonateModalOpen(true)}
+              initialCategory={selectedProgramCategory}
+              onSelectCategory={(cat) => setSelectedProgramCategory(cat)}
+              programs={programs}
+            />
+          )}
 
-        {currentTab === 'events' && (
-          <EventsPage
-            events={events}
-            onNavigate={handleNavigate}
-            onOpenDonateModal={() => setIsDonateModalOpen(true)}
-          />
-        )}
+          {currentTab === 'events' && (
+            <EventsPage
+              events={events}
+              onNavigate={handleNavigate}
+              onOpenDonateModal={() => setIsDonateModalOpen(true)}
+            />
+          )}
 
-        {currentTab === 'volunteer' && (
-          <VolunteerPage />
-        )}
+          {currentTab === 'volunteer' && (
+            <VolunteerPage />
+          )}
 
-        {currentTab === 'donate' && (
-          <DonatePage />
-        )}
-      </main>
+          {currentTab === 'donate' && (
+            <DonatePage />
+          )}
 
-      {/* 3. Global Omnipresent Footer on every page */}
-      <Footer
-        onNavigate={handleNavigate}
-        onOpenDonateModal={() => setIsDonateModalOpen(true)}
-      />
+          {currentTab === 'admin' && (
+            <AdminPage />
+          )}
+        </main>
 
-      {/* 4. Transfer & Viber Slip Modal */}
-      <DonationReceiptModal
-        isOpen={isDonateModalOpen}
-        onClose={() => setIsDonateModalOpen(false)}
-      />
+        {/* 3. Global Omnipresent Footer */}
+        <Footer
+          onNavigate={handleNavigate}
+          onOpenDonateModal={() => setIsDonateModalOpen(true)}
+        />
 
-      {/* 6. Video Player Modal for Dhaaris TV & Sign Language Media */}
-      <VideoPlayerModal
-        media={activeMediaModal}
-        onClose={() => setActiveMediaModal(null)}
-      />
-    </div>
+        {/* 4. Transfer & Viber Slip Modal */}
+        <DonationReceiptModal
+          isOpen={isDonateModalOpen}
+          onClose={() => setIsDonateModalOpen(false)}
+        />
+
+        {/* 5. Video Player Modal for Dhaaris TV & Sign Language Media */}
+        <VideoPlayerModal
+          media={activeMediaModal}
+          onClose={() => setActiveMediaModal(null)}
+        />
+      </div>
+    </AuthProvider>
   );
 }

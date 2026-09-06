@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { NavigationTab } from '../types';
+import { NavigationTab, ProgramItem } from '../types';
 import { PROGRAMS } from '../data/initialData';
 import { Users, Sparkles, HeartHandshake, CheckCircle2, Headphones, GraduationCap, BookOpen } from 'lucide-react';
 
@@ -8,15 +8,18 @@ interface ProgramsPageProps {
   onOpenDonateModal: () => void;
   initialCategory?: string | null;
   onSelectCategory?: (category: string | null) => void;
+  programs?: ProgramItem[];
 }
 
 export default function ProgramsPage({
   onNavigate,
   onOpenDonateModal,
   initialCategory,
-  onSelectCategory
+  onSelectCategory,
+  programs: propPrograms
 }: ProgramsPageProps) {
   const [activeCategory, setActiveCategory] = useState<string>('all');
+  const programList = propPrograms || PROGRAMS;
 
   useEffect(() => {
     if (initialCategory) {
@@ -42,8 +45,8 @@ export default function ProgramsPage({
   };
 
   const filteredPrograms = activeCategory === 'all'
-    ? PROGRAMS
-    : PROGRAMS.filter((p) => p.category === activeCategory);
+    ? programList
+    : programList.filter((p) => p.category === activeCategory);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 font-thaana">

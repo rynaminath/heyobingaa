@@ -7,7 +7,8 @@ export type NavigationTab =
   | 'programs' 
   | 'events' 
   | 'volunteer' 
-  | 'donate';
+  | 'donate'
+  | 'admin';
 
 export interface BankAccount {
   id: string;

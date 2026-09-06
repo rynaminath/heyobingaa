@@ -181,8 +181,21 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
             </div>
           </div>
 
-          {/* Top Bar Donate Button */}
+          {/* Top Bar Donate & Admin Buttons */}
           <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => handleNavClick('admin')}
+              className={`inline-flex items-center gap-1 px-2.5 py-1 sm:px-3 sm:py-1 rounded-lg text-xs font-semibold font-thaana transition-all ${
+                currentTab === 'admin'
+                  ? 'bg-white text-[#1B6B52]'
+                  : 'bg-white/10 hover:bg-white/20 text-[#EBF5F0]'
+              }`}
+              title="އެޑްމިން ޕެނަލް"
+            >
+              <span>އެޑްމިން</span>
+            </button>
+
             <button
               id="topbar-donate-button"
               type="button"
@@ -366,6 +379,21 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                 </button>
               );
             })}
+
+            {/* Mobile Admin Portal Link */}
+            <button
+              onClick={() => handleNavClick('admin')}
+              className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-right font-thaana text-lg font-semibold transition-colors ${
+                currentTab === 'admin'
+                  ? 'bg-[#EBF5F0] text-[#1B6B52] font-bold border-r-4 border-[#1B6B52]'
+                  : 'text-[#556660] hover:bg-[#FAFCFB]'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-[#1B6B52]"><Users className="w-4 h-4" /></span>
+                <span>އެޑްމިން ޕޯޓަލް (Admin)</span>
+              </div>
+            </button>
 
             {/* Social media in mobile drawer */}
             <div className="flex items-center justify-center gap-3 pt-3 pb-1 border-t border-[#E5ECE8]">
