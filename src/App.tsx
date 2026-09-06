@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { NavigationTab, MediaItem, EventItem, ProgramItem } from './types';
-import { INITIAL_EVENTS, INITIAL_MEDIA, PROGRAMS } from './data/initialData';
 import { AuthProvider } from './context/AuthContext';
 import { subscribeToEvents, subscribeToMedia, subscribeToPrograms } from './services/firestoreService';
 
@@ -25,21 +24,21 @@ export default function App() {
   const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
   const [activeMediaModal, setActiveMediaModal] = useState<MediaItem | null>(null);
 
-  // Firestore real-time state with initial data fallback
-  const [events, setEvents] = useState<EventItem[]>(INITIAL_EVENTS);
-  const [mediaList, setMediaList] = useState<MediaItem[]>(INITIAL_MEDIA);
-  const [programs, setPrograms] = useState<ProgramItem[]>(PROGRAMS);
+  // Pure Firestore real-time state driven by database
+  const [events, setEvents] = useState<EventItem[]>([]);
+  const [mediaList, setMediaList] = useState<MediaItem[]>([]);
+  const [programs, setPrograms] = useState<ProgramItem[]>([]);
 
   // Live Firebase Subscriptions
   useEffect(() => {
     const unsubEvents = subscribeToEvents((data) => {
-      if (data && data.length > 0) setEvents(data);
+      setEvents(data || []);
     });
     const unsubMedia = subscribeToMedia((data) => {
-      if (data && data.length > 0) setMediaList(data);
+      setMediaList(data || []);
     });
     const unsubPrograms = subscribeToPrograms((data) => {
-      if (data && data.length > 0) setPrograms(data);
+      setPrograms(data || []);
     });
 
     return () => {
@@ -170,7 +169,7 @@ export default function App() {
     handleNavigate('programs');
   };
 
-  const featuredEvent = events.find((e) => e.isFeatured) || events[0];
+  const featuredEvent = events.find((e) => e.isFeatured) || events[0] || null;
 
   return (
     <AuthProvider>

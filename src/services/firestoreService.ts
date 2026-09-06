@@ -17,10 +17,7 @@ import {
   INITIAL_EVENTS,
   INITIAL_MEDIA,
   PROGRAMS,
-  NGO_CONTACT,
-  BANK_ACCOUNTS,
-  INITIAL_DONATION_SLIPS,
-  INITIAL_VOLUNTEERS
+  NGO_CONTACT
 } from '../data/initialData';
 
 // Bootstrapped admin email
@@ -60,7 +57,7 @@ export function subscribeToEvents(
     colRef,
     (snapshot) => {
       if (snapshot.empty) {
-        onData(INITIAL_EVENTS);
+        onData([]);
         return;
       }
       const list: EventItem[] = [];
@@ -91,7 +88,7 @@ export function subscribeToMedia(
     colRef,
     (snapshot) => {
       if (snapshot.empty) {
-        onData(INITIAL_MEDIA);
+        onData([]);
         return;
       }
       const list: MediaItem[] = [];
@@ -120,7 +117,7 @@ export function subscribeToPrograms(
     colRef,
     (snapshot) => {
       if (snapshot.empty) {
-        onData(PROGRAMS);
+        onData([]);
         return;
       }
       const list: ProgramItem[] = [];
@@ -387,14 +384,6 @@ export async function seedInitialDataToFirestore(): Promise<{
     },
     { merge: true }
   );
-
-  // 5. Seed sample slips & volunteers for admin test
-  for (const slip of INITIAL_DONATION_SLIPS) {
-    await setDoc(doc(db, 'donationSlips', slip.id), slip, { merge: true });
-  }
-  for (const v of INITIAL_VOLUNTEERS) {
-    await setDoc(doc(db, 'volunteerApplications', v.id), v, { merge: true });
-  }
 
   return { eventsCount, mediaCount, programsCount };
 }

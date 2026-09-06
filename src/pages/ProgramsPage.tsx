@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { NavigationTab, ProgramItem } from '../types';
-import { PROGRAMS } from '../data/initialData';
 import { Users, Sparkles, HeartHandshake, CheckCircle2, Headphones, GraduationCap, BookOpen } from 'lucide-react';
 
 interface ProgramsPageProps {
@@ -19,7 +18,7 @@ export default function ProgramsPage({
   programs: propPrograms
 }: ProgramsPageProps) {
   const [activeCategory, setActiveCategory] = useState<string>('all');
-  const programList = propPrograms || PROGRAMS;
+  const programList = propPrograms ?? [];
 
   useEffect(() => {
     if (initialCategory) {

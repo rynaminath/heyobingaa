@@ -112,7 +112,17 @@ END:VCALENDAR`;
         </button>
       </div>
 
-      {/* Featured Flagship Event Detailed Module */}
+      {events.length === 0 ? (
+        <div className="bg-white rounded-3xl p-12 text-center border border-[#E5ECE8] space-y-3">
+          <Calendar className="w-12 h-12 text-[#1B6B52]/40 mx-auto" />
+          <h3 className="text-lg font-bold text-[#1C2622]">އަދި އެއްވެސް އިވެންޓެއް ނެތް</h3>
+          <p className="text-sm text-[#556660] max-w-md mx-auto">
+            ކުރިއަށް އޮތް ދަރުސްތަކާއި ޕްރޮގްރާމްތަކުގެ މަޢުލޫމާތު ވަރަށް އަވަހަށް އިތުރުކުރެވޭނެއެވެ.
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* Featured Flagship Event Detailed Module */}
       {events.filter(e => e.isFeatured).map((ev) => (
         <div
           key={ev.id}
@@ -276,6 +286,8 @@ END:VCALENDAR`;
           ))}
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg, DonationSlip, VolunteerApplication } from '../types';
+import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg } from '../types';
 
 export const NGO_CONTACT = {
   viberNumber: '+9607522778',
@@ -465,73 +465,5 @@ export const PROGRAMS: ProgramItem[] = [
       'ރަށްރަށަށް ކުރެވޭ ދަޢުވަތީ ދަތުރުތަކުގައި ބައިވެރިވުން'
     ],
     imageUrl: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80'
-  }
-];
-
-export const INITIAL_DONATION_SLIPS: DonationSlip[] = [
-  {
-    id: 'slip-001',
-    donorName: 'އާމިނަތު ޝަފީޤާ',
-    phone: '7789012',
-    amount: 500,
-    currency: 'MVR',
-    bankAccount: 'BML MVR (7770000179374)',
-    referenceNumber: 'TXN-984210',
-    notes: 'އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކުގެ ޓީވީ ޕްރޮގްރާމްތަކަށް ހޭދަކޮށްދެއްވުން އެދެން',
-    date: '2026-03-01',
-    verified: true
-  },
-  {
-    id: 'slip-002',
-    donorName: 'ޙުސައިން އިމްރާން',
-    phone: '9912345',
-    amount: 1500,
-    currency: 'MVR',
-    bankAccount: 'MIB MVR (90101555001661000)',
-    referenceNumber: 'MIB-883192',
-    notes: 'ރޯދައިގެ ހިޔަލުގައި ދަރުސް އިންތިޒާމުކުރުމަށް',
-    date: '2026-03-02',
-    verified: true
-  },
-  {
-    id: 'slip-003',
-    donorName: 'ސިއްރު ފަރާތެއް',
-    phone: '7654321',
-    amount: 100,
-    currency: 'USD',
-    bankAccount: 'BML USD (7730000584220)',
-    referenceNumber: 'USD-441029',
-    notes: 'ތުއްތުކުދިންގެ އިސްލާމީ ބިންގާ ޕްރޮގްރާމަށް',
-    date: '2026-03-03',
-    verified: false
-  }
-];
-
-export const INITIAL_VOLUNTEERS: VolunteerApplication[] = [
-  {
-    id: 'vol-001',
-    name: 'މަރިޔަމް ލުޖައިން',
-    phone: '7904321',
-    email: 'lujain@example.com',
-    islandCity: 'މާލެ',
-    track: 'sisters',
-    interests: ['އިވެންޓް ކޯޑިނޭޝަން', 'ކުޑަކުދިންގެ ޕްރޮގްރާމްތައް', 'ކޮންޓެންޓް ރައިޓިންގ'],
-    availability: 'ހަވީރު އަދި ރޭގަނޑު ގަޑިތަކުގައި',
-    notes: 'ކުރިންވެސް އިސްލާމީ ވޯކްޝޮޕްތަކުގައި ވޮލަންޓިއަރ ކޮށްފައިވާނެ',
-    submittedAt: '2026-02-24',
-    status: 'reviewed'
-  },
-  {
-    id: 'vol-002',
-    name: 'އަޙްމަދު ރަޝީދު',
-    phone: '7776543',
-    email: 'ahmed.rash@example.com',
-    islandCity: 'ހުޅުމާލެ',
-    track: 'brothers',
-    interests: ['ލޮޖިސްޓިކްސް އަދި ތަކެތި އުފުލުން', 'އޯޑިއޯ ވީޑިއޯ ސެޓަޕް', 'އިވެންޓް ސެކިއުރިޓީ'],
-    availability: 'ބަންދު ދުވަސްތަކާއި ރޭގަނޑު',
-    notes: 'ބޮޑެތި ޖަލްސާތަކުގެ ސައުންޑް ސިސްޓަމް ހަރުކުރުމުގެ ތަޖުރިބާ އެބަހުރި',
-    submittedAt: '2026-02-27',
-    status: 'contacted'
   }
 ];

@@ -3,10 +3,31 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/
 import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
-const app = initializeApp(firebaseConfig);
+let localConfig: Record<string, string> = {};
+try {
+  localConfig = (firebaseConfig as Record<string, string>) || {};
+} catch {
+  localConfig = {};
+}
+
+const activeFirebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || localConfig.apiKey || '',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || localConfig.authDomain || '',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || localConfig.projectId || '',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || localConfig.storageBucket || '',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || localConfig.messagingSenderId || '',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || localConfig.appId || '',
+};
+
+const app = initializeApp(activeFirebaseConfig);
 
 // CRITICAL: Must include firestoreDatabaseId
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+const activeFirestoreDbId =
+  import.meta.env.VITE_FIRESTORE_DATABASE_ID ||
+  localConfig.firestoreDatabaseId ||
+  'ai-studio-heyobingaango-5be7811f-1395-41ff-8b43-21809cd861ac';
+
+export const db = getFirestore(app, activeFirestoreDbId);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 

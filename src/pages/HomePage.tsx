@@ -22,7 +22,7 @@ interface HomePageProps {
   onNavigate: (tab: NavigationTab) => void;
   onOpenDonateModal: () => void;
   onSelectMedia: (media: MediaItem) => void;
-  featuredEvent: EventItem;
+  featuredEvent?: EventItem | null;
   featuredMediaList: MediaItem[];
 }
 
@@ -33,7 +33,7 @@ export default function HomePage({
   featuredEvent,
   featuredMediaList
 }: HomePageProps) {
-  const deafAccessibleMedia = featuredMediaList.find((m) => m.isDeafAccessible) || featuredMediaList[0];
+  const deafAccessibleMedia = featuredMediaList.find((m) => m.isDeafAccessible) || featuredMediaList[0] || null;
 
   return (
     <div className="space-y-16 pb-12 font-thaana">
@@ -71,70 +71,103 @@ export default function HomePage({
                 </p>
               </div>
 
-              {/* Spotlight Event Card: "ރޯދައިގެ ހިޔަލުގައި" */}
-              <div className="p-5 sm:p-6 rounded-2xl bg-[#142E26]/90 backdrop-blur-md border border-[#234A3E] shadow-xl space-y-4 hover:border-[#1B6B52] transition-colors">
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#234A3E] pb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-1 rounded-md bg-[#1B6B52] text-white font-bold text-xs">
-                      އިސް ޙަރަކާތް
-                    </span>
-                    <span className="text-xs text-[#CFE2F5]">
-                      މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް & ދާރިސް ޓީވީ ގުޅިގެން
+              {/* Spotlight Event Card */}
+              {featuredEvent ? (
+                <div className="p-5 sm:p-6 rounded-2xl bg-[#142E26]/90 backdrop-blur-md border border-[#234A3E] shadow-xl space-y-4 hover:border-[#1B6B52] transition-colors">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#234A3E] pb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-1 rounded-md bg-[#1B6B52] text-white font-bold text-xs">
+                        އިސް ޙަރަކާތް
+                      </span>
+                      <span className="text-xs text-[#CFE2F5]">
+                        {featuredEvent.partnerOrganization || 'މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް & ދާރިސް ޓީވީ ގުޅިގެން'}
+                      </span>
+                    </div>
+                    <span className="text-xs font-mono text-[#D1E0D9]">
+                      {featuredEvent.time}
                     </span>
                   </div>
-                  <span className="text-xs font-mono text-[#D1E0D9]">
-                    {featuredEvent.time}
-                  </span>
-                </div>
 
-                <div>
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-bold text-white">
+                      ދަރުސް: "{featuredEvent.title}"
+                    </h2>
+                    <p className="text-sm font-semibold text-[#A7F3D0] mt-1">
+                      ވާހަކަދައްކަވަނީ: {featuredEvent.speaker}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#D1E0D9] pt-1">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-[#A7F3D0] shrink-0" />
+                      <span>{featuredEvent.venue}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-[#A7F3D0] shrink-0" />
+                      <span>{featuredEvent.dayText}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-[#A7F3D0] shrink-0" />
+                      <span>ވަގުތު: {featuredEvent.time}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Tv className="w-4 h-4 text-[#CFE2F5] shrink-0" />
+                      <span>{featuredEvent.broadcast}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => onNavigate('events')}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1B6B52] hover:bg-[#145541] text-white font-bold text-xs transition-all shadow-md"
+                    >
+                      <span>ދަރުހުގެ ތަފްޞީލު ބައްލަވާ</span>
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={onOpenDonateModal}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-medium text-xs transition-colors"
+                    >
+                      <HeartHandshake className="w-3.5 h-3.5 text-[#FEE2E2]" />
+                      <span>ދަރުސް އިންތިޒާމަށް އެހީވެލައްވާ</span>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-5 sm:p-6 rounded-2xl bg-[#142E26]/90 backdrop-blur-md border border-[#234A3E] shadow-xl space-y-4">
+                  <div className="flex items-center gap-2 text-xs font-bold text-[#A7F3D0]">
+                    <Sparkles className="w-4 h-4 text-[#A7F3D0]" />
+                    <span>ހެޔޮބިންގާގެ މައިގަނޑު ދަޢުވަތީ ދައުރު</span>
+                  </div>
                   <h2 className="text-xl sm:text-2xl font-bold text-white">
-                    ދަރުސް: "{featuredEvent.title}"
+                    އިސްލާމީ ހޭލުންތެރިކަމާއި އޯގާތެރި މުޖުތަމަޢެއް
                   </h2>
-                  <p className="text-sm font-semibold text-[#A7F3D0] mt-1">
-                    ވާހަކަދައްކަވަނީ: {featuredEvent.speaker}
+                  <p className="text-xs sm:text-sm text-[#D1E0D9] leading-relaxed">
+                    ހެޔޮބިންގާއިން ރާވާ ހިންގާ އާންމު ދަރުސްތަކާއި ޕްރޮގްރާމްތަކުގެ އެންމެ ފަހުގެ މަޢުލޫމާތު މި ޕޯޓަލް މެދުވެރިކޮށް އަބަދުވެސް ފޯރުކޮށްދެވޭނެއެވެ.
                   </p>
+                  <div className="flex flex-wrap gap-3 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => onNavigate('programs')}
+                      className="px-4 py-2 rounded-xl bg-[#1B6B52] hover:bg-[#145541] text-white font-bold text-xs transition-all shadow-md flex items-center gap-1.5"
+                    >
+                      <span>ޕްރޮގްރާމްތައް ބައްލަވާ</span>
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onNavigate('volunteer')}
+                      className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-all flex items-center gap-1.5"
+                    >
+                      <Users className="w-3.5 h-3.5 text-[#A7F3D0]" />
+                      <span>ވޮލަންޓިއަރަކަށް ވެލައްވާ</span>
+                    </button>
+                  </div>
                 </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#D1E0D9] pt-1">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#A7F3D0] shrink-0" />
-                    <span>{featuredEvent.venue}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-[#A7F3D0] shrink-0" />
-                    <span>{featuredEvent.dayText}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-[#A7F3D0] shrink-0" />
-                    <span>ވަގުތު: {featuredEvent.time}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Tv className="w-4 h-4 text-[#CFE2F5] shrink-0" />
-                    <span>{featuredEvent.broadcast}</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-3 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => onNavigate('events')}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1B6B52] hover:bg-[#145541] text-white font-bold text-xs transition-all shadow-md"
-                  >
-                    <span>ދަރުހުގެ ތަފްޞީލު ބައްލަވާ</span>
-                    <ArrowLeft className="w-3.5 h-3.5" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={onOpenDonateModal}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-medium text-xs transition-colors"
-                  >
-                    <HeartHandshake className="w-3.5 h-3.5 text-[#FEE2E2]" />
-                    <span>ދަރުސް އިންތިޒާމަށް އެހީވެލައްވާ</span>
-                  </button>
-                </div>
-              </div>
+              )}
 
               {/* Quick Actions */}
               <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -171,52 +204,76 @@ export default function HomePage({
                   </span>
                 </div>
 
-                {/* Video Card Clickable */}
-                <div 
-                  onClick={() => onSelectMedia(deafAccessibleMedia)}
-                  className="relative aspect-video rounded-2xl overflow-hidden cursor-pointer group shadow-lg border border-[#234A3E]"
-                >
-                  <img
-                    src={deafAccessibleMedia.thumbnailUrl}
-                    alt={deafAccessibleMedia.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-between p-4">
-                    <div className="flex justify-start">
-                      <span className="px-2 py-0.5 rounded bg-black/60 text-xs text-white font-mono">
-                        {deafAccessibleMedia.duration}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-[#255D96] hover:bg-[#1C4875] text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                        <Play className="w-5 h-5 fill-current translate-x-0.5" />
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs text-[#CFE2F5] font-semibold">{deafAccessibleMedia.series}</p>
-                        <h4 className="text-sm font-bold text-white line-clamp-1">{deafAccessibleMedia.title}</h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="text-right space-y-2 text-xs sm:text-sm text-[#D1E0D9]">
-                  <p className="leading-relaxed">
-                    ދާރިސް ޓީވީއާ ގުޅިގެން، ރާއްޖޭގެ އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް އިސްލާމީ ޢިލްމާއި ތަރުބިއްޔަތު އިޝާރާތުގެ ބަހުރުވައިން ފޯރުކޮށްދިނުމުގެ މުހިންމު ސިލްސިލާ.
-                  </p>
-                  <div className="pt-2 flex items-center justify-between border-t border-[#234A3E]">
-                    <span className="text-[#A7F3D0] text-xs">
-                      އިންޓަޕްރިޓަރ: {deafAccessibleMedia.interpreter || 'ރަސްމީ ސައިން ޓީމު'}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => onNavigate('videos')}
-                      className="text-xs text-[#CFE2F5] hover:text-white underline underline-offset-4"
+                {deafAccessibleMedia ? (
+                  <>
+                    {/* Video Card Clickable */}
+                    <div 
+                      onClick={() => onSelectMedia(deafAccessibleMedia)}
+                      className="relative aspect-video rounded-2xl overflow-hidden cursor-pointer group shadow-lg border border-[#234A3E]"
                     >
-                      ހުރިހާ ވީޑިއޯއެއް ބައްލަވާ
-                    </button>
+                      <img
+                        src={deafAccessibleMedia.thumbnailUrl}
+                        alt={deafAccessibleMedia.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-between p-4">
+                        <div className="flex justify-start">
+                          <span className="px-2 py-0.5 rounded bg-black/60 text-xs text-white font-mono">
+                            {deafAccessibleMedia.duration}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full bg-[#255D96] hover:bg-[#1C4875] text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                            <Play className="w-5 h-5 fill-current translate-x-0.5" />
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs text-[#CFE2F5] font-semibold">{deafAccessibleMedia.series}</p>
+                            <h4 className="text-sm font-bold text-white line-clamp-1">{deafAccessibleMedia.title}</h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="text-right space-y-2 text-xs sm:text-sm text-[#D1E0D9]">
+                      <p className="leading-relaxed">
+                        ދާރިސް ޓީވީއާ ގުޅިގެން، ރާއްޖޭގެ އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް އިސްލާމީ ޢިލްމާއި ތަރުބިއްޔަތު އިޝާރާތުގެ ބަހުރުވައިން ފޯރުކޮށްދިނުމުގެ މުހިންމު ސިލްސިލާ.
+                      </p>
+                      <div className="pt-2 flex items-center justify-between border-t border-[#234A3E]">
+                        <span className="text-[#A7F3D0] text-xs">
+                          އިންޓަޕްރިޓަރ: {deafAccessibleMedia.interpreter || 'ރަސްމީ ސައިން ޓީމު'}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => onNavigate('videos')}
+                          className="text-xs text-[#CFE2F5] hover:text-white underline underline-offset-4"
+                        >
+                          ހުރިހާ ވީޑިއޯއެއް ބައްލަވާ
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-right space-y-4 py-4">
+                    <div className="relative aspect-video rounded-2xl bg-black/40 border border-[#234A3E] flex flex-col items-center justify-center p-6 text-center space-y-2">
+                      <Tv className="w-10 h-10 text-[#255D96] opacity-80" />
+                      <h4 className="text-sm font-bold text-white">ދާރިސް ޓީވީ & ޔޫޓިއުބް ޕްރޮގްރާމްތައް</h4>
+                      <p className="text-xs text-[#D1E0D9] max-w-xs">
+                        އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކަށް އިޝާރާތުގެ ބަހުރުވައިން ތައްޔާރުކުރެވޭ ވީޑިއޯތައް
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between pt-2 border-t border-[#234A3E]">
+                      <span className="text-[#A7F3D0] text-xs">ޔޫޓިއުބް: @heyobingaa</span>
+                      <button
+                        type="button"
+                        onClick={() => onNavigate('videos')}
+                        className="text-xs text-[#CFE2F5] hover:text-white underline underline-offset-4 font-bold"
+                      >
+                        ވީޑިއޯ ޕޯޓަލް އަށް ވަޑައިގަންނަވާ →
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
