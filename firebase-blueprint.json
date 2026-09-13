@@ -390,8 +390,8 @@
         },
         "url": {
           "type": "string",
-          "description": "Image URL or asset path.",
-          "maxLength": 1000
+          "description": "Image URL or base64 data URL asset.",
+          "maxLength": 800000
         },
         "filename": {
           "type": "string",

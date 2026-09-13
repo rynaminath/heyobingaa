@@ -222,6 +222,15 @@ html.high-contrast-dark button:focus-visible {
   outline-offset: 2px !important;
 }
 
+html.high-contrast-dark #hero-banner,
+html.high-contrast-dark .hero-section,
+html.high-contrast-dark [class*="from-[#0F231D]"],
+html.high-contrast-dark [class*="bg-[#0F231D]"] {
+  background: #0D1310 !important;
+  background-image: none !important;
+  border-color: #354740 !important;
+}
+
 /* ==========================================================================
    Dark Maroon Theme (ޑާކް މަރޫން) - Rich Deep Maroon, Warm Gold & High Readability
    ========================================================================== */
@@ -230,63 +239,290 @@ html.theme-dark-maroon {
 }
 
 html.theme-dark-maroon body {
-  background-color: #1E0407 !important;
+  background-color: #1A0306 !important;
   color: #FFF5F5 !important;
 }
 
-html.theme-dark-maroon header {
-  background-color: #26050A !important;
-  border-color: #4D1018 !important;
+html.theme-dark-maroon ::selection {
+  background-color: #801320 !important;
+  color: #FFF5F5 !important;
 }
 
+/* Custom scrollbars in Dark Maroon */
+html.theme-dark-maroon ::-webkit-scrollbar-track {
+  background: #1A0306 !important;
+}
+html.theme-dark-maroon ::-webkit-scrollbar-thumb {
+  background: #6B0E1B !important;
+}
+html.theme-dark-maroon ::-webkit-scrollbar-thumb:hover {
+  background: #8A1525 !important;
+}
+
+/* Header & Navigation */
+html.theme-dark-maroon header {
+  background-color: #26040A !important;
+  border-color: #4A0B14 !important;
+}
+
+/* Top bar in Header */
+html.theme-dark-maroon [class*="bg-[#0F4232]"] {
+  background-color: #38060E !important;
+}
+html.theme-dark-maroon [class*="border-[#14533F]"] {
+  border-color: #4D0A14 !important;
+}
+
+/* Brand Logo Styling */
+html.theme-dark-maroon .logo-title {
+  color: #FFFFFF !important;
+}
+html.theme-dark-maroon .logo-english {
+  color: #FBD38D !important; /* Radiant warm gold - highly visible against dark maroon */
+  font-weight: 700 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* High Contrast Dark Logo Styling */
+html.high-contrast-dark .logo-title {
+  color: #FFFFFF !important;
+}
+html.high-contrast-dark .logo-english {
+  color: #86EFAC !important;
+  font-weight: 700 !important;
+}
+
+/* Cards, White Containers, and Page Backgrounds */
 html.theme-dark-maroon .bg-white,
 html.theme-dark-maroon [class*="bg-[#FAFCFB]"],
 html.theme-dark-maroon [class*="bg-gray-50"] {
-  background-color: #2D090F !important;
+  background-color: #27060C !important;
   color: #FFF5F5 !important;
-  border-color: #4D1018 !important;
+  border-color: #4D0B14 !important;
 }
 
 html.theme-dark-maroon [class*="text-[#1C2622]"] {
   color: #FFF5F5 !important;
 }
 
+html.theme-dark-maroon [class*="text-[#1E2623]"] {
+  color: #FFF5F5 !important;
+}
+
 html.theme-dark-maroon [class*="text-[#556660]"],
 html.theme-dark-maroon [class*="text-gray-"] {
-  color: #E2C2C6 !important;
+  color: #F0CFD4 !important;
 }
 
 html.theme-dark-maroon [class*="border-[#E5ECE8]"],
 html.theme-dark-maroon [class*="border-gray-"] {
-  border-color: #4D1018 !important;
+  border-color: #4D0B14 !important;
 }
 
+/* Hero Section & Radial/Linear Gradients */
+html.theme-dark-maroon #hero-banner,
+html.theme-dark-maroon .hero-section,
+html.theme-dark-maroon [class*="from-[#0F231D]"],
+html.theme-dark-maroon [class*="via-[#16332A]"],
+html.theme-dark-maroon [class*="to-[#0E1E19]"],
+html.theme-dark-maroon [class*="to-[#0A1612]"],
+html.theme-dark-maroon [class*="bg-gradient-"][class*="from-[#0F231D]"],
+html.theme-dark-maroon [class*="bg-linear-"][class*="from-[#0F231D]"] {
+  background: linear-gradient(180deg, #2D050B 0%, #1D0307 50%, #120104 100%) !important;
+  background-image: linear-gradient(180deg, #2D050B 0%, #1D0307 50%, #120104 100%) !important;
+  border-color: #4D0A14 !important;
+}
+
+html.theme-dark-maroon [class*="border-[#1C3B32]"] {
+  border-color: #4D0A14 !important;
+}
+
+html.theme-dark-maroon [class*="bg-[#0F231D]"],
+html.theme-dark-maroon [class*="bg-[#0F231D]/95"] {
+  background-color: #170205 !important;
+  border-color: #4D0A14 !important;
+}
+
+html.theme-dark-maroon [class*="bg-radial from-[#1B6B52]"] {
+  background: radial-gradient(ellipse at top, #650C17 0%, #38060E 60%, #1A0306 100%) !important;
+  border-color: #4D0A14 !important;
+}
+
+html.theme-dark-maroon [class*="from-[#0F4232] to-[#1B6B52]"],
+html.theme-dark-maroon [class*="from-[#1B6B52] to-[#0F4232]"],
+html.theme-dark-maroon [class*="from-[#1B6B52] to-[#124837]"],
+html.theme-dark-maroon [class*="from-[#1B6B52] to-[#145541]"] {
+  background-image: linear-gradient(to bottom right, #650C17, #38060E) !important;
+  border-color: #4D0A14 !important;
+}
+
+html.theme-dark-maroon [class*="bg-[#18392F]"] {
+  background-color: #2F050C !important;
+  border-color: #4D0A14 !important;
+}
+
+html.theme-dark-maroon [class*="bg-[#142E26]"],
+html.theme-dark-maroon [class*="bg-[#142E26]/90"] {
+  background-color: #28050A !important;
+  border-color: #4D0A14 !important;
+}
+
+html.theme-dark-maroon [class*="bg-[#124837]"] {
+  background-color: #38060E !important;
+}
+
+html.theme-dark-maroon [class*="bg-[#F8FAF9]"] {
+  background-color: #24050A !important;
+  border-color: #4D0A14 !important;
+}
+
+html.theme-dark-maroon [class*="border-[#234A3E]"],
+html.theme-dark-maroon [class*="border-[#145541]"],
+html.theme-dark-maroon [class*="border-[#14533F]"],
+html.theme-dark-maroon [class*="border-[#E2E9E5]"] {
+  border-color: #4D0A14 !important;
+}
+
+/* Green blurs and ambient glow effects -> Maroon warm glow */
+html.theme-dark-maroon [class*="bg-[#1B6B52]/15"],
+html.theme-dark-maroon [class*="bg-[#1B6B52]/20"],
+html.theme-dark-maroon [class*="bg-[#1B6B52]/25"],
+html.theme-dark-maroon [class*="bg-[#1B6B52]/30"],
+html.theme-dark-maroon [class*="bg-[#1B6B52]/40"],
+html.theme-dark-maroon [class*="bg-[#1B6B52]/50"] {
+  background-color: rgba(128, 19, 32, 0.35) !important;
+}
+
+html.theme-dark-maroon [class*="bg-[#255D96]/20"],
+html.theme-dark-maroon [class*="bg-[#255D96]/15"] {
+  background-color: rgba(90, 10, 20, 0.25) !important;
+}
+
+html.theme-dark-maroon [class*="border-[#1B6B52]/40"],
+html.theme-dark-maroon [class*="border-[#1B6B52]/50"],
+html.theme-dark-maroon [class*="hover:border-[#1B6B52]"]:hover {
+  border-color: #FBD38D !important;
+}
+
+/* Footer & Dark Green/Black Containers */
+html.theme-dark-maroon footer,
+html.theme-dark-maroon [class*="bg-[#0A1612]"] {
+  background-color: #170205 !important;
+  border-color: #38060D !important;
+}
+
+html.theme-dark-maroon [class*="border-[#142921]"] {
+  border-color: #38060D !important;
+}
+
+/* Text and Badges */
+html.theme-dark-maroon [class*="text-[#EBF5F0]"] {
+  color: #FCE7F3 !important;
+}
+
+/* All Green Text & Accents */
 html.theme-dark-maroon [class*="text-[#1B6B52]"] {
-  color: #F6AD55 !important;
+  color: #FBD38D !important; /* Warm gold accent */
 }
 
-html.theme-dark-maroon [class*="bg-[#1B6B52]"] {
-  background-color: #7B121D !important;
+html.theme-dark-maroon [class*="hover:text-[#1B6B52]"]:hover {
+  color: #FEEBC8 !important;
+}
+
+html.theme-dark-maroon [class*="text-[#A7F3D0]"],
+html.theme-dark-maroon [class*="text-emerald-400"] {
+  color: #FBD38D !important;
+}
+
+html.theme-dark-maroon [class*="text-[#D1E0D9]"] {
+  color: #F2D5D9 !important;
+}
+
+html.theme-dark-maroon [class*="text-[#0F4232]"] {
   color: #FFF5F5 !important;
 }
 
-html.theme-dark-maroon [class*="bg-[#EBF5F0]"] {
-  background-color: #3D0D14 !important;
-  color: #FBD38D !important;
-  border-color: #5C1520 !important;
+/* Primary Green Buttons -> Rich Maroon Buttons */
+html.theme-dark-maroon [class*="bg-[#1B6B52]"] {
+  background-color: #801320 !important;
+  color: #FFF5F5 !important;
 }
 
+html.theme-dark-maroon [class*="hover:bg-[#15533F]"]:hover,
+html.theme-dark-maroon [class*="hover:bg-[#145541]"]:hover {
+  background-color: #9E1B2B !important;
+}
+
+/* Soft Green Badges / Light Green Highlights */
+html.theme-dark-maroon [class*="bg-[#EBF5F0]"] {
+  background-color: #38080F !important;
+  color: #FBD38D !important;
+  border-color: #5C121E !important;
+}
+
+html.theme-dark-maroon [class*="hover:bg-[#EBF5F0]"]:hover {
+  background-color: #450B14 !important;
+  color: #FEEBC8 !important;
+}
+
+html.theme-dark-maroon [class*="border-[#C8E0D5]"],
+html.theme-dark-maroon [class*="border-[#1B6B52]"] {
+  border-color: #650E1A !important;
+}
+
+/* Tailwind Emerald & Green Utilities (Badges, Pills, Rings, Gradients) */
+html.theme-dark-maroon [class*="bg-emerald-"],
+html.theme-dark-maroon [class*="bg-green-"] {
+  background-color: #38080F !important;
+  color: #FBD38D !important;
+  border-color: #5C121E !important;
+}
+
+html.theme-dark-maroon [class*="text-emerald-"],
+html.theme-dark-maroon [class*="text-green-"] {
+  color: #FBD38D !important;
+}
+
+html.theme-dark-maroon [class*="border-emerald-"],
+html.theme-dark-maroon [class*="border-green-"] {
+  border-color: #650E1A !important;
+}
+
+html.theme-dark-maroon [class*="ring-emerald-"],
+html.theme-dark-maroon [class*="ring-green-"] {
+  --tw-ring-color: #FBD38D !important;
+}
+
+html.theme-dark-maroon [class*="from-emerald-"],
+html.theme-dark-maroon [class*="from-green-"] {
+  --tw-gradient-from: #500812 !important;
+}
+
+html.theme-dark-maroon [class*="to-emerald-"],
+html.theme-dark-maroon [class*="to-green-"] {
+  --tw-gradient-to: #2B050B !important;
+}
+
+/* Form Inputs, Selects, and Textareas */
 html.theme-dark-maroon input,
 html.theme-dark-maroon select,
 html.theme-dark-maroon textarea {
-  background-color: #25060B !important;
+  background-color: #24050A !important;
   color: #FFF5F5 !important;
-  border-color: #5C1520 !important;
+  border-color: #4D0B14 !important;
 }
 
+html.theme-dark-maroon input:focus,
+html.theme-dark-maroon select:focus,
+html.theme-dark-maroon textarea:focus {
+  border-color: #FBD38D !important;
+  box-shadow: 0 0 0 2px rgba(251, 211, 141, 0.2) !important;
+}
+
+/* Focus Rings */
 html.theme-dark-maroon a:focus-visible,
 html.theme-dark-maroon button:focus-visible {
-  outline: 3px solid #F6AD55 !important;
+  outline: 3px solid #FBD38D !important;
   outline-offset: 2px !important;
 }
 

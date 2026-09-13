@@ -1,4 +1,5 @@
 import logoImg from '../images/logo.png';
+import { useAccessibility } from '../context/AccessibilityContext';
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
@@ -7,6 +8,8 @@ interface LogoProps {
 }
 
 export default function Logo({ size = 'md', variant = 'colored' }: LogoProps) {
+  const { contrastTheme } = useAccessibility();
+
   const iconSizes = {
     sm: 'w-9 h-9',
     md: 'w-11 h-11 sm:w-12 sm:h-12',
@@ -25,6 +28,18 @@ export default function Logo({ size = 'md', variant = 'colored' }: LogoProps) {
     lg: 'text-sm sm:text-base'
   };
 
+  // Determine colors with rock-solid visibility across themes
+  let titleColorClass = variant === 'dark' ? 'text-white' : 'text-[#1E2623]';
+  let englishColorClass = variant === 'dark' ? 'text-white/80' : 'text-[#1B6B52]';
+
+  if (contrastTheme === 'dark-maroon') {
+    titleColorClass = 'text-white';
+    englishColorClass = 'text-[#FBD38D] font-bold drop-shadow-xs'; // Warm luminous gold
+  } else if (contrastTheme === 'high-contrast-dark') {
+    titleColorClass = 'text-white';
+    englishColorClass = 'text-[#86EFAC] font-bold';
+  }
+
   return (
     <div className="flex items-center gap-2.5 sm:gap-3 select-none text-right">
       {/* Official Uploaded Logo */}
@@ -38,12 +53,12 @@ export default function Logo({ size = 'md', variant = 'colored' }: LogoProps) {
 
       {/* Brand Typography: Dhivehi on top, English below */}
       <div className="flex flex-col justify-center leading-tight text-right items-start">
-        <span className={`font-bold tracking-tight font-thaana text-right ${titleSizes[size]} ${variant === 'dark' ? 'text-white' : 'text-[#1E2623]'}`}>
+        <span className={`logo-title font-bold tracking-tight font-thaana text-right transition-colors ${titleSizes[size]} ${titleColorClass}`}>
           ހެޔޮބިންގާ
         </span>
         <span 
           dir="ltr" 
-          className={`font-semibold font-latin tracking-wide text-right ${englishSizes[size]} ${variant === 'dark' ? 'text-white/80' : 'text-[#1B6B52]'}`}
+          className={`logo-english font-semibold font-latin tracking-wide text-right transition-colors ${englishSizes[size]} ${englishColorClass}`}
         >
           Heyo Bingaa
         </span>

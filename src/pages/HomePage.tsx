@@ -38,7 +38,10 @@ export default function HomePage({
   return (
     <div className="space-y-16 pb-12 font-thaana">
       {/* 1. HERO BANNER: Flagship Event & Deaf-accessible Media Spotlight */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0F231D] via-[#16332A] to-[#0E1E19] text-white pt-10 pb-20 px-4 sm:px-6 lg:px-8 border-b border-[#1C3B32] shadow-xl">
+      <section
+        id="hero-banner"
+        className="hero-section relative overflow-hidden bg-gradient-to-b from-[#0F231D] via-[#16332A] to-[#0E1E19] text-white pt-10 pb-20 px-4 sm:px-6 lg:px-8 border-b border-[#1C3B32] shadow-xl"
+      >
         {/* Subtle decorative ambient lights in soft green and soft blue */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#1B6B52]/25 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-[#255D96]/20 rounded-full blur-3xl pointer-events-none" />

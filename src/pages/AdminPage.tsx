@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Calendar,
   Video,
@@ -20,8 +20,11 @@ import {
   X,
   AlertCircle,
   Eye,
-  Image as ImageIcon
+  Image as ImageIcon,
+  UploadCloud,
+  Crop
 } from 'lucide-react';
+import ImageCropperModal from '../components/ImageCropperModal';
 import { useAuth } from '../context/AuthContext';
 import {
   subscribeToEvents,
@@ -70,6 +73,12 @@ export default function AdminPage() {
   const [editingProgram, setEditingProgram] = useState<Partial<ProgramItem> | null>(null);
   const [editingGallery, setEditingGallery] = useState<Partial<GalleryItem> | null>(null);
   const [viewingSlip, setViewingSlip] = useState<DonationSlip | null>(null);
+
+  // Gallery Upload, Drag-Drop & Cropper State
+  const [cropModalData, setCropModalData] = useState<{ src: string; filename: string } | null>(null);
+  const [isDraggingOver, setIsDraggingOver] = useState<boolean>(false);
+  const galleryFileInputRef = useRef<HTMLInputElement>(null);
+  const modalFileInputRef = useRef<HTMLInputElement>(null);
 
   // Subscriptions
   useEffect(() => {
@@ -316,6 +325,49 @@ export default function AdminPage() {
     } finally {
       setActionLoading(false);
     }
+  };
+
+  const handleFileForCrop = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      showNotification('error', 'ހަމައެކަނި ފޮޓޯ ފައިލް (JPG, PNG, WebP) އަޕްލޯޑްކުރެއްވޭނެއެވެ.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        setCropModalData({
+          src: e.target.result as string,
+          filename: file.name
+        });
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleCropFinished = (croppedDataUrl: string, filename: string) => {
+    setCropModalData(null);
+    const titleFromFilename = filename
+      .replace(/\.[^/.]+$/, '')
+      .replace(/[-_]/g, ' ')
+      .trim();
+
+    if (editingGallery) {
+      setEditingGallery((prev) => ({
+        ...prev,
+        url: croppedDataUrl,
+        filename: filename,
+        title: prev?.title || titleFromFilename || 'ހެޔޮބިންގާ ފޮޓޯ'
+      }));
+    } else {
+      setEditingGallery({
+        title: titleFromFilename || 'ހެޔޮބިންގާ ފޮޓޯ',
+        url: croppedDataUrl,
+        filename: filename,
+        category: 'community',
+        order: galleryList.length + 1
+      });
+    }
+    showNotification('success', 'ފޮޓޯ ކާމިޔާބުކަމާއެކު ކްރޮޕްކޮށް ތައްޔާރުކުރެވިއްޖެ! ތަފްޞީލު ރައްކާކުރައްވާށެވެ.');
   };
 
   // --- Slips Actions ---
@@ -931,24 +983,90 @@ export default function AdminPage() {
       {/* TAB CONTENT: 6. GALLERY */}
       {activeTab === 'gallery' && (
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-[#1C2622]">ގެލެރީ ފޮޓޯތައް ބެލެހެއްޓެވުން</h2>
-            <button
-              type="button"
-              onClick={() =>
-                setEditingGallery({
-                  title: '',
-                  url: '',
-                  filename: '',
-                  category: 'community',
-                  order: galleryList.length + 1
-                })
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-bold text-[#1C2622]">ގެލެރީ ފޮޓޯތައް ބެލެހެއްޓެވުން</h2>
+              <p className="text-xs text-[#556660] mt-0.5">ފޮޓޯ އަޕްލޯޑްކުރައްވައި ކްރޮޕްކުރައްވާ ނުވަތަ ޑްރެގް އެންޑް ޑްރޮޕް ކުރައްވާ</p>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <input
+                ref={galleryFileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    handleFileForCrop(e.target.files[0]);
+                    e.target.value = '';
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => galleryFileInputRef.current?.click()}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1B6B52] hover:bg-[#15533F] text-white font-bold text-sm shadow-xs transition-all active:scale-95"
+              >
+                <UploadCloud className="w-4 h-4" />
+                <span>ފޮޓޯ އަޕްލޯޑްކުރައްވާ</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setEditingGallery({
+                    title: '',
+                    url: '',
+                    filename: '',
+                    category: 'community',
+                    order: galleryList.length + 1
+                  })
+                }
+                className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#FAFCFB] hover:bg-[#EBF5F0] text-[#1B6B52] border border-[#C8E0D5] font-bold text-sm transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                <span>ޔޫއާރްއެލް / އަމިއްލައަށް އިތުރުކުރައްވާ</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Drag & Drop Upload Zone */}
+          <div
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDraggingOver(true);
+            }}
+            onDragLeave={(e) => {
+              e.preventDefault();
+              setIsDraggingOver(false);
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDraggingOver(false);
+              if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                handleFileForCrop(e.dataTransfer.files[0]);
               }
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1B6B52] hover:bg-[#15533F] text-white font-bold text-sm shadow-xs transition-all"
-            >
-              <Plus className="w-4 h-4" />
-              <span>އައު ފޮޓޯއެއް އިތުރުކުރައްވާ</span>
-            </button>
+            }}
+            onClick={() => galleryFileInputRef.current?.click()}
+            className={`border-2 border-dashed rounded-3xl p-6 sm:p-8 text-center cursor-pointer transition-all duration-200 ${
+              isDraggingOver
+                ? 'border-[#1B6B52] bg-[#EBF5F0] scale-[1.01]'
+                : 'border-[#C8E0D5] hover:border-[#1B6B52] bg-white hover:bg-[#EBF5F0]/40'
+            }`}
+          >
+            <div className="flex flex-col items-center justify-center gap-2 text-center">
+              <div className="w-12 h-12 rounded-2xl bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center shrink-0">
+                <UploadCloud className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="font-bold text-base text-[#1C2622]">
+                  ފޮޓޯ މިތަނަށް ޑްރެގްކޮށް ދޫކޮށްލައްވާ، ނުވަތަ ފައިލް ނަންގަވަން ފިއްތަވާލައްވާ
+                </p>
+                <p className="text-xs text-[#556660] mt-1">
+                  Drag & drop images here or browse • އަޕްލޯޑްކުރުމާއެކު އޮޓޮމެޓިކުން ކްރޮޕްކުރުމުގެ ފުރުޞަތު ލިބޭނެ • JPG, PNG, WebP
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -1382,14 +1500,51 @@ export default function AdminPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#556660] mb-1">ފޮޓޯ URL ނުވަތަ ޕާތު (/images/... ނުވަތަ https://...) *</label>
+                <label className="block text-xs font-bold text-[#556660] mb-1">ފޮޓޯ އަޕްލޯޑްކުރުން ނުވަތަ URL</label>
+                
+                {/* Modal Drag & Drop Box */}
+                <div
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                      handleFileForCrop(e.dataTransfer.files[0]);
+                    }
+                  }}
+                  onClick={() => modalFileInputRef.current?.click()}
+                  className="border-2 border-dashed border-[#C8E0D5] hover:border-[#1B6B52] bg-[#FAFCFB] hover:bg-[#EBF5F0]/50 rounded-2xl p-4 text-center cursor-pointer transition-colors mb-3"
+                >
+                  <input
+                    ref={modalFileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        handleFileForCrop(e.target.files[0]);
+                        e.target.value = '';
+                      }
+                    }}
+                  />
+                  <div className="flex items-center justify-center gap-2 text-[#1B6B52]">
+                    <UploadCloud className="w-5 h-5" />
+                    <span className="text-xs font-bold">ފޮޓޯ ފައިލެއް ނަންގަވާ ނުވަތަ މިތަނަށް ޑްރެގްކޮށްލައްވާ</span>
+                  </div>
+                  <p className="text-[11px] text-[#556660] mt-1">ނެންގެވުމާއެކު ވަގުތުން ކްރޮޕްކުރުމަށް ހުޅުވޭނެއެވެ</p>
+                </div>
+
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[11px] text-[#556660]">ނުވަތަ ސީދާ URL ޖައްސަވާ:</span>
+                </div>
                 <input
                   type="text"
                   required
                   value={editingGallery.url || ''}
                   onChange={(e) => setEditingGallery({ ...editingGallery, url: e.target.value })}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono text-xs"
-                  placeholder="/images/gallery (1).jpg ނުވަތަ https://..."
+                  placeholder="/images/gallery (1).jpg ނުވަތަ https://... ނުވަތަ data:image/..."
                 />
               </div>
 
@@ -1416,8 +1571,23 @@ export default function AdminPage() {
               </div>
 
               {editingGallery.url && (
-                <div className="space-y-1">
-                  <label className="block text-xs font-bold text-[#556660]">ޕްރިވިއު:</label>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-bold text-[#556660]">ޕްރިވިއު އަދި ކްރޮޕްކުރުން:</label>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setCropModalData({
+                          src: editingGallery.url!,
+                          filename: editingGallery.filename || 'gallery-image.jpg'
+                        })
+                      }
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#EBF5F0] hover:bg-[#D5ECE1] text-[#1B6B52] text-xs font-bold transition-colors"
+                    >
+                      <Crop className="w-3.5 h-3.5" />
+                      <span>ކްރޮޕްކުރައްވާ / އެޖަސްޓްކުރައްވާ</span>
+                    </button>
+                  </div>
                   <div className="relative aspect-16/9 rounded-xl overflow-hidden bg-black/10 border border-[#E5ECE8]">
                     <img
                       src={editingGallery.url}
@@ -1478,6 +1648,16 @@ export default function AdminPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* --- IMAGE CROPPER MODAL --- */}
+      {cropModalData && (
+        <ImageCropperModal
+          imageSrc={cropModalData.src}
+          filename={cropModalData.filename}
+          onCropComplete={handleCropFinished}
+          onClose={() => setCropModalData(null)}
+        />
       )}
     </div>
   );
