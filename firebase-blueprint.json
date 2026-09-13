@@ -377,6 +377,43 @@
           "maxLength": 200
         }
       }
+    },
+    "galleryItem": {
+      "title": "GalleryItem",
+      "description": "Photos and images captured from NGO events, workshops, and gatherings.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Caption or title of the photo.",
+          "maxLength": 250
+        },
+        "url": {
+          "type": "string",
+          "description": "Image URL or asset path.",
+          "maxLength": 1000
+        },
+        "filename": {
+          "type": "string",
+          "description": "Optional file name.",
+          "maxLength": 200
+        },
+        "category": {
+          "type": "string",
+          "description": "Gallery topic category.",
+          "maxLength": 100
+        },
+        "order": {
+          "type": "number",
+          "description": "Display sort order."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Upload or creation timestamp.",
+          "maxLength": 50
+        }
+      },
+      "required": ["title", "url"]
     }
   },
   "firestore": {
@@ -395,6 +432,10 @@
     "/programs/{programId}": {
       "schema": "program",
       "description": "Programs and workshops run by the NGO."
+    },
+    "/gallery/{galleryId}": {
+      "schema": "galleryItem",
+      "description": "Photo gallery archive and images."
     },
     "/donationSlips/{slipId}": {
       "schema": "donationSlip",

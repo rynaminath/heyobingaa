@@ -1,4 +1,4 @@
-import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg } from '../types';
+import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg, GalleryItem } from '../types';
 
 export const NGO_CONTACT = {
   viberNumber: '+9607522778',
@@ -467,3 +467,18 @@ export const PROGRAMS: ProgramItem[] = [
     imageUrl: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80'
   }
 ];
+
+export const INITIAL_GALLERY: GalleryItem[] = Array.from({ length: 13 }, (_, i) => {
+  const num = i + 1;
+  const filename = `gallery (${num}).jpg`;
+  return {
+    id: `gallery-${num}`,
+    url: `/images/${encodeURIComponent(filename)}`,
+    filename,
+    title: `ހެޔޮބިންގާ ޙަރަކާތްތައް • ތަޞްވީރު ${num}`,
+    order: num,
+    category: 'community',
+    createdAt: '2026-03-01T00:00:00.000Z'
+  };
+});
+

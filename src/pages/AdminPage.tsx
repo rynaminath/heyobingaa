@@ -19,13 +19,15 @@ import {
   RefreshCw,
   X,
   AlertCircle,
-  Eye
+  Eye,
+  Image as ImageIcon
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import {
   subscribeToEvents,
   subscribeToMedia,
   subscribeToPrograms,
+  subscribeToGallery,
   subscribeToDonationSlips,
   subscribeToVolunteers,
   saveEventToFirestore,
@@ -34,15 +36,17 @@ import {
   deleteMediaFromFirestore,
   saveProgramToFirestore,
   deleteProgramFromFirestore,
+  saveGalleryItemToFirestore,
+  deleteGalleryItemFromFirestore,
   verifyDonationSlipInFirestore,
   deleteDonationSlipInFirestore,
   updateVolunteerStatusInFirestore,
   seedInitialDataToFirestore
 } from '../services/firestoreService';
-import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication } from '../types';
+import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem } from '../types';
 import { NGO_CONTACT } from '../data/initialData';
 
-type AdminTab = 'events' | 'media' | 'programs' | 'slips' | 'volunteers' | 'seeder';
+type AdminTab = 'events' | 'media' | 'programs' | 'gallery' | 'slips' | 'volunteers' | 'seeder';
 
 export default function AdminPage() {
   const { user, isAdmin, loading, loginWithGoogle, logout, adminEmail } = useAuth();
@@ -52,6 +56,7 @@ export default function AdminPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);
   const [programs, setPrograms] = useState<ProgramItem[]>([]);
+  const [galleryList, setGalleryList] = useState<GalleryItem[]>([]);
   const [slips, setSlips] = useState<DonationSlip[]>([]);
   const [volunteers, setVolunteers] = useState<VolunteerApplication[]>([]);
 
@@ -63,6 +68,7 @@ export default function AdminPage() {
   const [editingEvent, setEditingEvent] = useState<Partial<EventItem> | null>(null);
   const [editingMedia, setEditingMedia] = useState<Partial<MediaItem> | null>(null);
   const [editingProgram, setEditingProgram] = useState<Partial<ProgramItem> | null>(null);
+  const [editingGallery, setEditingGallery] = useState<Partial<GalleryItem> | null>(null);
   const [viewingSlip, setViewingSlip] = useState<DonationSlip | null>(null);
 
   // Subscriptions
@@ -70,6 +76,7 @@ export default function AdminPage() {
     const unsubEvents = subscribeToEvents(setEvents);
     const unsubMedia = subscribeToMedia(setMediaList);
     const unsubPrograms = subscribeToPrograms(setPrograms);
+    const unsubGallery = subscribeToGallery(setGalleryList);
 
     let unsubSlips = () => {};
     let unsubVolunteers = () => {};
@@ -83,6 +90,7 @@ export default function AdminPage() {
       unsubEvents();
       unsubMedia();
       unsubPrograms();
+      unsubGallery();
       unsubSlips();
       unsubVolunteers();
     };
@@ -103,7 +111,7 @@ export default function AdminPage() {
       const res = await seedInitialDataToFirestore();
       showNotification(
         'success',
-        `ޑޭޓާބޭސް ކާމިޔާބުކަމާއެކު ސީޑްކުރެވިއްޖެ! (${res.eventsCount} އިވެންޓް، ${res.mediaCount} ވީޑިއޯ، ${res.programsCount} ޕްރޮގްރާމް)`
+        `ޑޭޓާބޭސް ކާމިޔާބުކަމާއެކު ސީޑްކުރެވިއްޖެ! (${res.eventsCount} އިވެންޓް، ${res.mediaCount} ވީޑިއޯ، ${res.programsCount} ޕްރޮގްރާމް، ${res.galleryCount} ގެލެރީ ފޮޓޯ)`
       );
     } catch (err) {
       console.error(err);
@@ -263,6 +271,48 @@ export default function AdminPage() {
       showNotification('success', 'ޕްރޮގްރާމް ފޮހެލެވިއްޖެ');
     } catch (err) {
       showNotification('error', 'ޕްރޮގްރާމް ފޮހެލުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // --- Gallery Actions ---
+  const handleSaveGalleryItem = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingGallery?.title || !editingGallery?.url) {
+      showNotification('error', 'ކޮންމެހެން ފުރަންޖެހޭ ބައިތައް ފުރިހަމަކުރައްވާ');
+      return;
+    }
+    try {
+      setActionLoading(true);
+      const id = editingGallery.id || `gallery-${Date.now()}`;
+      const payload: GalleryItem = {
+        id,
+        title: editingGallery.title,
+        url: editingGallery.url,
+        filename: editingGallery.filename || '',
+        category: editingGallery.category || 'community',
+        order: Number(editingGallery.order || (galleryList.length + 1)),
+        createdAt: editingGallery.createdAt || new Date().toISOString()
+      };
+      await saveGalleryItemToFirestore(payload);
+      setEditingGallery(null);
+      showNotification('success', 'ގެލެރީ ތަޞްވީރު ރައްކާކުރެވިއްޖެ');
+    } catch (err) {
+      showNotification('error', 'ގެލެރީ ރައްކާކުރުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteGalleryItem = async (id: string) => {
+    if (!window.confirm('މި ތަޞްވީރު ފޮހެލަން ބޭނުންފުޅުތޯ؟')) return;
+    try {
+      setActionLoading(true);
+      await deleteGalleryItemFromFirestore(id);
+      showNotification('success', 'ތަޞްވީރު ފޮހެލެވިއްޖެ');
+    } catch (err) {
+      showNotification('error', 'ތަޞްވީރު ފޮހެލުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
     } finally {
       setActionLoading(false);
     }
@@ -464,6 +514,18 @@ export default function AdminPage() {
         >
           <BookOpen className="w-4 h-4" />
           <span>ޕްރޮގްރާމްތައް ({programs.length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('gallery')}
+          className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
+            activeTab === 'gallery'
+              ? 'bg-[#1B6B52] text-white shadow-sm'
+              : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
+          }`}
+        >
+          <ImageIcon className="w-4 h-4" />
+          <span>ގެލެރީ ({galleryList.length})</span>
         </button>
 
         <button
@@ -866,6 +928,90 @@ export default function AdminPage() {
         </div>
       )}
 
+      {/* TAB CONTENT: 6. GALLERY */}
+      {activeTab === 'gallery' && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold text-[#1C2622]">ގެލެރީ ފޮޓޯތައް ބެލެހެއްޓެވުން</h2>
+            <button
+              type="button"
+              onClick={() =>
+                setEditingGallery({
+                  title: '',
+                  url: '',
+                  filename: '',
+                  category: 'community',
+                  order: galleryList.length + 1
+                })
+              }
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1B6B52] hover:bg-[#15533F] text-white font-bold text-sm shadow-xs transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              <span>އައު ފޮޓޯއެއް އިތުރުކުރައްވާ</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {galleryList.length === 0 ? (
+              <div className="col-span-full py-16 text-center text-[#556660] bg-white rounded-3xl border border-[#E5ECE8]">
+                އަދި އެއްވެސް ފޮޓޯއެއް ޑޭޓާބޭސްގައި ނެތެވެ. މަތީގައިވާ 'ޑޭޓާބޭސް ސީޑްކުރުން' ފިއްތަވާލައްވައިގެން އަސްލު 13 ފޮޓޯ އަޅުއްވާށެވެ.
+              </div>
+            ) : (
+              galleryList.map((photo, idx) => (
+                <div
+                  key={photo.id}
+                  className="bg-white rounded-2xl border border-[#E5ECE8] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
+                >
+                  <div className="relative aspect-16/10 bg-[#0A1612]">
+                    <img
+                      src={photo.url}
+                      alt={photo.title}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-2 right-2 bg-black/70 text-white text-[11px] font-mono px-2 py-0.5 rounded-md backdrop-blur-xs">
+                      #{photo.order ?? idx + 1}
+                    </div>
+                  </div>
+
+                  <div className="p-3.5 space-y-2 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h4 className="font-bold text-sm text-[#1C2622] line-clamp-2">
+                        {photo.title}
+                      </h4>
+                      {photo.filename && (
+                        <p className="text-[11px] text-[#556660] font-mono truncate mt-0.5" dir="ltr">
+                          {photo.filename}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#E5ECE8]">
+                      <button
+                        type="button"
+                        onClick={() => setEditingGallery(photo)}
+                        className="p-1.5 rounded-lg hover:bg-[#EBF5F0] text-[#1B6B52] transition-colors"
+                        title="އިސްލާޙުކުރައްވާ"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteGalleryItem(photo.id)}
+                        className="p-1.5 rounded-lg hover:bg-rose-50 text-rose-600 transition-colors"
+                        title="ފޮހެލައްވާ"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
       {/* --- EVENT EDIT/ADD MODAL --- */}
       {editingEvent && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
@@ -1192,6 +1338,103 @@ export default function AdminPage() {
                 <button
                   type="button"
                   onClick={() => setEditingProgram(null)}
+                  className="px-4 py-2.5 rounded-xl border border-[#E5ECE8] text-[#556660] font-bold text-sm"
+                >
+                  ކެންސަލް
+                </button>
+                <button
+                  type="submit"
+                  disabled={actionLoading}
+                  className="px-6 py-2.5 rounded-xl bg-[#1B6B52] hover:bg-[#15533F] text-white font-bold text-sm"
+                >
+                  ރައްކާކުރައްވާ
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* --- GALLERY EDIT/ADD MODAL --- */}
+      {editingGallery && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#E5ECE8] pb-3">
+              <h3 className="text-lg font-bold text-[#1C2622]">
+                {editingGallery.id ? 'ގެލެރީ ފޮޓޯ އިސްލާޙުކުރައްވާ' : 'އައު ގެލެރީ ފޮޓޯއެއް އިތުރުކުރައްވާ'}
+              </h3>
+              <button onClick={() => setEditingGallery(null)} className="p-1 hover:bg-[#FAFCFB] rounded-lg">
+                <X className="w-5 h-5 text-[#556660]" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveGalleryItem} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-[#556660] mb-1">ފޮޓޯގެ ނަން / ކެޕްޝަން *</label>
+                <input
+                  type="text"
+                  required
+                  value={editingGallery.title || ''}
+                  onChange={(e) => setEditingGallery({ ...editingGallery, title: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none"
+                  placeholder="ހެޔޮބިންގާ ޙަރަކާތްތައް • ތަޞްވީރު..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#556660] mb-1">ފޮޓޯ URL ނުވަތަ ޕާތު (/images/... ނުވަތަ https://...) *</label>
+                <input
+                  type="text"
+                  required
+                  value={editingGallery.url || ''}
+                  onChange={(e) => setEditingGallery({ ...editingGallery, url: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono text-xs"
+                  placeholder="/images/gallery (1).jpg ނުވަތަ https://..."
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-[#556660] mb-1">ފައިލް ނަން</label>
+                  <input
+                    type="text"
+                    value={editingGallery.filename || ''}
+                    onChange={(e) => setEditingGallery({ ...editingGallery, filename: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono text-xs"
+                    placeholder="gallery (1).jpg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-[#556660] mb-1">ތަރުތީބު ނަންބަރު (Order)</label>
+                  <input
+                    type="number"
+                    value={editingGallery.order ?? 1}
+                    onChange={(e) => setEditingGallery({ ...editingGallery, order: Number(e.target.value) })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono"
+                  />
+                </div>
+              </div>
+
+              {editingGallery.url && (
+                <div className="space-y-1">
+                  <label className="block text-xs font-bold text-[#556660]">ޕްރިވިއު:</label>
+                  <div className="relative aspect-16/9 rounded-xl overflow-hidden bg-black/10 border border-[#E5ECE8]">
+                    <img
+                      src={editingGallery.url}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E5ECE8]">
+                <button
+                  type="button"
+                  onClick={() => setEditingGallery(null)}
                   className="px-4 py-2.5 rounded-xl border border-[#E5ECE8] text-[#556660] font-bold text-sm"
                 >
                   ކެންސަލް

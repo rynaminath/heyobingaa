@@ -222,5 +222,74 @@ html.high-contrast-dark button:focus-visible {
   outline-offset: 2px !important;
 }
 
+/* ==========================================================================
+   Dark Maroon Theme (ޑާކް މަރޫން) - Rich Deep Maroon, Warm Gold & High Readability
+   ========================================================================== */
+html.theme-dark-maroon {
+  color-scheme: dark;
+}
+
+html.theme-dark-maroon body {
+  background-color: #1E0407 !important;
+  color: #FFF5F5 !important;
+}
+
+html.theme-dark-maroon header {
+  background-color: #26050A !important;
+  border-color: #4D1018 !important;
+}
+
+html.theme-dark-maroon .bg-white,
+html.theme-dark-maroon [class*="bg-[#FAFCFB]"],
+html.theme-dark-maroon [class*="bg-gray-50"] {
+  background-color: #2D090F !important;
+  color: #FFF5F5 !important;
+  border-color: #4D1018 !important;
+}
+
+html.theme-dark-maroon [class*="text-[#1C2622]"] {
+  color: #FFF5F5 !important;
+}
+
+html.theme-dark-maroon [class*="text-[#556660]"],
+html.theme-dark-maroon [class*="text-gray-"] {
+  color: #E2C2C6 !important;
+}
+
+html.theme-dark-maroon [class*="border-[#E5ECE8]"],
+html.theme-dark-maroon [class*="border-gray-"] {
+  border-color: #4D1018 !important;
+}
+
+html.theme-dark-maroon [class*="text-[#1B6B52]"] {
+  color: #F6AD55 !important;
+}
+
+html.theme-dark-maroon [class*="bg-[#1B6B52]"] {
+  background-color: #7B121D !important;
+  color: #FFF5F5 !important;
+}
+
+html.theme-dark-maroon [class*="bg-[#EBF5F0]"] {
+  background-color: #3D0D14 !important;
+  color: #FBD38D !important;
+  border-color: #5C1520 !important;
+}
+
+html.theme-dark-maroon input,
+html.theme-dark-maroon select,
+html.theme-dark-maroon textarea {
+  background-color: #25060B !important;
+  color: #FFF5F5 !important;
+  border-color: #5C1520 !important;
+}
+
+html.theme-dark-maroon a:focus-visible,
+html.theme-dark-maroon button:focus-visible {
+  outline: 3px solid #F6AD55 !important;
+  outline-offset: 2px !important;
+}
+
+
 
 

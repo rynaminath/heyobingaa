@@ -116,3 +116,14 @@ export interface PartnerOrg {
   tag: string;
   accentColor: string;
 }
+
+export interface GalleryItem {
+  id: string;
+  url: string;
+  filename?: string;
+  title: string;
+  category?: string;
+  date?: string;
+  order?: number;
+  createdAt?: string;
+}

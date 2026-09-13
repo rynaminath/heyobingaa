@@ -12,12 +12,13 @@ import {
 } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { db, auth, handleFirestoreError, OperationType } from '../lib/firebase';
-import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication } from '../types';
+import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem } from '../types';
 import {
   INITIAL_EVENTS,
   INITIAL_MEDIA,
   PROGRAMS,
-  NGO_CONTACT
+  NGO_CONTACT,
+  INITIAL_GALLERY
 } from '../data/initialData';
 
 // Bootstrapped admin email
@@ -124,6 +125,37 @@ export function subscribeToPrograms(
       snapshot.forEach((docSnap) => {
         list.push({ ...(docSnap.data() as ProgramItem), id: docSnap.id });
       });
+      onData(list);
+    },
+    (error) => {
+      if (onError) onError(error);
+      handleFirestoreError(error, OperationType.GET, colPath);
+    }
+  );
+}
+
+/**
+ * Realtime subscribe to Gallery items
+ */
+export function subscribeToGallery(
+  onData: (items: GalleryItem[]) => void,
+  onError?: (err: unknown) => void
+) {
+  const colPath = 'gallery';
+  const colRef = collection(db, colPath);
+  return onSnapshot(
+    colRef,
+    (snapshot) => {
+      if (snapshot.empty) {
+        onData([]);
+        return;
+      }
+      const list: GalleryItem[] = [];
+      snapshot.forEach((docSnap) => {
+        list.push({ ...(docSnap.data() as GalleryItem), id: docSnap.id });
+      });
+      // Sort by order or creation date
+      list.sort((a, b) => ((a.order ?? 999) - (b.order ?? 999)));
       onData(list);
     },
     (error) => {
@@ -304,6 +336,32 @@ export async function deleteProgramFromFirestore(id: string): Promise<void> {
 }
 
 /**
+ * Admin: Save or Update Gallery Item
+ */
+export async function saveGalleryItemToFirestore(item: GalleryItem): Promise<void> {
+  const path = `gallery/${item.id}`;
+  try {
+    await setDoc(doc(db, 'gallery', item.id), item, { merge: true });
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+    throw error;
+  }
+}
+
+/**
+ * Admin: Delete Gallery Item
+ */
+export async function deleteGalleryItemFromFirestore(id: string): Promise<void> {
+  const path = `gallery/${id}`;
+  try {
+    await deleteDoc(doc(db, 'gallery', id));
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, path);
+    throw error;
+  }
+}
+
+/**
  * Admin: Toggle verification of donation slip
  */
 export async function verifyDonationSlipInFirestore(id: string, verified: boolean): Promise<void> {
@@ -352,6 +410,7 @@ export async function seedInitialDataToFirestore(): Promise<{
   eventsCount: number;
   mediaCount: number;
   programsCount: number;
+  galleryCount: number;
 }> {
   let eventsCount = 0;
   let mediaCount = 0;
@@ -375,7 +434,14 @@ export async function seedInitialDataToFirestore(): Promise<{
     programsCount++;
   }
 
-  // 4. Seed site settings
+  // 4. Seed Gallery
+  let galleryCount = 0;
+  for (const g of INITIAL_GALLERY) {
+    await setDoc(doc(db, 'gallery', g.id), g, { merge: true });
+    galleryCount++;
+  }
+
+  // 5. Seed site settings
   await setDoc(
     doc(db, 'siteSettings', 'global'),
     {
@@ -385,5 +451,5 @@ export async function seedInitialDataToFirestore(): Promise<{
     { merge: true }
   );
 
-  return { eventsCount, mediaCount, programsCount };
+  return { eventsCount, mediaCount, programsCount, galleryCount };
 }

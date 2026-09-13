@@ -73,16 +73,16 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
     { id: 'videos', label: 'ވީޑިއޯ', icon: <Video className="w-4 h-4" /> },
     { id: 'gallery', label: 'ގެލެރީ', icon: <Images className="w-4 h-4" /> },
     { id: 'programs', label: 'ޕްރޮގްރާމްތައް', icon: <Users className="w-4 h-4" /> },
-    { id: 'events', label: 'ދަރުސްތައް', icon: <Calendar className="w-4 h-4" /> },
     { id: 'volunteer', label: 'ގުޅުއްވުމަށް', icon: <Users className="w-4 h-4" /> }
   ];
 
   const programSubCategories = [
-    { id: 'all', label: 'ހުރިހާ ޕްރޮގްރާމްތައް', icon: <BookOpen className="w-4 h-4 text-[#1B6B52]" /> },
-    { id: 'audiobooks', label: 'އޯޑިއޯ ފޮތްތައް (Audiobooks)', icon: <Headphones className="w-4 h-4 text-[#1B6B52]" /> },
-    { id: 'lectures', label: 'ދަރުސްތައް (Lectures)', icon: <GraduationCap className="w-4 h-4 text-[#1B6B52]" /> },
-    { id: 'women', label: 'އުޚުތުންނާއި ކަނބަލުންނަށް', icon: <Users className="w-4 h-4 text-[#1B6B52]" /> },
-    { id: 'toddlers', label: 'ތުއްތު ކުދިންގެ ބިންގާ', icon: <Sparkles className="w-4 h-4 text-[#1B6B52]" /> }
+    { id: 'all', label: 'ހުރިހާ ޕްރޮގްރާމްތައް', icon: <BookOpen className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: false },
+    { id: 'events-tab', label: 'ދަރުސްތަކާއި ޙަރަކާތްތައް (Dharus & Events)', icon: <Calendar className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: true },
+    { id: 'lectures', label: 'ދަރުސްތަކާއި ސެމިނާރ (Lectures)', icon: <GraduationCap className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: false },
+    { id: 'audiobooks', label: 'އޯޑިއޯ ފޮތްތައް (Audiobooks)', icon: <Headphones className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: false },
+    { id: 'women', label: 'އުޚުތުންނާއި ކަނބަލުންނަށް', icon: <Users className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: false },
+    { id: 'toddlers', label: 'ތުއްތު ކުދިންގެ ބިންގާ', icon: <Sparkles className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: false }
   ];
 
   const handleNavClick = (tab: NavigationTab) => {
@@ -92,9 +92,18 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSubCategoryClick = (categoryId: string) => {
+  const handleSubCategoryClick = (sub: typeof programSubCategories[0] | string) => {
+    if (typeof sub === 'object' && sub.isEventsTab) {
+      handleNavClick('events');
+      return;
+    }
+    const catId = typeof sub === 'string' ? sub : sub.id;
+    if (catId === 'events') {
+      handleNavClick('events');
+      return;
+    }
     if (onSelectProgramCategory) {
-      onSelectProgramCategory(categoryId);
+      onSelectProgramCategory(catId);
     } else {
       onSelectTab('programs');
     }
@@ -227,7 +236,9 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
             {/* Desktop Navigation Links with Icons (Right-aligned immediately next to logo) */}
             <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
               {navItems.map((item) => {
-                const isActive = currentTab === item.id || (item.id === 'videos' && currentTab === 'media');
+                const isActive = item.id === 'programs'
+                  ? (currentTab === 'programs' || currentTab === 'events')
+                  : (currentTab === item.id || (item.id === 'videos' && currentTab === 'media'));
 
                 if (item.id === 'programs') {
                   return (
@@ -260,19 +271,19 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                       {/* Programs Dropdown Menu (Desktop) */}
                       {programsDropdownOpen && (
                         <div
-                          className="absolute top-full right-0 mt-1 w-64 bg-white rounded-2xl shadow-xl border border-[#E5ECE8] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                          className="absolute top-full right-0 mt-1 w-68 bg-white rounded-2xl shadow-xl border border-[#E5ECE8] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                           onMouseEnter={handleDropdownEnter}
                           onMouseLeave={handleDropdownLeave}
                         >
                           <div className="px-3.5 py-1.5 border-b border-[#E5ECE8]/60 mb-1 text-xs font-bold text-[#556660]">
-                            ޕްރޮގްރާމްތަކުގެ ބާވަތްތައް
+                            ޕްރޮގްރާމްތަކާއި ދަރުސްތައް
                           </div>
                           {programSubCategories.map((sub) => (
                             <button
                               key={sub.id}
                               type="button"
-                              onClick={() => handleSubCategoryClick(sub.id)}
-                              className="w-full px-3.5 py-2 text-right text-base font-semibold font-thaana text-[#1C2622] hover:bg-[#EBF5F0] hover:text-[#1B6B52] flex items-center justify-between transition-colors"
+                              onClick={() => handleSubCategoryClick(sub)}
+                              className="w-full px-3.5 py-2.5 text-right text-base font-semibold font-thaana text-[#1C2622] hover:bg-[#EBF5F0] hover:text-[#1B6B52] flex items-center justify-between transition-colors"
                             >
                               <div className="flex items-center gap-2.5">
                                 {sub.icon}
@@ -308,12 +319,8 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
             </nav>
           </div>
 
-          {/* Left Side (RTL End): Accessibility Settings (Desktop) & Mobile Hamburger */}
+          {/* Left Side (RTL End): Mobile Hamburger */}
           <div className="flex items-center gap-2">
-            <div className="hidden lg:flex items-center">
-              <AccessibilityMenu variant="header-nav" />
-            </div>
-
             <div className="flex items-center lg:hidden">
               <button
                 type="button"
@@ -333,7 +340,9 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
         <div className="lg:hidden bg-white border-b border-[#E5ECE8] px-4 pt-3 pb-6 space-y-3 shadow-xl animate-in slide-in-from-top-4 duration-200">
           <div className="grid grid-cols-1 gap-1">
             {navItems.map((item) => {
-              const isActive = currentTab === item.id || (item.id === 'videos' && currentTab === 'media');
+              const isActive = item.id === 'programs'
+                ? (currentTab === 'programs' || currentTab === 'events')
+                : (currentTab === item.id || (item.id === 'videos' && currentTab === 'media'));
               
               if (item.id === 'programs') {
                 return (
@@ -359,7 +368,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                         <button
                           key={sub.id}
                           type="button"
-                          onClick={() => handleSubCategoryClick(sub.id)}
+                          onClick={() => handleSubCategoryClick(sub)}
                           className="w-full flex items-center gap-2.5 py-2 text-right text-base font-thaana text-[#556660] hover:text-[#1B6B52]"
                         >
                           <span className="shrink-0">{sub.icon}</span>

@@ -2,6 +2,7 @@ import { NavigationTab } from '../types';
 import { PARTNERS, NGO_CONTACT } from '../data/initialData';
 import Logo from './Logo';
 import { MessageSquare, Mail, Phone, MapPin, Globe, Facebook, Instagram, Youtube } from 'lucide-react';
+import AccessibilityMenu from './AccessibilityMenu';
 
 interface FooterProps {
   onNavigate: (tab: NavigationTab) => void;
@@ -187,7 +188,9 @@ export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
             © {new Date().getFullYear()} ހެޔޮބިންގާ ޖަމްޢިއްޔާ (Heyo Bingaa NGO). ހުރިހާ ޙައްޤެއް ރައްކާތެރިކުރެވިފައި.
           </p>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <AccessibilityMenu variant="footer" />
+            <span>•</span>
             <button
               onClick={() => onNavigate('about')}
               className="hover:text-white transition-colors"

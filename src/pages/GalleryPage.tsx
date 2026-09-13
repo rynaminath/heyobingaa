@@ -1,79 +1,42 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ChevronRight, ChevronLeft, Play, Pause, Maximize2, X, Grid, Film } from 'lucide-react';
-import { NavigationTab } from '../types';
+import { ChevronRight, ChevronLeft, Play, Pause, Maximize2, X, Grid, Film, RefreshCw } from 'lucide-react';
+import { NavigationTab, GalleryItem } from '../types';
+import { subscribeToGallery } from '../services/firestoreService';
+import { INITIAL_GALLERY } from '../data/initialData';
 
 interface GalleryPageProps {
   onNavigate: (tab: NavigationTab) => void;
 }
 
-interface GalleryItem {
-  id: string;
-  url: string;
-  filename: string;
-  title: string;
-}
-
-// Pre-configured list of the 13 uploaded gallery images in /public/images
-const UPLOADED_GALLERY_IMAGES: GalleryItem[] = Array.from({ length: 13 }, (_, i) => {
-  const num = i + 1;
-  const filename = `gallery (${num}).jpg`;
-  return {
-    id: `gallery-${num}`,
-    url: `/images/${encodeURIComponent(filename)}`,
-    filename,
-    title: `ހެޔޮބިންގާ ޙަރަކާތްތައް • ތަޞްވީރު ${num}`
-  };
-});
-
 export default function GalleryPage({ onNavigate }: GalleryPageProps) {
-  // Read all 13 images instantly, with dynamic scan support
-  const [images, setImages] = useState<GalleryItem[]>(UPLOADED_GALLERY_IMAGES);
+  // Read gallery from database with fallback to pre-configured initial items
+  const [images, setImages] = useState<GalleryItem[]>(INITIAL_GALLERY);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [viewMode, setViewMode] = useState<'slideshow' | 'grid'>('slideshow');
+  const [loading, setLoading] = useState(true);
 
+  // Subscribe to Firestore 'gallery' collection
   useEffect(() => {
-    try {
-      // Scan all images in public/images
-      const modules = import.meta.glob<{ default: string }>(
-        ['/public/images/*.*', '/images/*.*'],
-        { eager: true, query: '?url', import: 'default' }
-      );
-
-      const detected: GalleryItem[] = [];
-      for (const [path, urlValue] of Object.entries(modules)) {
-        const cleanPath = path.replace(/^\/public/, '');
-        const filename = cleanPath.split('/').pop() || '';
-        if (!filename) continue;
-
-        // Skip non-image files if any
-        if (!/\.(jpg|jpeg|png|webp|svg)$/i.test(filename)) continue;
-
-        const matchNumber = filename.match(/\(([0-9]+)\)/);
-        const readableTitle = matchNumber
-          ? `ހެޔޮބިންގާ ޙަރަކާތްތައް • ތަޞްވީރު ${matchNumber[1]}`
-          : filename
-              .replace(/\.[^/.]+$/, '')
-              .replace(/^[0-9]+[_-]?/, '')
-              .replace(/[_-]+/g, ' ');
-
-        detected.push({
-          id: path,
-          url: typeof urlValue === 'string' ? urlValue : `/images/${encodeURIComponent(filename)}`,
-          filename,
-          title: readableTitle || filename
-        });
+    const unsubscribe = subscribeToGallery(
+      (items) => {
+        if (items.length > 0) {
+          setImages(items);
+        } else {
+          // If database is empty, maintain INITIAL_GALLERY
+          setImages(INITIAL_GALLERY);
+        }
+        setLoading(false);
+      },
+      (err) => {
+        console.warn('Firestore gallery subscription notice:', err);
+        setImages(INITIAL_GALLERY);
+        setLoading(false);
       }
+    );
 
-      // If detected images found via glob, sort naturally
-      if (detected.length > 0) {
-        detected.sort((a, b) => a.filename.localeCompare(b.filename, undefined, { numeric: true }));
-        setImages(detected);
-      }
-    } catch {
-      // Fallback is already initialized to UPLOADED_GALLERY_IMAGES
-    }
+    return () => unsubscribe();
   }, []);
 
   const total = images.length;

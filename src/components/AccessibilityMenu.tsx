@@ -13,13 +13,13 @@ import {
 } from 'lucide-react';
 
 interface AccessibilityMenuProps {
-  variant?: 'topbar' | 'mobile' | 'header-nav';
+  variant?: 'floating' | 'footer' | 'topbar' | 'mobile' | 'header-nav';
   className?: string;
   onCloseMobileDrawer?: () => void;
 }
 
 export default function AccessibilityMenu({ 
-  variant = 'topbar', 
+  variant = 'floating', 
   className = '',
   onCloseMobileDrawer
 }: AccessibilityMenuProps) {
@@ -76,6 +76,7 @@ export default function AccessibilityMenu({
   const isCustomized = fontSize !== 'normal' || contrastTheme !== 'normal';
 
   const fontOptions: { id: FontSizeScale; label: string; subLabel: string; scaleText: string }[] = [
+    { id: 'small', label: 'ކުޑަ', subLabel: '88%', scaleText: 'A-' },
     { id: 'normal', label: 'އާދައިގެ', subLabel: '100%', scaleText: 'A' },
     { id: 'large', label: 'ބޮޑު', subLabel: '115%', scaleText: 'A+' },
     { id: 'xlarge', label: 'ވަރަށް ބޮޑު', subLabel: '130%', scaleText: 'A++' }
@@ -99,6 +100,12 @@ export default function AccessibilityMenu({
       label: 'ހައި ކޮންޓްރާސްޓް (އަނދިރި)', 
       subLabel: 'High Contrast Dark',
       icon: <Moon className="w-4 h-4 text-emerald-400" />
+    },
+    { 
+      id: 'dark-maroon', 
+      label: 'ޑާކް މަރޫން (Dark Maroon)', 
+      subLabel: 'Deep Maroon & Gold',
+      icon: <span className="w-3.5 h-3.5 rounded-full bg-[#801320] border border-amber-300 inline-block" />
     }
   ];
 
@@ -128,10 +135,10 @@ export default function AccessibilityMenu({
           <div className="flex items-center justify-between text-xs text-[#556660]">
             <span className="font-semibold">އަކުރުގެ ސައިޒު (Font Size):</span>
             <span className="font-mono text-[11px] bg-white px-2 py-0.5 rounded border border-[#E5ECE8]">
-              {fontSize === 'normal' ? '100%' : fontSize === 'large' ? '115%' : '130%'}
+              {fontSize === 'small' ? '88%' : fontSize === 'normal' ? '100%' : fontSize === 'large' ? '115%' : '130%'}
             </span>
           </div>
-          <div className="grid grid-cols-3 gap-1.5">
+          <div className="grid grid-cols-4 gap-1.5">
             {fontOptions.map((opt) => (
               <button
                 key={opt.id}
@@ -186,42 +193,87 @@ export default function AccessibilityMenu({
     );
   }
 
-  // Topbar or Header Nav popover button
-  return (
-    <div className={`relative inline-block ${className}`}>
-      <button
-        ref={buttonRef}
-        id="accessibility-settings-trigger"
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-expanded={isOpen}
-        aria-haspopup="dialog"
-        aria-label="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
-        className={`group relative inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold font-thaana transition-all duration-200 ${
-          variant === 'topbar'
-            ? isOpen
-              ? 'bg-white text-[#1B6B52] shadow-xs'
-              : 'bg-white/10 hover:bg-white/20 text-[#EBF5F0]'
-            : isOpen
-            ? 'bg-[#EBF5F0] text-[#1B6B52] shadow-xs'
-            : 'text-[#556660] hover:text-[#1B6B52] hover:bg-[#EBF5F0]/60'
-        }`}
-        title="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
-      >
-        <Eye className={`w-3.5 h-3.5 shrink-0 transition-transform ${isOpen ? 'scale-110' : 'group-hover:scale-105'} ${
-          variant === 'topbar' ? 'text-[#A7F3D0]' : 'text-[#1B6B52]'
-        }`} />
-        <span className="hidden sm:inline">ފެނުމުގެ ފަސޭހަ</span>
-        <span className="sm:hidden">A±</span>
+  // Floating, Footer, Topbar or Header Nav popover button
+  const isUpward = variant === 'floating' || variant === 'footer';
 
-        {/* Small Active Indicator Dot if customized */}
-        {isCustomized && (
-          <span 
-            className="w-2 h-2 rounded-full bg-amber-400 border border-white shrink-0 animate-pulse" 
-            title="ބަދަލުތަކެއް ގެނެވިފައި"
-          />
-        )}
-      </button>
+  return (
+    <div className={`${variant === 'floating' ? 'fixed bottom-6 left-6 z-40' : 'relative inline-block'} ${className}`}>
+      {variant === 'floating' ? (
+        <button
+          ref={buttonRef}
+          id="accessibility-settings-trigger"
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-haspopup="dialog"
+          aria-label="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
+          className={`flex items-center gap-2 px-3.5 py-2.5 rounded-full shadow-lg border transition-all duration-200 active:scale-95 font-thaana ${
+            isCustomized
+              ? 'bg-[#1B6B52] text-white border-[#14533F] ring-2 ring-emerald-400/40'
+              : 'bg-white text-[#1C2622] hover:text-[#1B6B52] border-[#E5ECE8] hover:border-[#1B6B52]'
+          }`}
+          title="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
+        >
+          <div className="relative flex items-center justify-center">
+            <Eye className="w-4 h-4 shrink-0" />
+            {isCustomized && (
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 ring-1 ring-white" />
+            )}
+          </div>
+          <span className="text-xs font-bold hidden sm:inline">ފެނުމުގެ ފަސޭހަ</span>
+        </button>
+      ) : variant === 'footer' ? (
+        <button
+          ref={buttonRef}
+          id="accessibility-settings-trigger-footer"
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-haspopup="dialog"
+          aria-label="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
+          className="hover:text-white flex items-center gap-1.5 transition-colors text-xs text-[#D1E0D9] font-thaana"
+        >
+          <Eye className="w-3.5 h-3.5 text-[#A7F3D0]" />
+          <span>ފެނުމުގެ ފަސޭހަ</span>
+          {isCustomized && (
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
+          )}
+        </button>
+      ) : (
+        <button
+          ref={buttonRef}
+          id="accessibility-settings-trigger"
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-haspopup="dialog"
+          aria-label="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
+          className={`group relative inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold font-thaana transition-all duration-200 ${
+            variant === 'topbar'
+              ? isOpen
+                ? 'bg-white text-[#1B6B52] shadow-xs'
+                : 'bg-white/10 hover:bg-white/20 text-[#EBF5F0]'
+              : isOpen
+              ? 'bg-[#EBF5F0] text-[#1B6B52] shadow-xs'
+              : 'text-[#556660] hover:text-[#1B6B52] hover:bg-[#EBF5F0]/60'
+          }`}
+          title="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
+        >
+          <Eye className={`w-3.5 h-3.5 shrink-0 transition-transform ${isOpen ? 'scale-110' : 'group-hover:scale-105'} ${
+            variant === 'topbar' ? 'text-[#A7F3D0]' : 'text-[#1B6B52]'
+          }`} />
+          <span className="hidden sm:inline">ފެނުމުގެ ފަސޭހަ</span>
+          <span className="sm:hidden">A±</span>
+
+          {/* Small Active Indicator Dot if customized */}
+          {isCustomized && (
+            <span 
+              className="w-2 h-2 rounded-full bg-amber-400 border border-white shrink-0 animate-pulse" 
+              title="ބަދަލުތަކެއް ގެނެވިފައި"
+            />
+          )}
+        </button>
+      )}
 
       {/* Popover Dropdown Menu */}
       {isOpen && (
@@ -230,7 +282,13 @@ export default function AccessibilityMenu({
           role="dialog"
           aria-modal="true"
           aria-label="Accessibility Settings"
-          className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-80 sm:w-88 bg-white rounded-2xl shadow-2xl border border-[#E5ECE8] p-4 z-50 animate-in fade-in zoom-in-95 duration-150 text-right font-thaana"
+          className={`absolute w-80 sm:w-88 bg-white text-[#1C2622] rounded-2xl shadow-2xl border border-[#E5ECE8] p-4 z-50 animate-in fade-in zoom-in-95 duration-150 text-right font-thaana ${
+            variant === 'floating'
+              ? 'bottom-full mb-3 left-0'
+              : variant === 'footer'
+              ? 'bottom-full mb-3 left-0 sm:left-auto sm:right-0'
+              : 'left-0 sm:left-auto sm:right-0 mt-2'
+          }`}
           style={{ direction: 'rtl' }}
         >
           {/* Menu Header */}
@@ -263,12 +321,12 @@ export default function AccessibilityMenu({
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-[#1C2622]">އަކުރުގެ ސައިޒު (Font Size):</span>
               <div className="flex items-center gap-1 font-mono text-xs text-[#1B6B52] font-bold bg-[#EBF5F0] px-2 py-0.5 rounded">
-                <span>{fontSize === 'normal' ? '100% (Default)' : fontSize === 'large' ? '115% (Large)' : '130% (X-Large)'}</span>
+                <span>{fontSize === 'small' ? '88% (Small)' : fontSize === 'normal' ? '100% (Default)' : fontSize === 'large' ? '115% (Large)' : '130% (X-Large)'}</span>
               </div>
             </div>
 
             {/* Step buttons and Presets */}
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-4 gap-1.5">
               {fontOptions.map((opt) => {
                 const isSelected = fontSize === opt.id;
                 return (
@@ -276,7 +334,7 @@ export default function AccessibilityMenu({
                     key={opt.id}
                     type="button"
                     onClick={() => setFontSize(opt.id)}
-                    className={`py-2 px-2 rounded-xl text-center transition-all border flex flex-col items-center justify-center gap-0.5 ${
+                    className={`py-2 px-1 rounded-xl text-center transition-all border flex flex-col items-center justify-center gap-0.5 ${
                       isSelected
                         ? 'bg-[#1B6B52] text-white border-[#1B6B52] font-bold shadow-xs scale-[1.02]'
                         : 'bg-white text-[#1C2622] border-[#E5ECE8] hover:bg-[#EBF5F0] hover:border-[#C8E0D5]'
@@ -297,7 +355,7 @@ export default function AccessibilityMenu({
               <button
                 type="button"
                 onClick={decreaseFontSize}
-                disabled={fontSize === 'normal'}
+                disabled={fontSize === 'small'}
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#E5ECE8] bg-[#FAFCFB] hover:bg-[#EBF5F0] disabled:opacity-40 disabled:pointer-events-none transition-colors"
                 title="އަކުރު ކުޑަކުރޭ"
               >
