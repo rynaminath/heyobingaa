@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NavigationTab, MediaItem, EventItem, ProgramItem } from './types';
 import { AuthProvider } from './context/AuthContext';
+import { AccessibilityProvider } from './context/AccessibilityContext';
 import { subscribeToEvents, subscribeToMedia, subscribeToPrograms } from './services/firestoreService';
 
 import Header from './components/Header';
@@ -172,8 +173,9 @@ export default function App() {
   const featuredEvent = events.find((e) => e.isFeatured) || events[0] || null;
 
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-[#FAFCFB] text-[#1C2622] flex flex-col selection:bg-[#1B6B52] selection:text-white font-thaana">
+    <AccessibilityProvider>
+      <AuthProvider>
+        <div className="min-h-screen bg-[#FAFCFB] text-[#1C2622] flex flex-col selection:bg-[#1B6B52] selection:text-white font-thaana">
         {/* 1. Global Navigation Header */}
         <Header
           currentTab={currentTab}
@@ -262,5 +264,6 @@ export default function App() {
         />
       </div>
     </AuthProvider>
+    </AccessibilityProvider>
   );
 }

@@ -22,6 +22,7 @@ import {
   Sparkles 
 } from 'lucide-react';
 import { NGO_CONTACT } from '../data/initialData';
+import AccessibilityMenu from './AccessibilityMenu';
 
 interface HeaderProps {
   currentTab: NavigationTab;
@@ -181,8 +182,10 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
             </div>
           </div>
 
-          {/* Top Bar Donate & Admin Buttons */}
+          {/* Top Bar Donate, Admin & Accessibility Buttons */}
           <div className="flex items-center gap-2 shrink-0">
+            <AccessibilityMenu variant="topbar" />
+
             <button
               type="button"
               onClick={() => handleNavClick('admin')}
@@ -305,16 +308,22 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
             </nav>
           </div>
 
-          {/* Left Side (RTL End): Mobile & Tablet Hamburger Menu Button */}
-          <div className="flex items-center lg:hidden">
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-[#1C2622] hover:bg-[#EBF5F0] focus:outline-none"
-              aria-label="މެނޫ ހުޅުއްވާ"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+          {/* Left Side (RTL End): Accessibility Settings (Desktop) & Mobile Hamburger */}
+          <div className="flex items-center gap-2">
+            <div className="hidden lg:flex items-center">
+              <AccessibilityMenu variant="header-nav" />
+            </div>
+
+            <div className="flex items-center lg:hidden">
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-xl text-[#1C2622] hover:bg-[#EBF5F0] focus:outline-none"
+                aria-label="މެނޫ ހުޅުއްވާ"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -425,6 +434,14 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
               >
                 <Youtube className="w-4 h-4" />
               </a>
+            </div>
+
+            {/* Mobile Accessibility Settings */}
+            <div className="pt-2">
+              <AccessibilityMenu 
+                variant="mobile" 
+                onCloseMobileDrawer={() => setMobileMenuOpen(false)} 
+              />
             </div>
 
             <div className="pt-2 flex flex-col gap-2">

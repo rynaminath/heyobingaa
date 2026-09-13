@@ -103,4 +103,124 @@
   background: #9DBFA0;
 }
 
+/* ==========================================================================
+   Accessibility: High-Contrast Themes
+   ========================================================================== */
+
+/* High Contrast Light (Pure White Background, Pitch Black Text & Solid Borders) */
+html.high-contrast-light {
+  color-scheme: light;
+}
+
+html.high-contrast-light body {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+html.high-contrast-light [class*="text-[#556660]"],
+html.high-contrast-light [class*="text-gray-"],
+html.high-contrast-light [class*="text-slate-"] {
+  color: #111111 !important;
+  font-weight: 600 !important;
+}
+
+html.high-contrast-light [class*="text-[#1C2622]"] {
+  color: #000000 !important;
+}
+
+html.high-contrast-light [class*="bg-[#FAFCFB]"],
+html.high-contrast-light [class*="bg-gray-50"] {
+  background-color: #FFFFFF !important;
+}
+
+html.high-contrast-light .bg-white {
+  background-color: #FFFFFF !important;
+  border-color: #000000 !important;
+}
+
+html.high-contrast-light [class*="border-[#E5ECE8]"],
+html.high-contrast-light [class*="border-gray-"] {
+  border-color: #1A1A1A !important;
+}
+
+html.high-contrast-light [class*="text-[#1B6B52]"] {
+  color: #004D30 !important;
+  font-weight: 700 !important;
+}
+
+html.high-contrast-light [class*="bg-[#1B6B52]"] {
+  background-color: #004D30 !important;
+  color: #FFFFFF !important;
+}
+
+html.high-contrast-light [class*="bg-[#EBF5F0]"] {
+  background-color: #D4EDE0 !important;
+  border-color: #004D30 !important;
+}
+
+html.high-contrast-light a:focus-visible,
+html.high-contrast-light button:focus-visible {
+  outline: 3px solid #000000 !important;
+  outline-offset: 2px !important;
+}
+
+/* High Contrast Dark (Deep Midnight Background, Crisp White Text, Solid Bright Borders) */
+html.high-contrast-dark {
+  color-scheme: dark;
+}
+
+html.high-contrast-dark body {
+  background-color: #0B0F0E !important;
+  color: #FFFFFF !important;
+}
+
+html.high-contrast-dark header {
+  background-color: #0E1614 !important;
+  border-color: #2D3D37 !important;
+}
+
+html.high-contrast-dark .bg-white,
+html.high-contrast-dark [class*="bg-[#FAFCFB]"],
+html.high-contrast-dark [class*="bg-gray-50"] {
+  background-color: #121A16 !important;
+  color: #FFFFFF !important;
+  border-color: #354740 !important;
+}
+
+html.high-contrast-dark [class*="text-[#1C2622]"] {
+  color: #FFFFFF !important;
+}
+
+html.high-contrast-dark [class*="text-[#556660]"],
+html.high-contrast-dark [class*="text-gray-"] {
+  color: #D4E0D9 !important;
+}
+
+html.high-contrast-dark [class*="border-[#E5ECE8]"],
+html.high-contrast-dark [class*="border-gray-"] {
+  border-color: #354740 !important;
+}
+
+html.high-contrast-dark [class*="text-[#1B6B52]"] {
+  color: #4ADE80 !important;
+}
+
+html.high-contrast-dark [class*="bg-[#1B6B52]"] {
+  background-color: #0B4E38 !important;
+  color: #FFFFFF !important;
+}
+
+html.high-contrast-dark [class*="bg-[#EBF5F0]"] {
+  background-color: #162B22 !important;
+  color: #4ADE80 !important;
+  border-color: #2D5845 !important;
+}
+
+html.high-contrast-dark a:focus-visible,
+html.high-contrast-dark button:focus-visible {
+  outline: 3px solid #4ADE80 !important;
+  outline-offset: 2px !important;
+}
+
+
 
