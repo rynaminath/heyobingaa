@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 
-export type FontSizeScale = 'small' | 'normal' | 'large' | 'xlarge';
+export type FontSizeScale = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge';
 export type ContrastTheme = 'normal' | 'high-contrast-light' | 'high-contrast-dark' | 'dark-maroon';
 
 export interface AccessibilitySettings {
@@ -27,11 +27,12 @@ const DEFAULT_SETTINGS: AccessibilitySettings = {
   contrastTheme: 'normal'
 };
 
-const FONT_SIZE_SCALES: Record<FontSizeScale, string> = {
-  small: '88%',
-  normal: '100%',
-  large: '115%',
-  xlarge: '130%'
+export const FONT_SIZE_SCALES: Record<FontSizeScale, string> = {
+  small: '80%',
+  normal: '88%',
+  large: '100%',
+  xlarge: '115%',
+  xxlarge: '130%'
 };
 
 const AccessibilityContext = createContext<AccessibilityContextType>({
@@ -52,7 +53,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.fontSize && ['small', 'normal', 'large', 'xlarge'].includes(parsed.fontSize)) {
+        if (parsed.fontSize && ['small', 'normal', 'large', 'xlarge', 'xxlarge'].includes(parsed.fontSize)) {
           return parsed.fontSize as FontSizeScale;
         }
       }
@@ -114,12 +115,14 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       if (prev === 'small') return 'normal';
       if (prev === 'normal') return 'large';
       if (prev === 'large') return 'xlarge';
+      if (prev === 'xlarge') return 'xxlarge';
       return prev;
     });
   }, []);
 
   const decreaseFontSize = useCallback(() => {
     setFontSizeState((prev) => {
+      if (prev === 'xxlarge') return 'xlarge';
       if (prev === 'xlarge') return 'large';
       if (prev === 'large') return 'normal';
       if (prev === 'normal') return 'small';

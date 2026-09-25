@@ -43,13 +43,12 @@ import {
   deleteGalleryItemFromFirestore,
   verifyDonationSlipInFirestore,
   deleteDonationSlipInFirestore,
-  updateVolunteerStatusInFirestore,
-  seedInitialDataToFirestore
+  updateVolunteerStatusInFirestore
 } from '../services/firestoreService';
 import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem } from '../types';
 import { NGO_CONTACT } from '../data/initialData';
 
-type AdminTab = 'events' | 'media' | 'programs' | 'gallery' | 'slips' | 'volunteers' | 'seeder';
+type AdminTab = 'events' | 'media' | 'programs' | 'gallery' | 'slips' | 'volunteers';
 
 export default function AdminPage() {
   const { user, isAdmin, loading, loginWithGoogle, logout, adminEmail } = useAuth();
@@ -108,26 +107,6 @@ export default function AdminPage() {
   const showNotification = (type: 'success' | 'error', text: string) => {
     setMessage({ type, text });
     setTimeout(() => setMessage(null), 4000);
-  };
-
-  // Seed Initial Data handler
-  const handleSeedData = async () => {
-    if (!window.confirm('ހުރިހާ އިވެންޓްތަކާއި، ވީޑިއޯތަކާއި، ޕްރޮގްރާމްތަކުގެ ޑޭޓާ ފަޔަރބޭސްއަށް އަޅަން ބޭނުންފުޅުތޯ؟')) {
-      return;
-    }
-    try {
-      setActionLoading(true);
-      const res = await seedInitialDataToFirestore();
-      showNotification(
-        'success',
-        `ޑޭޓާބޭސް ކާމިޔާބުކަމާއެކު ސީޑްކުރެވިއްޖެ! (${res.eventsCount} އިވެންޓް، ${res.mediaCount} ވީޑިއޯ، ${res.programsCount} ޕްރޮގްރާމް، ${res.galleryCount} ގެލެރީ ފޮޓޯ)`
-      );
-    } catch (err) {
-      console.error(err);
-      showNotification('error', 'ޑޭޓާ އަޅާއިރު މައްސަލައެއް ދިމާވެއްޖެ');
-    } finally {
-      setActionLoading(false);
-    }
   };
 
   // --- Events CRUD ---
@@ -494,17 +473,6 @@ export default function AdminPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <button
-            type="button"
-            onClick={handleSeedData}
-            disabled={actionLoading}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#EBF5F0] hover:bg-[#D5EBE1] text-[#1B6B52] font-bold text-sm transition-all"
-            title="ވެބްސައިޓްގެ އަސްލު ހުރިހާ ޑޭޓާއެއް ޑޭޓާބޭސްއަށް އަޅާލުން"
-          >
-            <RefreshCw className={`w-4 h-4 ${actionLoading ? 'animate-spin' : ''}`} />
-            <span>ޑޭޓާބޭސް ސީޑްކުރުން (Seed)</span>
-          </button>
-
           <button
             type="button"
             onClick={logout}

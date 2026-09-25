@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useAccessibility, FontSizeScale, ContrastTheme } from '../context/AccessibilityContext';
+import { useAccessibility, FontSizeScale, ContrastTheme, FONT_SIZE_SCALES } from '../context/AccessibilityContext';
 import { 
   Eye, 
   RotateCcw, 
@@ -76,10 +76,11 @@ export default function AccessibilityMenu({
   const isCustomized = fontSize !== 'normal' || contrastTheme !== 'normal';
 
   const fontOptions: { id: FontSizeScale; label: string; subLabel: string; scaleText: string }[] = [
-    { id: 'small', label: 'ކުޑަ', subLabel: '88%', scaleText: 'A-' },
-    { id: 'normal', label: 'އާދައިގެ', subLabel: '100%', scaleText: 'A' },
-    { id: 'large', label: 'ބޮޑު', subLabel: '115%', scaleText: 'A+' },
-    { id: 'xlarge', label: 'ވަރަށް ބޮޑު', subLabel: '130%', scaleText: 'A++' }
+    { id: 'small', label: 'ކުޑަ', subLabel: '80%', scaleText: 'A-' },
+    { id: 'normal', label: 'އާދައިގެ', subLabel: '88%', scaleText: 'A' },
+    { id: 'large', label: 'ބޮޑު', subLabel: '100%', scaleText: 'A+' },
+    { id: 'xlarge', label: 'ވަރަށް ބޮޑު', subLabel: '115%', scaleText: 'A++' },
+    { id: 'xxlarge', label: 'އެންމެ ބޮޑު', subLabel: '130%', scaleText: 'A+++' }
   ];
 
   const contrastOptions: { id: ContrastTheme; label: string; subLabel: string; icon: React.ReactNode }[] = [
@@ -135,23 +136,24 @@ export default function AccessibilityMenu({
           <div className="flex items-center justify-between text-xs text-[#556660]">
             <span className="font-semibold">އަކުރުގެ ސައިޒު (Font Size):</span>
             <span className="font-mono text-[11px] bg-white px-2 py-0.5 rounded border border-[#E5ECE8]">
-              {fontSize === 'small' ? '88%' : fontSize === 'normal' ? '100%' : fontSize === 'large' ? '115%' : '130%'}
+              {FONT_SIZE_SCALES[fontSize]} ({fontOptions.find((opt) => opt.id === fontSize)?.label})
             </span>
           </div>
-          <div className="grid grid-cols-4 gap-1.5">
+          <div className="grid grid-cols-5 gap-1">
             {fontOptions.map((opt) => (
               <button
                 key={opt.id}
                 type="button"
                 onClick={() => setFontSize(opt.id)}
-                className={`py-2 px-1 rounded-xl text-center transition-all flex flex-col items-center justify-center gap-0.5 border ${
+                className={`py-2 px-0.5 rounded-xl text-center transition-all flex flex-col items-center justify-center gap-0.5 border ${
                   fontSize === opt.id
                     ? 'bg-[#1B6B52] text-white border-[#1B6B52] font-bold shadow-xs'
                     : 'bg-white text-[#1C2622] border-[#E5ECE8] hover:bg-[#EBF5F0]'
                 }`}
               >
-                <span className="font-bold font-mono text-sm leading-none">{opt.scaleText}</span>
-                <span className="text-[11px] leading-tight">{opt.label}</span>
+                <span className="font-bold font-mono text-xs leading-none">{opt.scaleText}</span>
+                <span className="text-[10px] leading-tight truncate w-full px-0.5">{opt.label}</span>
+                <span className={`text-[9px] font-mono ${fontSize === opt.id ? 'text-white/80' : 'text-[#556660]'}`}>{opt.subLabel}</span>
               </button>
             ))}
           </div>
@@ -321,12 +323,12 @@ export default function AccessibilityMenu({
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-[#1C2622]">އަކުރުގެ ސައިޒު (Font Size):</span>
               <div className="flex items-center gap-1 font-mono text-xs text-[#1B6B52] font-bold bg-[#EBF5F0] px-2 py-0.5 rounded">
-                <span>{fontSize === 'small' ? '88% (Small)' : fontSize === 'normal' ? '100% (Default)' : fontSize === 'large' ? '115% (Large)' : '130% (X-Large)'}</span>
+                <span>{FONT_SIZE_SCALES[fontSize]} ({fontOptions.find((opt) => opt.id === fontSize)?.label})</span>
               </div>
             </div>
 
             {/* Step buttons and Presets */}
-            <div className="grid grid-cols-4 gap-1.5">
+            <div className="grid grid-cols-5 gap-1">
               {fontOptions.map((opt) => {
                 const isSelected = fontSize === opt.id;
                 return (
@@ -334,14 +336,14 @@ export default function AccessibilityMenu({
                     key={opt.id}
                     type="button"
                     onClick={() => setFontSize(opt.id)}
-                    className={`py-2 px-1 rounded-xl text-center transition-all border flex flex-col items-center justify-center gap-0.5 ${
+                    className={`py-2 px-0.5 rounded-xl text-center transition-all border flex flex-col items-center justify-center gap-0.5 ${
                       isSelected
                         ? 'bg-[#1B6B52] text-white border-[#1B6B52] font-bold shadow-xs scale-[1.02]'
                         : 'bg-white text-[#1C2622] border-[#E5ECE8] hover:bg-[#EBF5F0] hover:border-[#C8E0D5]'
                     }`}
                   >
-                    <span className="font-bold font-mono text-sm leading-none">{opt.scaleText}</span>
-                    <span className="text-xs">{opt.label}</span>
+                    <span className="font-bold font-mono text-xs leading-none">{opt.scaleText}</span>
+                    <span className="text-[11px] leading-tight truncate w-full px-0.5">{opt.label}</span>
                     <span className={`text-[10px] font-mono ${isSelected ? 'text-white/80' : 'text-[#556660]'}`}>
                       {opt.subLabel}
                     </span>
@@ -366,21 +368,13 @@ export default function AccessibilityMenu({
               <button
                 type="button"
                 onClick={increaseFontSize}
-                disabled={fontSize === 'xlarge'}
+                disabled={fontSize === 'xxlarge'}
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#E5ECE8] bg-[#FAFCFB] hover:bg-[#EBF5F0] disabled:opacity-40 disabled:pointer-events-none transition-colors"
                 title="އަކުރު ބޮޑުކުރޭ"
               >
                 <ZoomIn className="w-3.5 h-3.5 text-[#1B6B52]" />
                 <span>ބޮޑުކުރޭ (A+)</span>
               </button>
-            </div>
-
-            {/* Live Sample Text Preview */}
-            <div className="mt-2 p-2 bg-[#FAFCFB] rounded-xl border border-[#E5ECE8] text-center">
-              <span className="text-[11px] text-[#556660] block mb-0.5">ލައިވް ސާމްޕަލް:</span>
-              <p className="text-sm font-semibold text-[#1B6B52] leading-relaxed">
-                ބިސްމިﷲ - ކިޔުމަށް ފަސޭހަ ސައިޒެއް
-              </p>
             </div>
           </div>
 
