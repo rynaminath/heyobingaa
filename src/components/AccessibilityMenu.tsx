@@ -79,34 +79,33 @@ export default function AccessibilityMenu({
     { id: 'small', label: 'ކުޑަ', subLabel: '80%', scaleText: 'A-' },
     { id: 'normal', label: 'އާދައިގެ', subLabel: '88%', scaleText: 'A' },
     { id: 'large', label: 'ބޮޑު', subLabel: '100%', scaleText: 'A+' },
-    { id: 'xlarge', label: 'ވަރަށް ބޮޑު', subLabel: '115%', scaleText: 'A++' },
-    { id: 'xxlarge', label: 'އެންމެ ބޮޑު', subLabel: '130%', scaleText: 'A+++' }
+    { id: 'xlarge', label: 'ވަރަށް ބޮޑު', subLabel: '115%', scaleText: 'A++' }
   ];
 
   const contrastOptions: { id: ContrastTheme; label: string; subLabel: string; icon: React.ReactNode }[] = [
     { 
       id: 'normal', 
-      label: 'އާދައިގެ ކުލަތައް', 
-      subLabel: 'Standard Theme',
+      label: 'އާދައިގެ (ފެހި)', 
+      subLabel: 'Standard Emerald Theme',
       icon: <Palette className="w-4 h-4 text-[#1B6B52]" />
     },
     { 
-      id: 'high-contrast-light', 
-      label: 'ހައި ކޮންޓްރާސްޓް (އަލި)', 
-      subLabel: 'High Contrast Light',
-      icon: <Sun className="w-4 h-4 text-amber-600" />
-    },
-    { 
-      id: 'high-contrast-dark', 
-      label: 'ހައި ކޮންޓްރާސްޓް (އަނދިރި)', 
-      subLabel: 'High Contrast Dark',
+      id: 'dark', 
+      label: 'ޑާކް މޯޑް (Dark Mode)', 
+      subLabel: 'Sleek Midnight Theme',
       icon: <Moon className="w-4 h-4 text-emerald-400" />
     },
     { 
-      id: 'dark-maroon', 
-      label: 'ޑާކް މަރޫން (Dark Maroon)', 
-      subLabel: 'Deep Maroon & Gold',
-      icon: <span className="w-3.5 h-3.5 rounded-full bg-[#801320] border border-amber-300 inline-block" />
+      id: 'blue', 
+      label: 'ނޫ ތީމް (Blue Theme)', 
+      subLabel: 'Oceanic & Royal Blue',
+      icon: <span className="w-3.5 h-3.5 rounded-full bg-[#1E5B94] border border-sky-300 inline-block" />
+    },
+    { 
+      id: 'red', 
+      label: 'ރަތް ތީމް (Red Theme)', 
+      subLabel: 'Rich Ruby & Crimson Red',
+      icon: <span className="w-3.5 h-3.5 rounded-full bg-[#991B2D] border border-rose-300 inline-block" />
     }
   ];
 
@@ -139,21 +138,21 @@ export default function AccessibilityMenu({
               {FONT_SIZE_SCALES[fontSize]} ({fontOptions.find((opt) => opt.id === fontSize)?.label})
             </span>
           </div>
-          <div className="grid grid-cols-5 gap-1">
+          <div className="grid grid-cols-4 gap-1.5">
             {fontOptions.map((opt) => (
               <button
                 key={opt.id}
                 type="button"
                 onClick={() => setFontSize(opt.id)}
-                className={`py-2 px-0.5 rounded-xl text-center transition-all flex flex-col items-center justify-center gap-0.5 border ${
+                className={`py-2 px-1 rounded-xl text-center transition-all flex flex-col items-center justify-center gap-0.5 border ${
                   fontSize === opt.id
                     ? 'bg-[#1B6B52] text-white border-[#1B6B52] font-bold shadow-xs'
                     : 'bg-white text-[#1C2622] border-[#E5ECE8] hover:bg-[#EBF5F0]'
                 }`}
               >
-                <span className="font-bold font-mono text-xs leading-none">{opt.scaleText}</span>
-                <span className="text-[10px] leading-tight truncate w-full px-0.5">{opt.label}</span>
-                <span className={`text-[9px] font-mono ${fontSize === opt.id ? 'text-white/80' : 'text-[#556660]'}`}>{opt.subLabel}</span>
+                <span className="font-bold font-mono text-xs sm:text-sm leading-none">{opt.scaleText}</span>
+                <span className="text-[11px] leading-tight truncate w-full px-0.5">{opt.label}</span>
+                <span className={`text-[10px] font-mono ${fontSize === opt.id ? 'text-white/80' : 'text-[#556660]'}`}>{opt.subLabel}</span>
               </button>
             ))}
           </div>
@@ -328,7 +327,7 @@ export default function AccessibilityMenu({
             </div>
 
             {/* Step buttons and Presets */}
-            <div className="grid grid-cols-5 gap-1">
+            <div className="grid grid-cols-4 gap-1.5">
               {fontOptions.map((opt) => {
                 const isSelected = fontSize === opt.id;
                 return (
@@ -336,13 +335,13 @@ export default function AccessibilityMenu({
                     key={opt.id}
                     type="button"
                     onClick={() => setFontSize(opt.id)}
-                    className={`py-2 px-0.5 rounded-xl text-center transition-all border flex flex-col items-center justify-center gap-0.5 ${
+                    className={`py-2 px-1 rounded-xl text-center transition-all border flex flex-col items-center justify-center gap-0.5 ${
                       isSelected
                         ? 'bg-[#1B6B52] text-white border-[#1B6B52] font-bold shadow-xs scale-[1.02]'
                         : 'bg-white text-[#1C2622] border-[#E5ECE8] hover:bg-[#EBF5F0] hover:border-[#C8E0D5]'
                     }`}
                   >
-                    <span className="font-bold font-mono text-xs leading-none">{opt.scaleText}</span>
+                    <span className="font-bold font-mono text-xs sm:text-sm leading-none">{opt.scaleText}</span>
                     <span className="text-[11px] leading-tight truncate w-full px-0.5">{opt.label}</span>
                     <span className={`text-[10px] font-mono ${isSelected ? 'text-white/80' : 'text-[#556660]'}`}>
                       {opt.subLabel}
@@ -368,7 +367,7 @@ export default function AccessibilityMenu({
               <button
                 type="button"
                 onClick={increaseFontSize}
-                disabled={fontSize === 'xxlarge'}
+                disabled={fontSize === 'xlarge'}
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#E5ECE8] bg-[#FAFCFB] hover:bg-[#EBF5F0] disabled:opacity-40 disabled:pointer-events-none transition-colors"
                 title="އަކުރު ބޮޑުކުރޭ"
               >
@@ -378,13 +377,13 @@ export default function AccessibilityMenu({
             </div>
           </div>
 
-          {/* Section 2: Contrast Theme Options */}
+          {/* Section 2: Theme Options */}
           <div className="py-3 border-b border-[#E5ECE8] space-y-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-[#1C2622]">ކުލަތަކުގެ ކޮންޓްރާސްޓް (Contrast Theme):</span>
+              <span className="font-bold text-[#1C2622]">ތީމް (Theme Mode):</span>
               {isHighContrast && (
                 <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">
-                  ހައި ކޮންޓްރާސްޓް އެކްޓިވް
+                  ތީމް އެކްޓިވް
                 </span>
               )}
             </div>
@@ -405,10 +404,12 @@ export default function AccessibilityMenu({
                   >
                     <div className="flex items-center gap-2.5">
                       <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
-                        theme.id === 'high-contrast-dark' 
+                        theme.id === 'dark' 
                           ? 'bg-neutral-900 border border-neutral-700' 
-                          : theme.id === 'high-contrast-light'
-                          ? 'bg-white border-2 border-black'
+                          : theme.id === 'blue'
+                          ? 'bg-blue-50 border border-blue-200'
+                          : theme.id === 'red'
+                          ? 'bg-red-50 border border-red-200'
                           : 'bg-[#EBF5F0]'
                       }`}>
                         {theme.icon}

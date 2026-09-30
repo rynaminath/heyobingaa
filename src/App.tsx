@@ -124,46 +124,95 @@ export default function App() {
     ogDesc.setAttribute('content', currentMeta.description);
   }, [currentTab]);
 
-  // Sync hash route or path
+  // Parse navigation tab from URL hash
+  const parseTabFromHash = (hashStr: string): NavigationTab => {
+    const h = (hashStr || '').toLowerCase();
+    if (h === '#/ehee' || h === '#ehee' || h === '#/donate' || h === '#donate' || window.location.pathname === '/ehee') {
+      return 'donate';
+    }
+    if (h === '#/admin' || h === '#admin') return 'admin';
+    if (h === '#/about' || h === '#about') return 'about';
+    if (h === '#/videos' || h === '#videos' || h === '#/media' || h === '#media') return 'videos';
+    if (h === '#/gallery' || h === '#gallery') return 'gallery';
+    if (h === '#/programs' || h === '#programs') return 'programs';
+    if (h === '#/events' || h === '#events') return 'events';
+    if (h === '#/volunteer' || h === '#volunteer') return 'volunteer';
+    return 'home';
+  };
+
+  // Synchronize native browser back and forward buttons
   useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash.toLowerCase();
-      if (hash === '#/ehee' || hash === '#ehee' || window.location.pathname === '/ehee') {
-        setCurrentTab('donate');
-      } else if (hash === '#/admin' || hash === '#admin') {
-        setCurrentTab('admin');
-      } else if (hash === '#/about' || hash === '#about') {
-        setCurrentTab('about');
-      } else if (hash === '#/videos' || hash === '#videos' || hash === '#/media' || hash === '#media') {
-        setCurrentTab('videos');
-      } else if (hash === '#/gallery' || hash === '#gallery') {
-        setCurrentTab('gallery');
-      } else if (hash === '#/programs' || hash === '#programs') {
-        setCurrentTab('programs');
-      } else if (hash === '#/events' || hash === '#events') {
-        setCurrentTab('events');
-      } else if (hash === '#/volunteer' || hash === '#volunteer') {
-        setCurrentTab('volunteer');
-      } else if (hash === '#/donate' || hash === '#donate') {
-        setCurrentTab('donate');
-      } else if (hash === '#/home' || hash === '#home') {
-        setCurrentTab('home');
+    // Initialize initial state if empty so user has a safe anchor
+    if (!window.location.hash) {
+      window.history.replaceState({ tab: 'home' }, '', '#/home');
+    } else {
+      const initialTab = parseTabFromHash(window.location.hash);
+      setCurrentTab(initialTab);
+      window.history.replaceState({ tab: initialTab }, '', window.location.hash);
+    }
+
+    const handlePopState = (e: PopStateEvent) => {
+      // If a modal is open, browser back closes the modal instead of closing the app!
+      if (isDonateModalOpen) {
+        setIsDonateModalOpen(false);
+        return;
       }
+      if (activeMediaModal) {
+        setActiveMediaModal(null);
+        return;
+      }
+
+      // Sync active tab
+      const targetTab = e.state?.tab || parseTabFromHash(window.location.hash);
+      setCurrentTab(targetTab);
     };
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
+
+    const handleHashChange = () => {
+      const targetTab = parseTabFromHash(window.location.hash);
+      setCurrentTab(targetTab);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, [isDonateModalOpen, activeMediaModal]);
 
   const handleNavigate = (tab: NavigationTab) => {
     const targetTab = tab === 'media' ? 'videos' : tab;
     setCurrentTab(targetTab);
-    if (targetTab === 'donate') {
-      window.location.hash = '/ehee';
-    } else {
-      window.location.hash = `#/${targetTab}`;
+    const hash = targetTab === 'donate' ? '#/ehee' : `#/${targetTab}`;
+    if (window.location.hash !== hash) {
+      window.history.pushState({ tab: targetTab }, '', hash);
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleOpenDonateModal = () => {
+    window.history.pushState({ modalOpen: true, tab: currentTab }, '');
+    setIsDonateModalOpen(true);
+  };
+
+  const handleCloseDonateModal = () => {
+    if (window.history.state?.modalOpen) {
+      window.history.back();
+    }
+    setIsDonateModalOpen(false);
+  };
+
+  const handleOpenMediaModal = (media: MediaItem) => {
+    window.history.pushState({ modalOpen: true, tab: currentTab }, '');
+    setActiveMediaModal(media);
+  };
+
+  const handleCloseMediaModal = () => {
+    if (window.history.state?.modalOpen) {
+      window.history.back();
+    }
+    setActiveMediaModal(null);
   };
 
   const handleSelectProgramCategory = (cat: string) => {
@@ -185,7 +234,7 @@ export default function App() {
             handleNavigate(tab);
           }}
           onSelectProgramCategory={handleSelectProgramCategory}
-          onOpenDonateModal={() => setIsDonateModalOpen(true)}
+          onOpenDonateModal={handleOpenDonateModal}
         />
 
         {/* 2. Main Page Content */}
@@ -193,8 +242,8 @@ export default function App() {
           {currentTab === 'home' && (
             <HomePage
               onNavigate={handleNavigate}
-              onOpenDonateModal={() => setIsDonateModalOpen(true)}
-              onSelectMedia={(media) => setActiveMediaModal(media)}
+              onOpenDonateModal={handleOpenDonateModal}
+              onSelectMedia={(media) => handleOpenMediaModal(media)}
               featuredEvent={featuredEvent}
               featuredMediaList={mediaList}
             />
@@ -207,7 +256,7 @@ export default function App() {
           {(currentTab === 'videos' || currentTab === 'media') && (
             <MediaArchivePage
               mediaList={mediaList}
-              onSelectMedia={(media) => setActiveMediaModal(media)}
+              onSelectMedia={(media) => handleOpenMediaModal(media)}
             />
           )}
 
@@ -218,7 +267,7 @@ export default function App() {
           {currentTab === 'programs' && (
             <ProgramsPage
               onNavigate={handleNavigate}
-              onOpenDonateModal={() => setIsDonateModalOpen(true)}
+              onOpenDonateModal={handleOpenDonateModal}
               initialCategory={selectedProgramCategory}
               onSelectCategory={(cat) => setSelectedProgramCategory(cat)}
               programs={programs}
@@ -229,7 +278,7 @@ export default function App() {
             <EventsPage
               events={events}
               onNavigate={handleNavigate}
-              onOpenDonateModal={() => setIsDonateModalOpen(true)}
+              onOpenDonateModal={handleOpenDonateModal}
             />
           )}
 
@@ -249,19 +298,19 @@ export default function App() {
         {/* 3. Global Omnipresent Footer */}
         <Footer
           onNavigate={handleNavigate}
-          onOpenDonateModal={() => setIsDonateModalOpen(true)}
+          onOpenDonateModal={handleOpenDonateModal}
         />
 
         {/* 4. Transfer & Viber Slip Modal */}
         <DonationReceiptModal
           isOpen={isDonateModalOpen}
-          onClose={() => setIsDonateModalOpen(false)}
+          onClose={handleCloseDonateModal}
         />
 
         {/* 5. Video Player Modal for Dhaaris TV & Sign Language Media */}
         <VideoPlayerModal
           media={activeMediaModal}
-          onClose={() => setActiveMediaModal(null)}
+          onClose={handleCloseMediaModal}
         />
 
         {/* 6. Floating Accessible Action Widget (Moved from Menu Bar) */}

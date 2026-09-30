@@ -133,7 +133,10 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
       }`}
     >
       {/* Top Banner Notice: Contact & Social Media */}
-      <div className="bg-[#1B6B52] text-[#EBF5F0] border-b border-[#145541] py-1.5 px-3 sm:px-4">
+      <div 
+        id="header-topbar"
+        className="bg-gradient-to-r from-[#0F3528] via-[#1A6850] via-[#20775C] to-[#124536] text-[#EBF5F0] border-b border-[#124335] py-1.5 px-3 sm:px-4 shadow-xs"
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           {/* Left / Contact & Social Links */}
           <div className="flex items-center gap-2 sm:gap-4 overflow-x-auto py-0.5 no-scrollbar">

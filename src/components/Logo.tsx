@@ -32,12 +32,15 @@ export default function Logo({ size = 'md', variant = 'colored' }: LogoProps) {
   let titleColorClass = variant === 'dark' ? 'text-white' : 'text-[#1E2623]';
   let englishColorClass = variant === 'dark' ? 'text-white/80' : 'text-[#1B6B52]';
 
-  if (contrastTheme === 'dark-maroon') {
+  if (contrastTheme === 'dark') {
     titleColorClass = 'text-white';
-    englishColorClass = 'text-[#FBD38D] font-bold drop-shadow-xs'; // Warm luminous gold
-  } else if (contrastTheme === 'high-contrast-dark') {
-    titleColorClass = 'text-white';
-    englishColorClass = 'text-[#86EFAC] font-bold';
+    englishColorClass = 'text-[#34D399] font-bold';
+  } else if (contrastTheme === 'blue') {
+    titleColorClass = variant === 'dark' ? 'text-white' : 'text-[#0F2D4A]';
+    englishColorClass = variant === 'dark' ? 'text-[#93C5FD]' : 'text-[#1E5B94] font-bold';
+  } else if (contrastTheme === 'red') {
+    titleColorClass = variant === 'dark' ? 'text-white' : 'text-[#4A0B14]';
+    englishColorClass = variant === 'dark' ? 'text-[#FCA5A5]' : 'text-[#991B2D] font-bold';
   }
 
   return (

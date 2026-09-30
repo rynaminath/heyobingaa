@@ -13,7 +13,6 @@ import {
   Play, 
   ShieldCheck, 
   Users, 
-  BookOpen, 
   CheckCircle2, 
   ExternalLink 
 } from 'lucide-react';
@@ -40,32 +39,41 @@ export default function HomePage({
       {/* 1. HERO BANNER: Flagship Event & Deaf-accessible Media Spotlight */}
       <section
         id="hero-banner"
-        className="hero-section relative overflow-hidden bg-gradient-to-b from-[#0F231D] via-[#16332A] to-[#0E1E19] text-white pt-10 pb-20 px-4 sm:px-6 lg:px-8 border-b border-[#1C3B32] shadow-xl"
+        className="hero-section group relative overflow-hidden text-white pt-12 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 border-b border-[#286352] shadow-xl transition-all duration-500 ease-out hover:scale-[1.008] hover:shadow-2xl hover:border-[#3CA88B] transform-gpu will-change-transform cursor-default"
+        style={{
+          backgroundColor: '#1E5243',
+          backgroundImage: 'radial-gradient(ellipse at 50% 20%, #266352 0%, #1B4A3C 100%)'
+        }}
       >
-        {/* Subtle decorative ambient lights in soft green and soft blue */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#1B6B52]/25 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-[#255D96]/20 rounded-full blur-3xl pointer-events-none" />
+        {/* Islamic Star & Lattice Tessellation Architectural Texture Overlay */}
+        <div 
+          className="hero-texture absolute inset-0 pointer-events-none opacity-[0.14] mix-blend-screen transition-transform duration-700 ease-out group-hover:scale-105 transform-gpu"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23A7F3D0' stroke-width='0.7' fill='none' fill-rule='evenodd'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Cpath d='M30 10l20 20-20 20-20-20z'/%3E%3Cpath d='M0 0l15 15L0 30l30 30 15-15L60 60V0L45 15 30 0z'/%3E%3Ccircle cx='30' cy='30' r='3.5' fill='%23A7F3D0' fill-opacity='0.25'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '48px 48px'
+          }}
+          aria-hidden="true"
+        />
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          {/* Top Announcement Badge with Official Logo */}
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#18392F] border border-[#234A3E] text-[#EBF5F0] text-xs font-semibold shadow-xs">
-              <img src={logoImg} alt="Logo" className="w-5 h-5 object-contain" />
-              <span>ހެޔޮބިންގާ • <span dir="ltr" className="font-mono">15/01/2024</span> ގައި ރަޖިސްޓްރީ ކުރެވުނު ޖަމްޢިއްޔާ</span>
-            </div>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#B83244]/30 border border-[#B83244]/50 text-[#FEE2E2] text-xs font-medium">
-              <Sparkles className="w-3.5 h-3.5 text-[#FED7AA]" />
-              <span><span dir="ltr" className="font-mono">13+</span> އަހަރުގެ ދަޢުވަތީ އަދި އިޖުތިމާޢީ ތަޖުރިބާ</span>
-            </span>
-          </div>
+        {/* Tactile Fine Stipple Grain Texture Overlay */}
+        <div 
+          className="hero-texture absolute inset-0 pointer-events-none opacity-[0.09] mix-blend-overlay transition-transform duration-700 ease-out group-hover:scale-103 transform-gpu"
+          style={{
+            backgroundImage: `radial-gradient(circle, #ffffff 1px, transparent 1px)`,
+            backgroundSize: '16px 16px'
+          }}
+          aria-hidden="true"
+        />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        {/* Subtle decorative ambient lights in soft luminous mint & sky blue */}
+        <div className="absolute top-0 right-1/4 w-[480px] h-[480px] bg-[#34D399]/15 rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out group-hover:scale-115 group-hover:bg-[#34D399]/25" />
+        <div className="absolute bottom-0 left-10 w-[420px] h-[420px] bg-[#38BDF8]/10 rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out group-hover:scale-115 group-hover:bg-[#38BDF8]/20" />
+
+        <div className="max-w-7xl mx-auto relative z-10 transition-transform duration-500 ease-out group-hover:scale-[1.008] transform-gpu">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             {/* Right Column (RTL Lead): Main Hero Text & Event Spotlight */}
             <div className="lg:col-span-7 space-y-6 text-right">
               <div className="space-y-3">
-                <span className="text-[#A7F3D0] font-bold text-sm tracking-wide block">
-                  އުޚުތުންގެ އިސްނެގުމުގައި ހެޔޮ މުޖުތަމަޢެއް ބިނާކުރުން
-                </span>
                 <h1 className="text-3xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                   ހެޔޮ ޖީލެއް، <span className="text-[#A7F3D0]">ހެޔޮބިންގަލެއް</span> ގެ މަތީގައި
                 </h1>
@@ -76,8 +84,8 @@ export default function HomePage({
 
               {/* Spotlight Event Card */}
               {featuredEvent ? (
-                <div className="p-5 sm:p-6 rounded-2xl bg-[#142E26]/90 backdrop-blur-md border border-[#234A3E] shadow-xl space-y-4 hover:border-[#1B6B52] transition-colors">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#234A3E] pb-3">
+                <div className="p-5 sm:p-6 rounded-2xl bg-[#13382E]/95 backdrop-blur-md border border-[#2B705C] shadow-2xl space-y-4 hover:border-[#3CA88B] hover:shadow-2xl transition-all duration-300 ease-out hover:scale-[1.012] transform-gpu">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#235848] pb-3">
                     <div className="flex items-center gap-2">
                       <span className="px-2.5 py-1 rounded-md bg-[#1B6B52] text-white font-bold text-xs">
                         އިސް ޙަރަކާތް
@@ -140,7 +148,7 @@ export default function HomePage({
                   </div>
                 </div>
               ) : (
-                <div className="p-5 sm:p-6 rounded-2xl bg-[#142E26]/90 backdrop-blur-md border border-[#234A3E] shadow-xl space-y-4">
+                <div className="p-5 sm:p-6 rounded-2xl bg-[#13382E]/95 backdrop-blur-md border border-[#2B705C] shadow-2xl space-y-4">
                   <div className="flex items-center gap-2 text-xs font-bold text-[#A7F3D0]">
                     <Sparkles className="w-4 h-4 text-[#A7F3D0]" />
                     <span>ހެޔޮބިންގާގެ މައިގަނޑު ދަޢުވަތީ ދައުރު</span>
@@ -171,32 +179,11 @@ export default function HomePage({
                   </div>
                 </div>
               )}
-
-              {/* Quick Actions */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <button
-                  type="button"
-                  onClick={() => onNavigate('donate')}
-                  className="px-6 py-3 rounded-xl bg-[#B83244] hover:bg-[#9A2434] text-white font-bold text-sm shadow-lg shadow-[#B83244]/25 active:scale-95 transition-all flex items-center gap-2 border border-[#B83244]/40"
-                >
-                  <HeartHandshake className="w-4 h-4 text-white" />
-                  <span>އެހީދެއްވުމަށް (Donate Now)</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate('about')}
-                  className="px-5 py-3 rounded-xl bg-[#142E26] hover:bg-[#1B6B52] text-white border border-[#234A3E] font-medium text-sm transition-colors flex items-center gap-2"
-                >
-                  <BookOpen className="w-4 h-4 text-[#A7F3D0]" />
-                  <span>ޖަމިއްޔާގެ ތަޢާރަފް</span>
-                </button>
-              </div>
             </div>
 
             {/* Left Column: Featured Dhaaris TV Deaf-Accessible Production Card */}
             <div className="lg:col-span-5 space-y-4">
-              <div className="bg-[#142E26] border border-[#234A3E] rounded-3xl p-5 shadow-2xl backdrop-blur-sm space-y-4">
+              <div className="bg-[#13382E]/95 border border-[#2B705C] rounded-3xl p-5 shadow-2xl backdrop-blur-sm space-y-4 hover:border-[#3CA88B] hover:shadow-2xl transition-all duration-300 ease-out hover:scale-[1.012] transform-gpu">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#255D96] animate-pulse" />

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 
-export type FontSizeScale = 'small' | 'normal' | 'large' | 'xlarge' | 'xxlarge';
-export type ContrastTheme = 'normal' | 'high-contrast-light' | 'high-contrast-dark' | 'dark-maroon';
+export type FontSizeScale = 'small' | 'normal' | 'large' | 'xlarge';
+export type ContrastTheme = 'normal' | 'dark' | 'blue' | 'red';
 
 export interface AccessibilitySettings {
   fontSize: FontSizeScale;
@@ -31,8 +31,7 @@ export const FONT_SIZE_SCALES: Record<FontSizeScale, string> = {
   small: '80%',
   normal: '88%',
   large: '100%',
-  xlarge: '115%',
-  xxlarge: '130%'
+  xlarge: '115%'
 };
 
 const AccessibilityContext = createContext<AccessibilityContextType>({
@@ -53,7 +52,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.fontSize && ['small', 'normal', 'large', 'xlarge', 'xxlarge'].includes(parsed.fontSize)) {
+        if (parsed.fontSize && ['small', 'normal', 'large', 'xlarge'].includes(parsed.fontSize)) {
           return parsed.fontSize as FontSizeScale;
         }
       }
@@ -68,7 +67,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.contrastTheme && ['normal', 'high-contrast-light', 'high-contrast-dark', 'dark-maroon'].includes(parsed.contrastTheme)) {
+        if (parsed.contrastTheme && ['normal', 'dark', 'blue', 'red'].includes(parsed.contrastTheme)) {
           return parsed.contrastTheme as ContrastTheme;
         }
       }
@@ -84,14 +83,14 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     root.style.fontSize = FONT_SIZE_SCALES[fontSize];
     root.setAttribute('data-font-size', fontSize);
 
-    // Update contrast classes
-    root.classList.remove('high-contrast-light', 'high-contrast-dark', 'theme-dark-maroon');
-    if (contrastTheme === 'high-contrast-light') {
-      root.classList.add('high-contrast-light');
-    } else if (contrastTheme === 'high-contrast-dark') {
-      root.classList.add('high-contrast-dark');
-    } else if (contrastTheme === 'dark-maroon') {
-      root.classList.add('theme-dark-maroon');
+    // Update theme classes on document
+    root.classList.remove('theme-dark', 'theme-blue', 'theme-red');
+    if (contrastTheme === 'dark') {
+      root.classList.add('theme-dark');
+    } else if (contrastTheme === 'blue') {
+      root.classList.add('theme-blue');
+    } else if (contrastTheme === 'red') {
+      root.classList.add('theme-red');
     }
 
     // Persist to localStorage
@@ -115,14 +114,12 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
       if (prev === 'small') return 'normal';
       if (prev === 'normal') return 'large';
       if (prev === 'large') return 'xlarge';
-      if (prev === 'xlarge') return 'xxlarge';
       return prev;
     });
   }, []);
 
   const decreaseFontSize = useCallback(() => {
     setFontSizeState((prev) => {
-      if (prev === 'xxlarge') return 'xlarge';
       if (prev === 'xlarge') return 'large';
       if (prev === 'large') return 'normal';
       if (prev === 'normal') return 'small';
@@ -131,7 +128,7 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const toggleHighContrast = useCallback(() => {
-    setContrastThemeState((prev) => (prev === 'normal' ? 'high-contrast-light' : 'normal'));
+    setContrastThemeState((prev) => (prev === 'normal' ? 'dark' : 'normal'));
   }, []);
 
   const resetAccessibility = useCallback(() => {

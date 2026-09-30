@@ -52,6 +52,7 @@
   html {
     font-size: 88%;
     -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
   }
 
   body {
@@ -63,6 +64,7 @@
     letter-spacing: 0.01em;
     background-color: #FAFCFB;
     color: #1C2622;
+    overflow-x: hidden;
   }
 
   p {
@@ -216,314 +218,171 @@ html.high-contrast-dark [class*="bg-[#EBF5F0]"] {
   border-color: #2D5845 !important;
 }
 
-html.high-contrast-dark a:focus-visible,
-html.high-contrast-dark button:focus-visible {
-  outline: 3px solid #4ADE80 !important;
-  outline-offset: 2px !important;
+/* ==========================================================================
+   THEME: Dark Mode (ޑާކް މޯޑް) - Deep Charcoal & Luminous Emerald / Gold
+   ========================================================================== */
+html.theme-dark {
+  color-scheme: dark;
 }
-
-html.high-contrast-dark #hero-banner,
-html.high-contrast-dark .hero-section,
-html.high-contrast-dark [class*="from-[#0F231D]"],
-html.high-contrast-dark [class*="bg-[#0F231D]"] {
-  background: #0D1310 !important;
-  background-image: none !important;
-  border-color: #354740 !important;
+html.theme-dark body {
+  background-color: #0F1715 !important;
+  color: #F1F6F4 !important;
+}
+html.theme-dark ::selection {
+  background-color: #1B6B52 !important;
+  color: #FFFFFF !important;
+}
+html.theme-dark header {
+  background-color: rgba(18, 29, 26, 0.95) !important;
+  border-color: #213630 !important;
+}
+html.theme-dark #header-topbar {
+  background: linear-gradient(90deg, #091310 0%, #142E25 50%, #0C1A15 100%) !important;
+  border-color: #1A372E !important;
+}
+html.theme-dark .bg-white,
+html.theme-dark [class*="bg-[#FAFCFB]"],
+html.theme-dark [class*="bg-gray-50"] {
+  background-color: #162420 !important;
+  color: #F1F6F4 !important;
+  border-color: #243B34 !important;
+}
+html.theme-dark [class*="text-[#1C2622]"],
+html.theme-dark [class*="text-[#1E2623]"] {
+  color: #F1F6F4 !important;
+}
+html.theme-dark [class*="text-[#556660]"],
+html.theme-dark [class*="text-gray-"] {
+  color: #9BB3AA !important;
+}
+html.theme-dark [class*="border-[#E5ECE8]"] {
+  border-color: #243B34 !important;
+}
+html.theme-dark #hero-banner {
+  background-color: #0E1A16 !important;
+  background-image: radial-gradient(ellipse at 50% 20%, #163028 0%, #0A1411 100%) !important;
+  border-color: #1D3A31 !important;
+}
+html.theme-dark footer {
+  background-color: #0A110F !important;
+  border-color: #192924 !important;
+}
+html.theme-dark input,
+html.theme-dark select,
+html.theme-dark textarea {
+  background-color: #121D1A !important;
+  color: #F1F6F4 !important;
+  border-color: #263D37 !important;
 }
 
 /* ==========================================================================
-   Dark Maroon Theme (ޑާކް މަރޫން) - Rich Deep Maroon, Warm Gold & High Readability
+   THEME: Blue Theme (ނޫ ތީމް) - Oceanic Sapphire & Royal Navy
    ========================================================================== */
-html.theme-dark-maroon {
-  color-scheme: dark;
+html.theme-blue body {
+  background-color: #F4F8FC !important;
+  color: #0F1E2E !important;
 }
-
-html.theme-dark-maroon body {
-  background-color: #1A0306 !important;
-  color: #FFF5F5 !important;
-}
-
-html.theme-dark-maroon ::selection {
-  background-color: #801320 !important;
-  color: #FFF5F5 !important;
-}
-
-/* Custom scrollbars in Dark Maroon */
-html.theme-dark-maroon ::-webkit-scrollbar-track {
-  background: #1A0306 !important;
-}
-html.theme-dark-maroon ::-webkit-scrollbar-thumb {
-  background: #6B0E1B !important;
-}
-html.theme-dark-maroon ::-webkit-scrollbar-thumb:hover {
-  background: #8A1525 !important;
-}
-
-/* Header & Navigation */
-html.theme-dark-maroon header {
-  background-color: #26040A !important;
-  border-color: #4A0B14 !important;
-}
-
-/* Top bar in Header */
-html.theme-dark-maroon [class*="bg-[#0F4232]"] {
-  background-color: #38060E !important;
-}
-html.theme-dark-maroon [class*="border-[#14533F]"] {
-  border-color: #4D0A14 !important;
-}
-
-/* Brand Logo Styling */
-html.theme-dark-maroon .logo-title {
+html.theme-blue ::selection {
+  background-color: #1E5B94 !important;
   color: #FFFFFF !important;
 }
-html.theme-dark-maroon .logo-english {
-  color: #FBD38D !important; /* Radiant warm gold - highly visible against dark maroon */
-  font-weight: 700 !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+html.theme-blue header {
+  border-color: #CFE2F5 !important;
+}
+html.theme-blue #header-topbar {
+  background: linear-gradient(90deg, #0F2D4A 0%, #1E5B94 50%, #123A60 100%) !important;
+  border-color: #133D63 !important;
+}
+html.theme-blue [class*="bg-[#1B6B52]"] {
+  background-color: #1E5B94 !important;
+}
+html.theme-blue [class*="hover:bg-[#1B6B52]"]:hover,
+html.theme-blue [class*="hover:bg-[#145541]"]:hover {
+  background-color: #164673 !important;
+}
+html.theme-blue [class*="text-[#1B6B52]"] {
+  color: #1E5B94 !important;
+}
+html.theme-blue [class*="hover:text-[#1B6B52]"]:hover {
+  color: #164673 !important;
+}
+html.theme-blue [class*="border-[#1B6B52]"] {
+  border-color: #1E5B94 !important;
+}
+html.theme-blue [class*="bg-[#EBF5F0]"] {
+  background-color: #EBF4FA !important;
+  color: #1E5B94 !important;
+  border-color: #CFE2F5 !important;
+}
+html.theme-blue [class*="text-[#A7F3D0]"] {
+  color: #93C5FD !important;
+}
+html.theme-blue #hero-banner {
+  background-color: #153E64 !important;
+  background-image: radial-gradient(ellipse at 50% 20%, #1E5B94 0%, #102F4D 100%) !important;
+  border-color: #245F94 !important;
+}
+html.theme-blue #hero-banner .hero-texture {
+  opacity: 0.12 !important;
+}
+html.theme-blue footer {
+  background-color: #0A1B2C !important;
+  border-color: #133352 !important;
 }
 
-/* High Contrast Dark Logo Styling */
-html.high-contrast-dark .logo-title {
+/* ==========================================================================
+   THEME: Red Theme (ރަތް ތީމް) - Rich Ruby & Crimson Red
+   ========================================================================== */
+html.theme-red body {
+  background-color: #FCF7F8 !important;
+  color: #26070C !important;
+}
+html.theme-red ::selection {
+  background-color: #991B2D !important;
   color: #FFFFFF !important;
 }
-html.high-contrast-dark .logo-english {
-  color: #86EFAC !important;
-  font-weight: 700 !important;
+html.theme-red header {
+  border-color: #F5D5DB !important;
 }
-
-/* Cards, White Containers, and Page Backgrounds */
-html.theme-dark-maroon .bg-white,
-html.theme-dark-maroon [class*="bg-[#FAFCFB]"],
-html.theme-dark-maroon [class*="bg-gray-50"] {
-  background-color: #27060C !important;
-  color: #FFF5F5 !important;
-  border-color: #4D0B14 !important;
+html.theme-red #header-topbar {
+  background: linear-gradient(90deg, #4A0B14 0%, #991B2D 50%, #5E0D1B 100%) !important;
+  border-color: #5C0E1A !important;
 }
-
-html.theme-dark-maroon [class*="text-[#1C2622]"] {
-  color: #FFF5F5 !important;
+html.theme-red [class*="bg-[#1B6B52]"] {
+  background-color: #991B2D !important;
 }
-
-html.theme-dark-maroon [class*="text-[#1E2623]"] {
-  color: #FFF5F5 !important;
+html.theme-red [class*="hover:bg-[#1B6B52]"]:hover,
+html.theme-red [class*="hover:bg-[#145541]"]:hover {
+  background-color: #7E1423 !important;
 }
-
-html.theme-dark-maroon [class*="text-[#556660]"],
-html.theme-dark-maroon [class*="text-gray-"] {
-  color: #F0CFD4 !important;
+html.theme-red [class*="text-[#1B6B52]"] {
+  color: #991B2D !important;
 }
-
-html.theme-dark-maroon [class*="border-[#E5ECE8]"],
-html.theme-dark-maroon [class*="border-gray-"] {
-  border-color: #4D0B14 !important;
+html.theme-red [class*="hover:text-[#1B6B52]"]:hover {
+  color: #7E1423 !important;
 }
-
-/* Hero Section & Radial/Linear Gradients */
-html.theme-dark-maroon #hero-banner,
-html.theme-dark-maroon .hero-section,
-html.theme-dark-maroon [class*="from-[#0F231D]"],
-html.theme-dark-maroon [class*="via-[#16332A]"],
-html.theme-dark-maroon [class*="to-[#0E1E19]"],
-html.theme-dark-maroon [class*="to-[#0A1612]"],
-html.theme-dark-maroon [class*="bg-gradient-"][class*="from-[#0F231D]"],
-html.theme-dark-maroon [class*="bg-linear-"][class*="from-[#0F231D]"] {
-  background: linear-gradient(180deg, #2D050B 0%, #1D0307 50%, #120104 100%) !important;
-  background-image: linear-gradient(180deg, #2D050B 0%, #1D0307 50%, #120104 100%) !important;
-  border-color: #4D0A14 !important;
+html.theme-red [class*="border-[#1B6B52]"] {
+  border-color: #991B2D !important;
 }
-
-html.theme-dark-maroon [class*="border-[#1C3B32]"] {
-  border-color: #4D0A14 !important;
+html.theme-red [class*="bg-[#EBF5F0]"] {
+  background-color: #FDF2F4 !important;
+  color: #991B2D !important;
+  border-color: #F5D5DB !important;
 }
-
-html.theme-dark-maroon [class*="bg-[#0F231D]"],
-html.theme-dark-maroon [class*="bg-[#0F231D]/95"] {
-  background-color: #170205 !important;
-  border-color: #4D0A14 !important;
+html.theme-red [class*="text-[#A7F3D0]"] {
+  color: #FCA5A5 !important;
 }
-
-html.theme-dark-maroon [class*="bg-radial from-[#1B6B52]"] {
-  background: radial-gradient(ellipse at top, #650C17 0%, #38060E 60%, #1A0306 100%) !important;
-  border-color: #4D0A14 !important;
+html.theme-red #hero-banner {
+  background-color: #5E101D !important;
+  background-image: radial-gradient(ellipse at 50% 20%, #7E1527 0%, #460B15 100%) !important;
+  border-color: #8C192C !important;
 }
-
-html.theme-dark-maroon [class*="from-[#0F4232] to-[#1B6B52]"],
-html.theme-dark-maroon [class*="from-[#1B6B52] to-[#0F4232]"],
-html.theme-dark-maroon [class*="from-[#1B6B52] to-[#124837]"],
-html.theme-dark-maroon [class*="from-[#1B6B52] to-[#145541]"] {
-  background-image: linear-gradient(to bottom right, #650C17, #38060E) !important;
-  border-color: #4D0A14 !important;
+html.theme-red #hero-banner .hero-texture {
+  opacity: 0.12 !important;
 }
-
-html.theme-dark-maroon [class*="bg-[#18392F]"] {
-  background-color: #2F050C !important;
-  border-color: #4D0A14 !important;
-}
-
-html.theme-dark-maroon [class*="bg-[#142E26]"],
-html.theme-dark-maroon [class*="bg-[#142E26]/90"] {
-  background-color: #28050A !important;
-  border-color: #4D0A14 !important;
-}
-
-html.theme-dark-maroon [class*="bg-[#124837]"] {
-  background-color: #38060E !important;
-}
-
-html.theme-dark-maroon [class*="bg-[#F8FAF9]"] {
-  background-color: #24050A !important;
-  border-color: #4D0A14 !important;
-}
-
-html.theme-dark-maroon [class*="border-[#234A3E]"],
-html.theme-dark-maroon [class*="border-[#145541]"],
-html.theme-dark-maroon [class*="border-[#14533F]"],
-html.theme-dark-maroon [class*="border-[#E2E9E5]"] {
-  border-color: #4D0A14 !important;
-}
-
-/* Green blurs and ambient glow effects -> Maroon warm glow */
-html.theme-dark-maroon [class*="bg-[#1B6B52]/15"],
-html.theme-dark-maroon [class*="bg-[#1B6B52]/20"],
-html.theme-dark-maroon [class*="bg-[#1B6B52]/25"],
-html.theme-dark-maroon [class*="bg-[#1B6B52]/30"],
-html.theme-dark-maroon [class*="bg-[#1B6B52]/40"],
-html.theme-dark-maroon [class*="bg-[#1B6B52]/50"] {
-  background-color: rgba(128, 19, 32, 0.35) !important;
-}
-
-html.theme-dark-maroon [class*="bg-[#255D96]/20"],
-html.theme-dark-maroon [class*="bg-[#255D96]/15"] {
-  background-color: rgba(90, 10, 20, 0.25) !important;
-}
-
-html.theme-dark-maroon [class*="border-[#1B6B52]/40"],
-html.theme-dark-maroon [class*="border-[#1B6B52]/50"],
-html.theme-dark-maroon [class*="hover:border-[#1B6B52]"]:hover {
-  border-color: #FBD38D !important;
-}
-
-/* Footer & Dark Green/Black Containers */
-html.theme-dark-maroon footer,
-html.theme-dark-maroon [class*="bg-[#0A1612]"] {
-  background-color: #170205 !important;
-  border-color: #38060D !important;
-}
-
-html.theme-dark-maroon [class*="border-[#142921]"] {
-  border-color: #38060D !important;
-}
-
-/* Text and Badges */
-html.theme-dark-maroon [class*="text-[#EBF5F0]"] {
-  color: #FCE7F3 !important;
-}
-
-/* All Green Text & Accents */
-html.theme-dark-maroon [class*="text-[#1B6B52]"] {
-  color: #FBD38D !important; /* Warm gold accent */
-}
-
-html.theme-dark-maroon [class*="hover:text-[#1B6B52]"]:hover {
-  color: #FEEBC8 !important;
-}
-
-html.theme-dark-maroon [class*="text-[#A7F3D0]"],
-html.theme-dark-maroon [class*="text-emerald-400"] {
-  color: #FBD38D !important;
-}
-
-html.theme-dark-maroon [class*="text-[#D1E0D9]"] {
-  color: #F2D5D9 !important;
-}
-
-html.theme-dark-maroon [class*="text-[#0F4232]"] {
-  color: #FFF5F5 !important;
-}
-
-/* Primary Green Buttons -> Rich Maroon Buttons */
-html.theme-dark-maroon [class*="bg-[#1B6B52]"] {
-  background-color: #801320 !important;
-  color: #FFF5F5 !important;
-}
-
-html.theme-dark-maroon [class*="hover:bg-[#15533F]"]:hover,
-html.theme-dark-maroon [class*="hover:bg-[#145541]"]:hover {
-  background-color: #9E1B2B !important;
-}
-
-/* Soft Green Badges / Light Green Highlights */
-html.theme-dark-maroon [class*="bg-[#EBF5F0]"] {
-  background-color: #38080F !important;
-  color: #FBD38D !important;
-  border-color: #5C121E !important;
-}
-
-html.theme-dark-maroon [class*="hover:bg-[#EBF5F0]"]:hover {
-  background-color: #450B14 !important;
-  color: #FEEBC8 !important;
-}
-
-html.theme-dark-maroon [class*="border-[#C8E0D5]"],
-html.theme-dark-maroon [class*="border-[#1B6B52]"] {
-  border-color: #650E1A !important;
-}
-
-/* Tailwind Emerald & Green Utilities (Badges, Pills, Rings, Gradients) */
-html.theme-dark-maroon [class*="bg-emerald-"],
-html.theme-dark-maroon [class*="bg-green-"] {
-  background-color: #38080F !important;
-  color: #FBD38D !important;
-  border-color: #5C121E !important;
-}
-
-html.theme-dark-maroon [class*="text-emerald-"],
-html.theme-dark-maroon [class*="text-green-"] {
-  color: #FBD38D !important;
-}
-
-html.theme-dark-maroon [class*="border-emerald-"],
-html.theme-dark-maroon [class*="border-green-"] {
-  border-color: #650E1A !important;
-}
-
-html.theme-dark-maroon [class*="ring-emerald-"],
-html.theme-dark-maroon [class*="ring-green-"] {
-  --tw-ring-color: #FBD38D !important;
-}
-
-html.theme-dark-maroon [class*="from-emerald-"],
-html.theme-dark-maroon [class*="from-green-"] {
-  --tw-gradient-from: #500812 !important;
-}
-
-html.theme-dark-maroon [class*="to-emerald-"],
-html.theme-dark-maroon [class*="to-green-"] {
-  --tw-gradient-to: #2B050B !important;
-}
-
-/* Form Inputs, Selects, and Textareas */
-html.theme-dark-maroon input,
-html.theme-dark-maroon select,
-html.theme-dark-maroon textarea {
-  background-color: #24050A !important;
-  color: #FFF5F5 !important;
-  border-color: #4D0B14 !important;
-}
-
-html.theme-dark-maroon input:focus,
-html.theme-dark-maroon select:focus,
-html.theme-dark-maroon textarea:focus {
-  border-color: #FBD38D !important;
-  box-shadow: 0 0 0 2px rgba(251, 211, 141, 0.2) !important;
-}
-
-/* Focus Rings */
-html.theme-dark-maroon a:focus-visible,
-html.theme-dark-maroon button:focus-visible {
-  outline: 3px solid #FBD38D !important;
-  outline-offset: 2px !important;
+html.theme-red footer {
+  background-color: #230409 !important;
+  border-color: #4A0813 !important;
 }
 
 
