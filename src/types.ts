@@ -127,3 +127,16 @@ export interface GalleryItem {
   order?: number;
   createdAt?: string;
 }
+
+export interface HeroSlide {
+  id: string;
+  imageUrl: string;
+  badge?: string;
+  title: string;
+  caption: string;
+  ctaText?: string;
+  ctaLink?: NavigationTab;
+  secondaryCtaText?: string;
+  secondaryCtaLink?: NavigationTab;
+  order?: number;
+}

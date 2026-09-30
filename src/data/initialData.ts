@@ -1,4 +1,4 @@
-import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg, GalleryItem } from '../types';
+import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg, GalleryItem, HeroSlide } from '../types';
 
 export const NGO_CONTACT = {
   viberNumber: '+9607522778',
@@ -481,4 +481,67 @@ export const INITIAL_GALLERY: GalleryItem[] = Array.from({ length: 13 }, (_, i) 
     createdAt: '2026-03-01T00:00:00.000Z'
   };
 });
+
+export const INITIAL_HERO_SLIDES: HeroSlide[] = [
+  {
+    id: 'slide-1',
+    imageUrl: '/images/gallery%20(1).jpg',
+    badge: 'އިސް ޙަރަކާތް • ދަޢުވަތީ ދައުރު',
+    title: 'އިސްލާމީ ހޭލުންތެރިކަމާއި އޯގާތެރި މުޖުތަމަޢެއް',
+    caption: 'ހެޔޮބިންގާއަކީ އުޚުތުންގެ އިސްނެގުމާއި ލީޑަރޝިޕްގައި، މުޖުތަމަޢުގެ އިސްލާމީ ހޭލުންތެރިކަން ކުރިއެރުވުމަށާއި ހެޔޮލަފާ ޖީލެއް ބިނާކުރުމަށް ހިންގޭ ދިވެހި ޖަމްޢިއްޔާއެކެވެ.',
+    ctaText: 'ޕްރޮގްރާމްތައް ބައްލަވާ',
+    ctaLink: 'programs',
+    secondaryCtaText: 'ވޮލަންޓިއަރަކަށް ވެލައްވާ',
+    secondaryCtaLink: 'volunteer',
+    order: 1
+  },
+  {
+    id: 'slide-2',
+    imageUrl: '/images/gallery%20(2).jpg',
+    badge: 'އިޝާރާތުގެ ބަހުރުވަ (Deaf Accessible)',
+    title: 'ދާރިސް ޓީވީ & އިޝާރާތުގެ ބަހުރުވައިގެ ޚާއްޞަ ސީރީޒްތައް',
+    caption: 'ރާއްޖޭގެ އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް އިސްލާމީ ޢިލްމާއި ތަރުބިއްޔަތު އިޝާރާތުގެ ބަހުރުވައިން ފޯރުކޮށްދިނުމަށް ދާރިސް ޓީވީއާ ގުޅިގެން އުފައްދާ މުހިންމު ސިލްސިލާ.',
+    ctaText: 'ވީޑިއޯތައް ބައްލަވާ',
+    ctaLink: 'videos',
+    secondaryCtaText: 'އިތުރު މަޢުލޫމާތު',
+    secondaryCtaLink: 'about',
+    order: 2
+  },
+  {
+    id: 'slide-3',
+    imageUrl: '/images/gallery%20(6).jpg',
+    badge: 'ސިސްޓާސް-ލެޑް އެންޖީއޯ • 13+ އަހަރު',
+    title: 'އުޚުތުންގެ އިސްނެގުމުގައި ހެޔޮ ބިންގަލެއް',
+    caption: '13+ އަހަރަށްވުރެ ގިނަ ދުވަހު މައިދާނުގައި ހަރަކާތްތެރިވެފައިވާ ތަޖުރިބާކާރު ކަނބަލުންގެ އިސްނެގުމާއެކު، އަންހެނުންގެ މުރާޖަޢާ ވޯކްޝޮޕްތަކާއި ނަފްސާނީ ހޭލުންތެރިކަން.',
+    ctaText: 'ޖަމިއްޔާގެ ތަޢާރަފް',
+    ctaLink: 'about',
+    secondaryCtaText: 'ވޮލަންޓިއަރ ޓީމާ ގުޅިވަޑައިގަންނަވާ',
+    secondaryCtaLink: 'volunteer',
+    order: 3
+  },
+  {
+    id: 'slide-4',
+    imageUrl: '/images/gallery%20(5).jpg',
+    badge: 'ތަރުބަވީ ބިންގާ (Kids & Youth)',
+    title: 'ތުއްތުކުދިންނާއި ޒުވާނުންގެ އިސްލާމީ ތަރުބިއްޔަތު',
+    caption: '3 އަހަރާއި 7 އަހަރާ ދެމެދުގެ ކުދިންނަށް ކުޅިވަރާއި ވާހަކަތަކުގެ ޒަރީޢާއިން އިސްލާމީ ރިވެތި އަޚްލާޤާއި ތައުޙީދު އުނގަންނައިދިނުމުގެ އަމާޒު.',
+    ctaText: 'ޕްރޮގްރާމްތައް ބައްލަވާ',
+    ctaLink: 'programs',
+    secondaryCtaText: 'އެހީދެއްވުމަށް',
+    secondaryCtaLink: 'donate',
+    order: 4
+  },
+  {
+    id: 'slide-5',
+    imageUrl: '/images/gallery%20(3).jpg',
+    badge: 'އެހީތެރިކަމުގެ ގޮވާލުން (Support)',
+    title: 'ދީނީ އަދި އިޖުތިމާޢީ މަޝްރޫޢުތަކަށް ޞަދަޤާތް ކުރައްވާ',
+    caption: 'ހެޔޮބިންގާގެ އެންމެހައި ދަޢުވަތީ އަދި ތަރުބަވީ މަސައްކަތްތައް ކުރިއަށްދަނީ ތިޔަބޭފުޅުންގެ ދީލަތި އެހީއިންނެވެ. ފަސޭހައިން އެކައުންޓަށް ޖަމާކުރައްވައި ސްލިޕް އަޕްލޯޑް ކުރައްވާ.',
+    ctaText: 'އެހީ ފޯރުކޮށްދެއްވާ',
+    ctaLink: 'donate',
+    secondaryCtaText: 'އެކައުންޓް ނަންބަރުތައް',
+    secondaryCtaLink: 'donate',
+    order: 5
+  }
+];
 
