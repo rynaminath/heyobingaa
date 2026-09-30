@@ -50,7 +50,7 @@ export default function VideoPlayerModal({ media, onClose }: VideoPlayerModalPro
                 {media.partner}
               </span>
               {media.isDeafAccessible && (
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#255D96]/30 text-[#CFE2F5] border border-[#255D96]/50 font-thaana flex items-center gap-1 font-bold">
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#1B6B52]/30 text-[#A7F3D0] border border-[#1B6B52]/50 font-thaana flex items-center gap-1 font-bold">
                   <span>އިޝާރާތުގެ ބަހުރުވަ (Sign Language)</span>
                 </span>
               )}

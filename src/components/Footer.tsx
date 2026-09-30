@@ -14,7 +14,7 @@ export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
     <footer className="bg-[#0F231D] text-[#D1E0D9] py-12 border-t border-[#1C3B32] font-thaana relative overflow-hidden">
       {/* Decorative backdrop elements */}
       <div className="absolute top-0 right-1/4 w-96 h-96 rounded-full bg-[#1B6B52]/15 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-96 h-96 rounded-full bg-[#255D96]/10 blur-3xl pointer-events-none" />
+      <div className="footer-ambient-secondary absolute bottom-0 left-1/4 w-96 h-96 rounded-full bg-[#1B6B52]/10 blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* MAIN FOOTER: Navigation & Contact Network */}

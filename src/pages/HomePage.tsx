@@ -65,9 +65,9 @@ export default function HomePage({
           aria-hidden="true"
         />
 
-        {/* Subtle decorative ambient lights in soft luminous mint & sky blue */}
-        <div className="absolute top-0 right-1/4 w-[480px] h-[480px] bg-[#34D399]/15 rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out group-hover:scale-115 group-hover:bg-[#34D399]/25" />
-        <div className="absolute bottom-0 left-10 w-[420px] h-[420px] bg-[#38BDF8]/10 rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out group-hover:scale-115 group-hover:bg-[#38BDF8]/20" />
+        {/* Subtle decorative ambient lights in harmonized theme shades */}
+        <div className="hero-ambient-primary absolute top-0 right-1/4 w-[480px] h-[480px] rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out group-hover:scale-115" />
+        <div className="hero-ambient-secondary absolute bottom-0 left-10 w-[420px] h-[420px] rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out group-hover:scale-115" />
 
         <div className="max-w-7xl mx-auto relative z-10 transition-transform duration-500 ease-out group-hover:scale-[1.008] transform-gpu">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
@@ -90,7 +90,7 @@ export default function HomePage({
                       <span className="px-2.5 py-1 rounded-md bg-[#1B6B52] text-white font-bold text-xs">
                         އިސް ޙަރަކާތް
                       </span>
-                      <span className="text-xs text-[#CFE2F5]">
+                      <span className="text-xs text-[#D1E0D9]">
                         {featuredEvent.partnerOrganization || 'މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް & ދާރިސް ޓީވީ ގުޅިގެން'}
                       </span>
                     </div>
@@ -122,7 +122,7 @@ export default function HomePage({
                       <span>ވަގުތު: {featuredEvent.time}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Tv className="w-4 h-4 text-[#CFE2F5] shrink-0" />
+                      <Tv className="w-4 h-4 text-[#A7F3D0] shrink-0" />
                       <span>{featuredEvent.broadcast}</span>
                     </div>
                   </div>
@@ -186,10 +186,10 @@ export default function HomePage({
               <div className="bg-[#13382E]/95 border border-[#2B705C] rounded-3xl p-5 shadow-2xl backdrop-blur-sm space-y-4 hover:border-[#3CA88B] hover:shadow-2xl transition-all duration-300 ease-out hover:scale-[1.012] transform-gpu">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#255D96] animate-pulse" />
-                    <span className="text-xs font-bold text-[#CFE2F5] font-latin">DHAARIS TV × HEYO BINGAA</span>
+                    <span className="video-feature-dot w-2.5 h-2.5 rounded-full bg-[#1B6B52] animate-pulse" />
+                    <span className="video-feature-title text-xs font-bold text-[#A7F3D0] font-latin">DHAARIS TV × HEYO BINGAA</span>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-[#255D96] text-white text-xs font-bold shadow-xs">
+                  <span className="video-feature-badge px-3 py-1 rounded-full bg-[#1B6B52] text-white text-xs font-bold shadow-xs">
                     އިޝާރާތުގެ ބަހުރުވަ
                   </span>
                 </div>
@@ -214,11 +214,11 @@ export default function HomePage({
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-[#255D96] hover:bg-[#1C4875] text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                          <div className="video-feature-playbtn w-12 h-12 rounded-full bg-[#1B6B52] hover:bg-[#145541] text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                             <Play className="w-5 h-5 fill-current translate-x-0.5" />
                           </div>
                           <div className="text-right">
-                            <p className="text-xs text-[#CFE2F5] font-semibold">{deafAccessibleMedia.series}</p>
+                            <p className="video-feature-series text-xs text-[#A7F3D0] font-semibold">{deafAccessibleMedia.series}</p>
                             <h4 className="text-sm font-bold text-white line-clamp-1">{deafAccessibleMedia.title}</h4>
                           </div>
                         </div>
@@ -236,7 +236,7 @@ export default function HomePage({
                         <button
                           type="button"
                           onClick={() => onNavigate('videos')}
-                          className="text-xs text-[#CFE2F5] hover:text-white underline underline-offset-4"
+                          className="video-feature-link text-xs text-[#A7F3D0] hover:text-white underline underline-offset-4"
                         >
                           ހުރިހާ ވީޑިއޯއެއް ބައްލަވާ
                         </button>
@@ -246,7 +246,7 @@ export default function HomePage({
                 ) : (
                   <div className="text-right space-y-4 py-4">
                     <div className="relative aspect-video rounded-2xl bg-black/40 border border-[#234A3E] flex flex-col items-center justify-center p-6 text-center space-y-2">
-                      <Tv className="w-10 h-10 text-[#255D96] opacity-80" />
+                      <Tv className="w-10 h-10 text-[#A7F3D0] opacity-80" />
                       <h4 className="text-sm font-bold text-white">ދާރިސް ޓީވީ & ޔޫޓިއުބް ޕްރޮގްރާމްތައް</h4>
                       <p className="text-xs text-[#D1E0D9] max-w-xs">
                         އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކަށް އިޝާރާތުގެ ބަހުރުވައިން ތައްޔާރުކުރެވޭ ވީޑިއޯތައް
@@ -257,7 +257,7 @@ export default function HomePage({
                       <button
                         type="button"
                         onClick={() => onNavigate('videos')}
-                        className="text-xs text-[#CFE2F5] hover:text-white underline underline-offset-4 font-bold"
+                        className="text-xs text-[#A7F3D0] hover:text-white underline underline-offset-4 font-bold"
                       >
                         ވީޑިއޯ ޕޯޓަލް އަށް ވަޑައިގަންނަވާ →
                       </button>
@@ -299,7 +299,7 @@ export default function HomePage({
                 </div>
 
                 <div className="p-4 rounded-xl bg-[#F8FAF9] border border-[#E2E9E5] flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#EDF4FC] text-[#255D96] flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-9 h-9 rounded-lg bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center shrink-0 mt-0.5">
                     <CheckCircle2 className="w-5 h-5" />
                   </div>
                   <div>
@@ -312,7 +312,7 @@ export default function HomePage({
               </div>
             </div>
 
-            <div className="lg:col-span-4 bg-gradient-to-br from-[#1B6B52] to-[#124837] text-white rounded-2xl p-6 text-right space-y-4 shadow-lg border border-[#1B6B52]">
+            <div className="lg:col-span-4 home-mission-card bg-gradient-to-br from-[#1B6B52] to-[#124837] text-white rounded-2xl p-6 text-right space-y-4 shadow-lg border border-[#1B6B52]">
               <div className="flex items-center justify-between border-b border-white/20 pb-3">
                 <span className="text-xs text-[#EBF5F0] font-bold tracking-wider uppercase block">
                   ޖަމިއްޔާގެ މަޤުޞަދު

@@ -93,7 +93,7 @@ export default function AccessibilityMenu({
       id: 'dark', 
       label: 'ޑާކް މޯޑް (Dark Mode)', 
       subLabel: 'Sleek Midnight Theme',
-      icon: <Moon className="w-4 h-4 text-emerald-400" />
+      icon: <Moon className="w-4 h-4 text-amber-400" />
     },
     { 
       id: 'blue', 

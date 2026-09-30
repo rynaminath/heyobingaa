@@ -207,46 +207,108 @@ html.high-contrast-dark [class*="text-[#1B6B52]"] {
   color: #4ADE80 !important;
 }
 
-html.high-contrast-dark [class*="bg-[#1B6B52]"] {
-  background-color: #0B4E38 !important;
-  color: #FFFFFF !important;
+/* ==========================================================================
+   Ambient Glow Orbs on Hero Banner & Footer
+   Harmonized to emerald/mint by default (NOT out-of-place sky blue)
+   ========================================================================== */
+.hero-ambient-primary {
+  background-color: rgba(52, 211, 153, 0.15);
 }
-
-html.high-contrast-dark [class*="bg-[#EBF5F0]"] {
-  background-color: #162B22 !important;
-  color: #4ADE80 !important;
-  border-color: #2D5845 !important;
+.hero-ambient-secondary {
+  background-color: rgba(52, 211, 153, 0.13);
+}
+#hero-banner:hover .hero-ambient-primary {
+  background-color: rgba(52, 211, 153, 0.25);
+}
+#hero-banner:hover .hero-ambient-secondary {
+  background-color: rgba(52, 211, 153, 0.22);
+}
+.footer-ambient-secondary {
+  background-color: rgba(27, 107, 82, 0.12);
 }
 
 /* ==========================================================================
-   THEME: Dark Mode (ޑާކް މޯޑް) - Deep Charcoal & Luminous Emerald / Gold
+   THEME: Dark Mode (ޑާކް މޯޑް) - Deep Midnight Charcoal, Jade & Emerald Highlights
+   Transforms all green boxes, badges, borders, gradients, and dark backgrounds
    ========================================================================== */
 html.theme-dark {
   color-scheme: dark;
 }
 html.theme-dark body {
-  background-color: #0F1715 !important;
+  background-color: #0E1614 !important;
   color: #F1F6F4 !important;
 }
 html.theme-dark ::selection {
   background-color: #1B6B52 !important;
   color: #FFFFFF !important;
 }
+
+/* Header & Topbar */
 html.theme-dark header {
-  background-color: rgba(18, 29, 26, 0.95) !important;
-  border-color: #213630 !important;
+  background-color: rgba(14, 22, 20, 0.96) !important;
+  border-color: #1E332D !important;
 }
 html.theme-dark #header-topbar {
-  background: linear-gradient(90deg, #091310 0%, #142E25 50%, #0C1A15 100%) !important;
-  border-color: #1A372E !important;
+  background: linear-gradient(90deg, #08120F 0%, #122921 50%, #0A1713 100%) !important;
+  border-color: #17332A !important;
 }
+
+/* Hero Section Ambient Lights */
+html.theme-dark .hero-ambient-primary {
+  background-color: rgba(52, 211, 153, 0.10) !important;
+}
+html.theme-dark .hero-ambient-secondary {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+}
+html.theme-dark #hero-banner:hover .hero-ambient-secondary {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+}
+html.theme-dark .footer-ambient-secondary {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+}
+
+/* Hero Section */
+html.theme-dark #hero-banner {
+  background-color: #0B1412 !important;
+  background-image: radial-gradient(ellipse at 50% 20%, #132B23 0%, #070D0B 100%) !important;
+  border-color: #1A352D !important;
+}
+html.theme-dark #hero-banner .hero-texture {
+  opacity: 0.1 !important;
+}
+
+/* ALL Gradient Header Banners & Boxes (About, Events, Programs, Volunteer, Donate, Media, Mission Card, Modals) */
+html.theme-dark [class*="from-[#134e3e]"],
+html.theme-dark [class*="from-[#142E26]"],
+html.theme-dark [class*="from-[#1B6B52]"],
+html.theme-dark [class*="from-[#0F231D]"],
+html.theme-dark .home-mission-card,
+html.theme-dark [class*="bg-linear-to-r from-[#0F231D]"],
+html.theme-dark [class*="from-[#0F3528]"] {
+  background: linear-gradient(135deg, #091210 0%, #12241F 50%, #060D0B 100%) !important;
+  background-image: linear-gradient(135deg, #091210 0%, #12241F 50%, #060D0B 100%) !important;
+  border-color: #1E3831 !important;
+}
+
+/* Light Tinted Gradient Boxes & Cards (Donate Offline Transfer Card, About Leadership Card) */
+html.theme-dark [class*="from-[#EBF5F0]"],
+html.theme-dark [class*="via-[#EBF5F0]"] {
+  background: #15221F !important;
+  background-image: none !important;
+  border-color: #223832 !important;
+}
+
+/* Base Cards, White Containers, and Page Backgrounds */
 html.theme-dark .bg-white,
 html.theme-dark [class*="bg-[#FAFCFB]"],
-html.theme-dark [class*="bg-gray-50"] {
-  background-color: #162420 !important;
+html.theme-dark [class*="bg-gray-50"],
+html.theme-dark [class*="bg-[#F8FAF9]"] {
+  background-color: #15221F !important;
   color: #F1F6F4 !important;
-  border-color: #243B34 !important;
+  border-color: #223832 !important;
 }
+
+/* Texts */
 html.theme-dark [class*="text-[#1C2622]"],
 html.theme-dark [class*="text-[#1E2623]"] {
   color: #F1F6F4 !important;
@@ -255,28 +317,137 @@ html.theme-dark [class*="text-[#556660]"],
 html.theme-dark [class*="text-gray-"] {
   color: #9BB3AA !important;
 }
-html.theme-dark [class*="border-[#E5ECE8]"] {
-  border-color: #243B34 !important;
+html.theme-dark [class*="text-[#1B6B52]"] {
+  color: #34D399 !important;
 }
-html.theme-dark #hero-banner {
-  background-color: #0E1A16 !important;
-  background-image: radial-gradient(ellipse at 50% 20%, #163028 0%, #0A1411 100%) !important;
-  border-color: #1D3A31 !important;
+html.theme-dark [class*="hover:text-[#1B6B52]"]:hover {
+  color: #6EE7B7 !important;
 }
-html.theme-dark footer {
-  background-color: #0A110F !important;
-  border-color: #192924 !important;
+html.theme-dark [class*="text-[#A7F3D0]"],
+html.theme-dark [class*="text-emerald-400"],
+html.theme-dark [class*="text-[#38D39F]"],
+html.theme-dark [class*="text-[#A8C4B8]"],
+html.theme-dark [class*="text-[#CFE2F5]"],
+html.theme-dark [class*="text-[#255D96]"] {
+  color: #34D399 !important;
 }
+html.theme-dark [class*="text-[#0F4232]"] {
+  color: #6EE7B7 !important;
+}
+
+/* Light Green Tinted Boxes & Badges */
+html.theme-dark [class*="bg-[#EBF5F0]"],
+html.theme-dark [class*="bg-[#EDF4FC]"] {
+  background-color: #1A2E28 !important;
+  color: #6EE7B7 !important;
+  border-color: #2B4E44 !important;
+}
+html.theme-dark [class*="hover:bg-[#EBF5F0]"]:hover {
+  background-color: #213C34 !important;
+  color: #A7F3D0 !important;
+}
+html.theme-dark [class*="bg-[#EBF5F0]/"] {
+  background-color: rgba(26, 46, 40, 0.7) !important;
+}
+
+/* Dark Green Solid Boxes, Cards & Containers (Hero & Spotlight Cards) */
+html.theme-dark [class*="bg-[#142E26]"],
+html.theme-dark [class*="bg-[#13382E]"],
+html.theme-dark [class*="bg-[#18392F]"],
+html.theme-dark [class*="bg-[#0F231D]"],
+html.theme-dark [class*="bg-[#124837]"] {
+  background-color: #101C19 !important;
+  border-color: #223B34 !important;
+}
+
+/* BankCard MVR Currency Badge */
+html.theme-dark [class*="bg-[#143D30]"] {
+  background-color: #0E1A17 !important;
+}
+html.theme-dark [class*="text-[#86EFAC]"] {
+  color: #34D399 !important;
+}
+html.theme-dark [class*="border-[#22C55E]"] {
+  border-color: #1B6B52 !important;
+}
+
+/* Borders */
+html.theme-dark [class*="border-[#E5ECE8]"],
+html.theme-dark [class*="border-[#E2E9E5]"],
+html.theme-dark [class*="border-gray-"] {
+  border-color: #223832 !important;
+}
+html.theme-dark [class*="border-[#1B6B52]"],
+html.theme-dark [class*="border-[#C8E0D5]"],
+html.theme-dark [class*="border-[#A7F3D0]"],
+html.theme-dark [class*="border-[#255D96]"] {
+  border-color: #2A5A4B !important;
+}
+html.theme-dark [class*="border-[#2B705C]"],
+html.theme-dark [class*="border-[#234A3E]"],
+html.theme-dark [class*="border-[#235848]"],
+html.theme-dark [class*="border-[#286352]"],
+html.theme-dark [class*="border-[#145541]"],
+html.theme-dark [class*="border-[#14533F]"],
+html.theme-dark [class*="border-[#1C3B32]"] {
+  border-color: #1E3831 !important;
+}
+html.theme-dark [class*="border-[#3CA88B]"] {
+  border-color: #2A5A4B !important;
+}
+html.theme-dark [class*="hover:border-[#3CA88B]"]:hover,
+html.theme-dark [class*="hover:border-[#1B6B52]"]:hover {
+  border-color: #34D399 !important;
+}
+
+/* Primary Green Buttons */
+html.theme-dark [class*="bg-[#1B6B52]"] {
+  background-color: #1B6B52 !important;
+  color: #FFFFFF !important;
+  border-color: #228465 !important;
+}
+html.theme-dark [class*="hover:bg-[#1B6B52]"]:hover,
+html.theme-dark [class*="hover:bg-[#145541]"]:hover,
+html.theme-dark [class*="hover:bg-[#15533F]"]:hover {
+  background-color: #238567 !important;
+}
+
+/* BankCard BML Dark Styling */
+html.theme-dark [id*="bank-box-bml"],
+html.theme-dark [class*="from-[#0F231D]"][class*="to-[#0A1612]"] {
+  background-image: linear-gradient(135deg, #091210 0%, #12241F 50%, #060D0B 100%) !important;
+  border-color: #224E40 !important;
+}
+html.theme-dark [id*="bank-box-mib"] {
+  border-color: #1E3831 !important;
+}
+
+/* Footer */
+html.theme-dark footer,
+html.theme-dark [class*="bg-[#0A1612]"] {
+  background-color: #070D0B !important;
+  border-color: #152621 !important;
+}
+
+/* Inputs, Selects & Modals */
 html.theme-dark input,
 html.theme-dark select,
 html.theme-dark textarea {
-  background-color: #121D1A !important;
+  background-color: #101A18 !important;
   color: #F1F6F4 !important;
   border-color: #263D37 !important;
 }
+html.theme-dark input:focus,
+html.theme-dark select:focus,
+html.theme-dark textarea:focus {
+  border-color: #34D399 !important;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.2) !important;
+}
+
 
 /* ==========================================================================
    THEME: Blue Theme (ނޫ ތީމް) - Oceanic Sapphire & Royal Navy
+   Transforms ALL green boxes, badges, borders, buttons, and accents to Blue
    ========================================================================== */
 html.theme-blue body {
   background-color: #F4F8FC !important;
@@ -286,18 +457,73 @@ html.theme-blue ::selection {
   background-color: #1E5B94 !important;
   color: #FFFFFF !important;
 }
+
+/* Header & Topbar */
 html.theme-blue header {
+  background-color: rgba(255, 255, 255, 0.96) !important;
   border-color: #CFE2F5 !important;
 }
 html.theme-blue #header-topbar {
-  background: linear-gradient(90deg, #0F2D4A 0%, #1E5B94 50%, #123A60 100%) !important;
-  border-color: #133D63 !important;
+  background: linear-gradient(90deg, #0B2238 0%, #1E5B94 50%, #103353 100%) !important;
+  border-color: #12395E !important;
 }
+
+/* Hero Section Ambient Lights */
+html.theme-blue .hero-ambient-primary {
+  background-color: rgba(96, 165, 250, 0.22) !important;
+}
+html.theme-blue .hero-ambient-secondary {
+  background-color: rgba(59, 130, 246, 0.20) !important;
+}
+html.theme-blue #hero-banner:hover .hero-ambient-secondary {
+  background-color: rgba(59, 130, 246, 0.32) !important;
+}
+html.theme-blue .footer-ambient-secondary {
+  background-color: rgba(59, 130, 246, 0.18) !important;
+}
+
+/* Hero Section */
+html.theme-blue #hero-banner {
+  background-color: #13395C !important;
+  background-image: radial-gradient(ellipse at 50% 20%, #1A4E7D 0%, #0E2943 100%) !important;
+  border-color: #1F598E !important;
+}
+html.theme-blue #hero-banner .hero-texture {
+  filter: hue-rotate(60deg) saturate(1.2) !important;
+  opacity: 0.12 !important;
+}
+
+/* ALL Gradient Header Banners & Boxes (About, Events, Programs, Volunteer, Donate, Media, Mission Card, Modals) */
+html.theme-blue [class*="from-[#134e3e]"],
+html.theme-blue [class*="from-[#142E26]"],
+html.theme-blue [class*="from-[#1B6B52]"],
+html.theme-blue [class*="from-[#0F231D]"],
+html.theme-blue .home-mission-card,
+html.theme-blue [class*="bg-linear-to-r from-[#0F231D]"],
+html.theme-blue [class*="from-[#0F3528]"] {
+  background: linear-gradient(135deg, #0B2238 0%, #153E65 50%, #081A2C 100%) !important;
+  background-image: linear-gradient(135deg, #0B2238 0%, #153E65 50%, #081A2C 100%) !important;
+  border-color: #1D507C !important;
+}
+
+/* Light Tinted Gradient Boxes & Cards (Donate Offline Transfer Card, About Leadership Card) */
+html.theme-blue [class*="from-[#EBF5F0]"],
+html.theme-blue [class*="via-[#EBF5F0]"] {
+  background: #EBF4FA !important;
+  background-image: none !important;
+  border-color: #CFE2F5 !important;
+}
+
+/* Primary Blue Buttons & Accents (replaces #1B6B52) */
 html.theme-blue [class*="bg-[#1B6B52]"] {
   background-color: #1E5B94 !important;
+  color: #FFFFFF !important;
+  border-color: #1E5B94 !important;
 }
 html.theme-blue [class*="hover:bg-[#1B6B52]"]:hover,
-html.theme-blue [class*="hover:bg-[#145541]"]:hover {
+html.theme-blue [class*="hover:bg-[#145541]"]:hover,
+html.theme-blue [class*="hover:bg-[#15533F]"]:hover,
+html.theme-blue [class*="hover:bg-[#155944]"]:hover {
   background-color: #164673 !important;
 }
 html.theme-blue [class*="text-[#1B6B52]"] {
@@ -309,29 +535,122 @@ html.theme-blue [class*="hover:text-[#1B6B52]"]:hover {
 html.theme-blue [class*="border-[#1B6B52]"] {
   border-color: #1E5B94 !important;
 }
+
+/* Light Green Tinted Boxes, Badges & Pills -> Soft Icy Blue Boxes */
 html.theme-blue [class*="bg-[#EBF5F0]"] {
   background-color: #EBF4FA !important;
   color: #1E5B94 !important;
   border-color: #CFE2F5 !important;
 }
-html.theme-blue [class*="text-[#A7F3D0]"] {
+html.theme-blue [class*="hover:bg-[#EBF5F0]"]:hover {
+  background-color: #DDEBF7 !important;
+  color: #164673 !important;
+}
+html.theme-blue [class*="bg-[#EBF5F0]/"] {
+  background-color: rgba(235, 244, 250, 0.7) !important;
+}
+html.theme-blue [class*="border-[#C8E0D5]"],
+html.theme-blue [class*="border-[#A7F3D0]"] {
+  border-color: #CFE2F5 !important;
+}
+
+/* Dark Green Solid Boxes, Cards & Containers -> Deep Oceanic Blue Cards */
+html.theme-blue [class*="bg-[#142E26]"],
+html.theme-blue [class*="bg-[#13382E]"],
+html.theme-blue [class*="bg-[#18392F]"],
+html.theme-blue [class*="bg-[#0F231D]"],
+html.theme-blue [class*="bg-[#124837]"] {
+  background-color: #0E2943 !important;
+  border-color: #1D507C !important;
+}
+
+/* Borders */
+html.theme-blue [class*="border-[#2B705C]"],
+html.theme-blue [class*="border-[#234A3E]"],
+html.theme-blue [class*="border-[#235848]"],
+html.theme-blue [class*="border-[#286352]"],
+html.theme-blue [class*="border-[#145541]"],
+html.theme-blue [class*="border-[#14533F]"],
+html.theme-blue [class*="border-[#1C3B32]"] {
+  border-color: #1D507C !important;
+}
+html.theme-blue [class*="border-[#3CA88B]"] {
+  border-color: #1D507C !important;
+}
+html.theme-blue [class*="hover:border-[#3CA88B]"]:hover,
+html.theme-blue [class*="hover:border-[#1B6B52]"]:hover {
+  border-color: #2563EB !important;
+}
+
+/* Accents & Highlights */
+html.theme-blue [class*="text-[#A7F3D0]"],
+html.theme-blue [class*="text-emerald-400"],
+html.theme-blue [class*="text-[#38D39F]"],
+html.theme-blue [class*="text-[#A8C4B8]"] {
+  color: #60A5FA !important;
+}
+html.theme-blue [class*="text-[#0F4232]"] {
+  color: #0F2D4A !important;
+}
+html.theme-blue [class*="text-[#D1E0D9]"] {
+  color: #CBDCEB !important;
+}
+
+/* BankCard BML Blue Theme */
+html.theme-blue [id*="bank-box-bml"],
+html.theme-blue [class*="from-[#0F231D]"][class*="to-[#0A1612]"] {
+  background-image: linear-gradient(135deg, #091C2E 0%, #133B5F 50%, #071524 100%) !important;
+  border-color: #1E5B94 !important;
+}
+
+/* BankCard MVR Currency Badge */
+html.theme-blue [class*="bg-[#143D30]"] {
+  background-color: #0E2943 !important;
+}
+html.theme-blue [class*="text-[#86EFAC]"] {
   color: #93C5FD !important;
 }
-html.theme-blue #hero-banner {
-  background-color: #153E64 !important;
-  background-image: radial-gradient(ellipse at 50% 20%, #1E5B94 0%, #102F4D 100%) !important;
-  border-color: #245F94 !important;
+html.theme-blue [class*="border-[#22C55E]"] {
+  border-color: #3B82F6 !important;
 }
-html.theme-blue #hero-banner .hero-texture {
-  opacity: 0.12 !important;
+
+/* Ambient glow & blurs */
+html.theme-blue [class*="bg-[#1B6B52]/"],
+html.theme-blue [class*="bg-[#34D399]/"] {
+  background-color: rgba(30, 91, 148, 0.25) !important;
 }
-html.theme-blue footer {
+
+/* Tailwind Emerald & Green utilities */
+html.theme-blue [class*="bg-emerald-"],
+html.theme-blue [class*="bg-green-"] {
+  background-color: #EBF4FA !important;
+  color: #1E5B94 !important;
+  border-color: #CFE2F5 !important;
+}
+html.theme-blue [class*="text-emerald-"],
+html.theme-blue [class*="text-green-"] {
+  color: #1E5B94 !important;
+}
+html.theme-blue [class*="border-emerald-"],
+html.theme-blue [class*="border-green-"] {
+  border-color: #CFE2F5 !important;
+}
+html.theme-blue [class*="ring-emerald-"],
+html.theme-blue [class*="ring-green-"] {
+  --tw-ring-color: #1E5B94 !important;
+}
+
+/* Footer */
+html.theme-blue footer,
+html.theme-blue [class*="bg-[#0A1612]"] {
   background-color: #0A1B2C !important;
   border-color: #133352 !important;
 }
 
+
 /* ==========================================================================
-   THEME: Red Theme (ރަތް ތީމް) - Rich Ruby & Crimson Red
+   THEME: Red Theme (ރަތް ތީމް) - Rich Crimson Ruby & Burgundy
+   Transforms ALL green boxes, badges, borders, buttons, and accents to Red
    ========================================================================== */
 html.theme-red body {
   background-color: #FCF7F8 !important;
@@ -341,18 +660,73 @@ html.theme-red ::selection {
   background-color: #991B2D !important;
   color: #FFFFFF !important;
 }
+
+/* Header & Topbar */
 html.theme-red header {
+  background-color: rgba(255, 255, 255, 0.96) !important;
   border-color: #F5D5DB !important;
 }
 html.theme-red #header-topbar {
-  background: linear-gradient(90deg, #4A0B14 0%, #991B2D 50%, #5E0D1B 100%) !important;
+  background: linear-gradient(90deg, #38060E 0%, #991B2D 50%, #4A0B14 100%) !important;
   border-color: #5C0E1A !important;
 }
+
+/* Hero Section Ambient Lights */
+html.theme-red .hero-ambient-primary {
+  background-color: rgba(244, 63, 94, 0.22) !important;
+}
+html.theme-red .hero-ambient-secondary {
+  background-color: rgba(225, 29, 72, 0.20) !important;
+}
+html.theme-red #hero-banner:hover .hero-ambient-secondary {
+  background-color: rgba(225, 29, 72, 0.32) !important;
+}
+html.theme-red .footer-ambient-secondary {
+  background-color: rgba(225, 29, 72, 0.18) !important;
+}
+
+/* Hero Section */
+html.theme-red #hero-banner {
+  background-color: #4D0913 !important;
+  background-image: radial-gradient(ellipse at 50% 20%, #6E0E1D 0%, #38070E 100%) !important;
+  border-color: #7E1222 !important;
+}
+html.theme-red #hero-banner .hero-texture {
+  filter: hue-rotate(190deg) saturate(1.4) !important;
+  opacity: 0.12 !important;
+}
+
+/* ALL Gradient Header Banners & Boxes (About, Events, Programs, Volunteer, Donate, Media, Mission Card, Modals) */
+html.theme-red [class*="from-[#134e3e]"],
+html.theme-red [class*="from-[#142E26]"],
+html.theme-red [class*="from-[#1B6B52]"],
+html.theme-red [class*="from-[#0F231D]"],
+html.theme-red .home-mission-card,
+html.theme-red [class*="bg-linear-to-r from-[#0F231D]"],
+html.theme-red [class*="from-[#0F3528]"] {
+  background: linear-gradient(135deg, #4A0B14 0%, #7A1220 50%, #26050A 100%) !important;
+  background-image: linear-gradient(135deg, #4A0B14 0%, #7A1220 50%, #26050A 100%) !important;
+  border-color: #690D1B !important;
+}
+
+/* Light Tinted Gradient Boxes & Cards (Donate Offline Transfer Card, About Leadership Card) */
+html.theme-red [class*="from-[#EBF5F0]"],
+html.theme-red [class*="via-[#EBF5F0]"] {
+  background: #FDF2F4 !important;
+  background-image: none !important;
+  border-color: #F5D5DB !important;
+}
+
+/* Primary Red Buttons & Accents (replaces #1B6B52) */
 html.theme-red [class*="bg-[#1B6B52]"] {
   background-color: #991B2D !important;
+  color: #FFFFFF !important;
+  border-color: #991B2D !important;
 }
 html.theme-red [class*="hover:bg-[#1B6B52]"]:hover,
-html.theme-red [class*="hover:bg-[#145541]"]:hover {
+html.theme-red [class*="hover:bg-[#145541]"]:hover,
+html.theme-red [class*="hover:bg-[#15533F]"]:hover,
+html.theme-red [class*="hover:bg-[#155944]"]:hover {
   background-color: #7E1423 !important;
 }
 html.theme-red [class*="text-[#1B6B52]"] {
@@ -364,26 +738,135 @@ html.theme-red [class*="hover:text-[#1B6B52]"]:hover {
 html.theme-red [class*="border-[#1B6B52]"] {
   border-color: #991B2D !important;
 }
+
+/* Light Green Tinted Boxes, Badges & Pills -> Soft Rose Tint Boxes */
 html.theme-red [class*="bg-[#EBF5F0]"] {
   background-color: #FDF2F4 !important;
   color: #991B2D !important;
   border-color: #F5D5DB !important;
 }
-html.theme-red [class*="text-[#A7F3D0]"] {
+html.theme-red [class*="hover:bg-[#EBF5F0]"]:hover {
+  background-color: #FCE7EB !important;
+  color: #7E1423 !important;
+}
+html.theme-red [class*="bg-[#EBF5F0]/"] {
+  background-color: rgba(253, 242, 244, 0.7) !important;
+}
+html.theme-red [class*="border-[#C8E0D5]"],
+html.theme-red [class*="border-[#A7F3D0]"] {
+  border-color: #F5D5DB !important;
+}
+
+/* Dark Green Solid Boxes, Cards & Containers -> Deep Burgundy Cards */
+html.theme-red [class*="bg-[#142E26]"],
+html.theme-red [class*="bg-[#13382E]"],
+html.theme-red [class*="bg-[#18392F]"],
+html.theme-red [class*="bg-[#0F231D]"],
+html.theme-red [class*="bg-[#124837]"] {
+  background-color: #38070E !important;
+  border-color: #690D1B !important;
+}
+
+/* Borders */
+html.theme-red [class*="border-[#2B705C]"],
+html.theme-red [class*="border-[#234A3E]"],
+html.theme-red [class*="border-[#235848]"],
+html.theme-red [class*="border-[#286352]"],
+html.theme-red [class*="border-[#145541]"],
+html.theme-red [class*="border-[#14533F]"],
+html.theme-red [class*="border-[#1C3B32]"] {
+  border-color: #690D1B !important;
+}
+html.theme-red [class*="border-[#3CA88B]"] {
+  border-color: #690D1B !important;
+}
+html.theme-red [class*="hover:border-[#3CA88B]"]:hover,
+html.theme-red [class*="hover:border-[#1B6B52]"]:hover {
+  border-color: #E11D48 !important;
+}
+
+/* Accents & Highlights */
+html.theme-red [class*="text-[#A7F3D0]"],
+html.theme-red [class*="text-emerald-400"],
+html.theme-red [class*="text-[#38D39F]"],
+html.theme-red [class*="text-[#A8C4B8]"] {
+  color: #F87171 !important;
+}
+html.theme-red [class*="text-[#0F4232]"] {
+  color: #4A0B14 !important;
+}
+html.theme-red [class*="text-[#D1E0D9]"] {
+  color: #EBD0D4 !important;
+}
+html.theme-red [class*="text-[#CFE2F5]"] {
+  color: #FECDD3 !important;
+}
+
+/* Blue Elements on Red Theme -> Transformed to Rose/Red so no blue persists */
+html.theme-red [class*="text-[#255D96]"] {
+  color: #E11D48 !important;
+}
+html.theme-red [class*="bg-[#EDF4FC]"] {
+  background-color: #FDF2F4 !important;
+}
+html.theme-red [class*="border-[#255D96]"] {
+  border-color: #F5D5DB !important;
+}
+
+/* BankCard BML Red Theme */
+html.theme-red [id*="bank-box-bml"],
+html.theme-red [class*="from-[#0F231D]"][class*="to-[#0A1612]"] {
+  background-image: linear-gradient(135deg, #240409 0%, #4D0A14 50%, #1A0307 100%) !important;
+  border-color: #991B2D !important;
+}
+html.theme-red [id*="bank-box-mib"] {
+  border-color: #690D1B !important;
+}
+
+/* BankCard MVR Currency Badge */
+html.theme-red [class*="bg-[#143D30]"] {
+  background-color: #38070E !important;
+}
+html.theme-red [class*="text-[#86EFAC]"] {
   color: #FCA5A5 !important;
 }
-html.theme-red #hero-banner {
-  background-color: #5E101D !important;
-  background-image: radial-gradient(ellipse at 50% 20%, #7E1527 0%, #460B15 100%) !important;
-  border-color: #8C192C !important;
+html.theme-red [class*="border-[#22C55E]"] {
+  border-color: #E11D48 !important;
 }
-html.theme-red #hero-banner .hero-texture {
-  opacity: 0.12 !important;
+
+/* Ambient glow & blurs */
+html.theme-red [class*="bg-[#1B6B52]/"],
+html.theme-red [class*="bg-[#34D399]/"] {
+  background-color: rgba(153, 27, 45, 0.25) !important;
 }
-html.theme-red footer {
-  background-color: #230409 !important;
-  border-color: #4A0813 !important;
+
+/* Tailwind Emerald & Green utilities */
+html.theme-red [class*="bg-emerald-"],
+html.theme-red [class*="bg-green-"] {
+  background-color: #FDF2F4 !important;
+  color: #991B2D !important;
+  border-color: #F5D5DB !important;
 }
+html.theme-red [class*="text-emerald-"],
+html.theme-red [class*="text-green-"] {
+  color: #991B2D !important;
+}
+html.theme-red [class*="border-emerald-"],
+html.theme-red [class*="border-green-"] {
+  border-color: #F5D5DB !important;
+}
+html.theme-red [class*="ring-emerald-"],
+html.theme-red [class*="ring-green-"] {
+  --tw-ring-color: #991B2D !important;
+}
+
+/* Footer */
+html.theme-red footer,
+html.theme-red [class*="bg-[#0A1612]"] {
+  background-color: #1A0307 !important;
+  border-color: #38070E !important;
+}
+
 
 
 
