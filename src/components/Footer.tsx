@@ -1,7 +1,7 @@
 import { NavigationTab } from '../types';
 import { PARTNERS, NGO_CONTACT } from '../data/initialData';
 import Logo from './Logo';
-import { MessageSquare, Mail, Phone, MapPin, Globe, Facebook, Instagram, Youtube } from 'lucide-react';
+import { MessageSquare, Mail, MapPin, Globe, Facebook, Instagram, Youtube } from 'lucide-react';
 import AccessibilityMenu from './AccessibilityMenu';
 
 interface FooterProps {
@@ -11,7 +11,27 @@ interface FooterProps {
 
 export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
   return (
-    <footer className="bg-[#0F231D] text-[#D1E0D9] py-12 border-t border-[#1C3B32] font-thaana relative overflow-hidden">
+    <footer className="footer-section bg-[#0F231D] text-[#D1E0D9] py-12 border-t border-[#1C3B32] font-thaana relative overflow-hidden">
+      {/* Layer 1: Islamic Star & Lattice Tessellation Architectural Texture Overlay across entire green footer */}
+      <div 
+        className="footer-texture absolute inset-0 pointer-events-none opacity-[0.16] mix-blend-screen"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23A7F3D0' stroke-width='0.7' fill='none' fill-rule='evenodd'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Cpath d='M30 10l20 20-20 20-20-20z'/%3E%3Cpath d='M0 0l15 15L0 30l30 30 15-15L60 60V0L45 15 30 0z'/%3E%3Ccircle cx='30' cy='30' r='3.5' fill='%23A7F3D0' fill-opacity='0.25'/%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundSize: '48px 48px'
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Layer 2: Tactile Fine Stipple Grain Texture Overlay across entire green footer */}
+      <div 
+        className="footer-texture absolute inset-0 pointer-events-none opacity-[0.08] mix-blend-overlay"
+        style={{
+          backgroundImage: `radial-gradient(circle, #ffffff 1px, transparent 1px)`,
+          backgroundSize: '16px 16px'
+        }}
+        aria-hidden="true"
+      />
+
       {/* Decorative backdrop elements */}
       <div className="absolute top-0 right-1/4 w-96 h-96 rounded-full bg-[#1B6B52]/15 blur-3xl pointer-events-none" />
       <div className="footer-ambient-secondary absolute bottom-0 left-1/4 w-96 h-96 rounded-full bg-[#1B6B52]/10 blur-3xl pointer-events-none" />
@@ -183,7 +203,10 @@ export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
         </div>
 
         {/* BOTTOM SECTION: Copyright & Domain */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#8BAEA0]">
+        <div 
+          id="footer-bottombar"
+          className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#8BAEA0]"
+        >
           <p>
             © {new Date().getFullYear()} ހެޔޮބިންގާ ޖަމްޢިއްޔާ (Heyo Bingaa NGO). ހުރިހާ ޙައްޤެއް ރައްކާތެރިކުރެވިފައި.
           </p>

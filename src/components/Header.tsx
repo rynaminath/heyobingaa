@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { NavigationTab } from '../types';
 import Logo from './Logo';
 import { 
@@ -7,7 +7,6 @@ import {
   X, 
   MessageSquare, 
   Video, 
-  Calendar, 
   Users, 
   BookOpen, 
   Home, 
@@ -15,11 +14,7 @@ import {
   Facebook, 
   Instagram, 
   Youtube, 
-  Mail, 
-  ChevronDown, 
-  Headphones, 
-  GraduationCap, 
-  Sparkles 
+  Mail 
 } from 'lucide-react';
 import { NGO_CONTACT } from '../data/initialData';
 import AccessibilityMenu from './AccessibilityMenu';
@@ -27,16 +22,13 @@ import AccessibilityMenu from './AccessibilityMenu';
 interface HeaderProps {
   currentTab: NavigationTab;
   onSelectTab: (tab: NavigationTab) => void;
-  onSelectProgramCategory?: (category: string) => void;
   onOpenDonateModal: () => void;
 }
 
-export default function Header({ currentTab, onSelectTab, onSelectProgramCategory, onOpenDonateModal }: HeaderProps) {
+export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [programsDropdownOpen, setProgramsDropdownOpen] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Auto-hide menu bar together with top bar after scrolling down, restore smoothly when scrolling up
   useEffect(() => {
@@ -54,7 +46,6 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
       } else if (currentScrollY > lastScrollY && currentScrollY > 70) {
         // User scrolled down -> autohide entire header (menu bar + top bar)
         setHeaderVisible(false);
-        setProgramsDropdownOpen(false);
       } else if (currentScrollY < lastScrollY) {
         // User scrolled back up -> restore entire header smoothly
         setHeaderVisible(true);
@@ -76,54 +67,10 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
     { id: 'volunteer', label: 'ގުޅުއްވުމަށް', icon: <Users className="w-4 h-4" /> }
   ];
 
-  const programSubCategories = [
-    { id: 'all', label: 'ހުރިހާ ޕްރޮގްރާމްތައް', icon: <BookOpen className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: false },
-    { id: 'events-tab', label: 'ދަރުސްތަކާއި ޙަރަކާތްތައް (Dharus & Events)', icon: <Calendar className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: true },
-    { id: 'lectures', label: 'ދަރުސްތަކާއި ސެމިނާރ (Lectures)', icon: <GraduationCap className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: false },
-    { id: 'audiobooks', label: 'އޯޑިއޯ ފޮތްތައް (Audiobooks)', icon: <Headphones className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: false },
-    { id: 'women', label: 'އުޚުތުންނާއި ކަނބަލުންނަށް', icon: <Users className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: false },
-    { id: 'toddlers', label: 'ތުއްތު ކުދިންގެ ބިންގާ', icon: <Sparkles className="w-4 h-4 text-[#1B6B52]" />, isEventsTab: false }
-  ];
-
   const handleNavClick = (tab: NavigationTab) => {
     onSelectTab(tab);
     setMobileMenuOpen(false);
-    setProgramsDropdownOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleSubCategoryClick = (sub: typeof programSubCategories[0] | string) => {
-    if (typeof sub === 'object' && sub.isEventsTab) {
-      handleNavClick('events');
-      return;
-    }
-    const catId = typeof sub === 'string' ? sub : sub.id;
-    if (catId === 'events') {
-      handleNavClick('events');
-      return;
-    }
-    if (onSelectProgramCategory) {
-      onSelectProgramCategory(catId);
-    } else {
-      onSelectTab('programs');
-    }
-    setMobileMenuOpen(false);
-    setProgramsDropdownOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleDropdownEnter = () => {
-    if (dropdownTimeoutRef.current) {
-      clearTimeout(dropdownTimeoutRef.current);
-      dropdownTimeoutRef.current = null;
-    }
-    setProgramsDropdownOpen(true);
-  };
-
-  const handleDropdownLeave = () => {
-    dropdownTimeoutRef.current = setTimeout(() => {
-      setProgramsDropdownOpen(false);
-    }, 200);
   };
 
   return (
@@ -135,9 +82,29 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
       {/* Top Banner Notice: Contact & Social Media */}
       <div 
         id="header-topbar"
-        className="bg-gradient-to-r from-[#0F3528] via-[#1A6850] via-[#20775C] to-[#124536] text-[#EBF5F0] border-b border-[#124335] py-1.5 px-3 sm:px-4 shadow-xs"
+        className="relative overflow-hidden bg-gradient-to-r from-[#0F3528] via-[#1A6850] via-[#20775C] to-[#124536] text-[#EBF5F0] border-b border-[#124335] py-1.5 px-3 sm:px-4 shadow-xs"
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
+        {/* Layer 1: Islamic Star & Lattice Tessellation Texture Overlay */}
+        <div 
+          className="topbar-texture absolute inset-0 pointer-events-none opacity-[0.16] mix-blend-screen"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23A7F3D0' stroke-width='0.7' fill='none' fill-rule='evenodd'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Cpath d='M30 10l20 20-20 20-20-20z'/%3E%3Cpath d='M0 0l15 15L0 30l30 30 15-15L60 60V0L45 15 30 0z'/%3E%3Ccircle cx='30' cy='30' r='3.5' fill='%23A7F3D0' fill-opacity='0.25'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '42px 42px'
+          }}
+          aria-hidden="true"
+        />
+
+        {/* Layer 2: Tactile Fine Stipple Grain Texture Overlay */}
+        <div 
+          className="topbar-texture absolute inset-0 pointer-events-none opacity-[0.08] mix-blend-overlay"
+          style={{
+            backgroundImage: `radial-gradient(circle, #ffffff 1px, transparent 1px)`,
+            backgroundSize: '16px 16px'
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 relative z-10">
           {/* Left / Contact & Social Links */}
           <div className="flex items-center gap-2 sm:gap-4 overflow-x-auto py-0.5 no-scrollbar">
             <a
@@ -202,7 +169,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
               id="topbar-donate-button"
               type="button"
               onClick={() => handleNavClick('donate')}
-              className="group inline-flex items-center gap-1.5 px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-lg bg-[#B83244] hover:bg-[#9A2434] active:bg-[#7E1A27] text-white font-bold text-xs sm:text-sm font-thaana shadow-sm hover:shadow active:scale-95 transition-all duration-200 border border-[#B83244]/40"
+              className="group inline-flex items-center gap-1.5 px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-lg bg-[#B83244] hover:bg-[#9A2434] active:bg-[#7E1A27] text-white font-bold text-xs sm:text-sm font-thaana shadow-sm hover:shadow active:scale-95 transition-all duration-200 border border-[#B83244]/40 cursor-pointer"
             >
               <HeartHandshake className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white group-hover:scale-110 transition-transform shrink-0" />
               <span>އެހީދެއްވުމަށް</span>
@@ -226,73 +193,14 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
             {/* Desktop Navigation Links with Icons (Right-aligned immediately next to logo) */}
             <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
               {navItems.map((item) => {
-                const isActive = item.id === 'programs'
-                  ? (currentTab === 'programs' || currentTab === 'events')
-                  : (currentTab === item.id || (item.id === 'videos' && currentTab === 'media'));
-
-                if (item.id === 'programs') {
-                  return (
-                    <div
-                      key={item.id}
-                      className="relative"
-                      onMouseEnter={handleDropdownEnter}
-                      onMouseLeave={handleDropdownLeave}
-                    >
-                      <button
-                        id={`nav-link-${item.id}`}
-                        type="button"
-                        onClick={() => handleNavClick('programs')}
-                        className={`relative px-3.5 py-2 rounded-xl text-lg font-semibold font-thaana transition-all duration-200 flex items-center gap-2 ${
-                          isActive
-                            ? 'text-[#1B6B52] bg-[#EBF5F0] font-bold shadow-xs'
-                            : 'text-[#556660] hover:text-[#1B6B52] hover:bg-[#EBF5F0]/60'
-                        }`}
-                        aria-expanded={programsDropdownOpen}
-                        aria-haspopup="true"
-                      >
-                        <span className="text-[#1B6B52] shrink-0">{item.icon}</span>
-                        <span>{item.label}</span>
-                        <ChevronDown className={`w-3.5 h-3.5 text-[#556660] transition-transform duration-200 ${programsDropdownOpen ? 'rotate-180 text-[#1B6B52]' : ''}`} />
-                        {isActive && (
-                          <span className="absolute bottom-0.5 left-3.5 right-3.5 h-0.5 bg-[#1B6B52] rounded-full" />
-                        )}
-                      </button>
-
-                      {/* Programs Dropdown Menu (Desktop) */}
-                      {programsDropdownOpen && (
-                        <div
-                          className="absolute top-full right-0 mt-1 w-68 bg-white rounded-2xl shadow-xl border border-[#E5ECE8] py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
-                          onMouseEnter={handleDropdownEnter}
-                          onMouseLeave={handleDropdownLeave}
-                        >
-                          <div className="px-3.5 py-1.5 border-b border-[#E5ECE8]/60 mb-1 text-xs font-bold text-[#556660]">
-                            ޕްރޮގްރާމްތަކާއި ދަރުސްތައް
-                          </div>
-                          {programSubCategories.map((sub) => (
-                            <button
-                              key={sub.id}
-                              type="button"
-                              onClick={() => handleSubCategoryClick(sub)}
-                              className="w-full px-3.5 py-2.5 text-right text-base font-semibold font-thaana text-[#1C2622] hover:bg-[#EBF5F0] hover:text-[#1B6B52] flex items-center justify-between transition-colors"
-                            >
-                              <div className="flex items-center gap-2.5">
-                                {sub.icon}
-                                <span>{sub.label}</span>
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                }
+                const isActive = item.id === currentTab || (item.id === 'videos' && currentTab === 'media');
 
                 return (
                   <button
                     key={item.id}
                     id={`nav-link-${item.id}`}
                     onClick={() => handleNavClick(item.id)}
-                    className={`relative px-3.5 py-2 rounded-xl text-lg font-semibold font-thaana transition-all duration-200 flex items-center gap-2 ${
+                    className={`relative px-3.5 py-2 rounded-xl text-lg font-semibold font-thaana transition-all duration-200 flex items-center gap-2 cursor-pointer ${
                       isActive
                         ? 'text-[#1B6B52] bg-[#EBF5F0] font-bold shadow-xs'
                         : 'text-[#556660] hover:text-[#1B6B52] hover:bg-[#EBF5F0]/60'
@@ -309,72 +217,43 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
             </nav>
           </div>
 
-          {/* Left Side (RTL End): Mobile Hamburger */}
-          <div className="flex items-center gap-2">
-            <div className="flex items-center lg:hidden">
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-xl text-[#1C2622] hover:bg-[#EBF5F0] focus:outline-none"
-                aria-label="މެނޫ ހުޅުއްވާ"
-              >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
+          {/* Left Side: CTAs & Mobile Hamburger Toggle */}
+          <div className="flex items-center gap-3">
+            {/* Desktop Donate Button */}
+            <button
+              type="button"
+              onClick={onOpenDonateModal}
+              className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1B6B52] hover:bg-[#145541] active:bg-[#0E3D2F] text-white font-bold font-thaana text-sm shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-95"
+            >
+              <HeartHandshake className="w-4 h-4 text-[#A7F3D0]" />
+              <span>އެހީތެރިވެދެއްވާ (Donate)</span>
+            </button>
+
+            {/* Mobile Menu Hamburger Toggle */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-xl text-[#1C2622] hover:bg-[#EBF5F0] transition-colors cursor-pointer"
+              aria-label="ތަފްޞީލީ މެނޫ"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-[#E5ECE8] px-4 pt-3 pb-6 space-y-3 shadow-xl animate-in slide-in-from-top-4 duration-200">
-          <div className="grid grid-cols-1 gap-1">
+        <div className="lg:hidden bg-white border-b border-[#E5ECE8] px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top duration-200 shadow-xl max-h-[calc(100vh-100px)] overflow-y-auto">
+          <div className="flex flex-col gap-1">
             {navItems.map((item) => {
-              const isActive = item.id === 'programs'
-                ? (currentTab === 'programs' || currentTab === 'events')
-                : (currentTab === item.id || (item.id === 'videos' && currentTab === 'media'));
-              
-              if (item.id === 'programs') {
-                return (
-                  <div key={item.id} className="space-y-1">
-                    <button
-                      onClick={() => handleNavClick(item.id)}
-                      className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-right font-thaana text-lg font-semibold transition-colors ${
-                        isActive
-                          ? 'bg-[#EBF5F0] text-[#1B6B52] font-bold border-r-4 border-[#1B6B52]'
-                          : 'text-[#556660] hover:bg-[#FAFCFB]'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="text-[#1B6B52]">{item.icon}</span>
-                        <span>{item.label}</span>
-                      </div>
-                      <ChevronDown className="w-4 h-4 text-[#556660]" />
-                    </button>
-
-                    {/* Mobile Programs Sub-Categories */}
-                    <div className="pr-8 pl-2 py-1 space-y-1 bg-[#FAFCFB] rounded-xl border border-[#E5ECE8]">
-                      {programSubCategories.map((sub) => (
-                        <button
-                          key={sub.id}
-                          type="button"
-                          onClick={() => handleSubCategoryClick(sub)}
-                          className="w-full flex items-center gap-2.5 py-2 text-right text-base font-thaana text-[#556660] hover:text-[#1B6B52]"
-                        >
-                          <span className="shrink-0">{sub.icon}</span>
-                          <span>{sub.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                );
-              }
+              const isActive = item.id === currentTab || (item.id === 'videos' && currentTab === 'media');
 
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-right font-thaana text-lg font-semibold transition-colors ${
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-right font-thaana text-lg font-semibold transition-colors cursor-pointer ${
                     isActive
                       ? 'bg-[#EBF5F0] text-[#1B6B52] font-bold border-r-4 border-[#1B6B52]'
                       : 'text-[#556660] hover:bg-[#FAFCFB]'
@@ -432,7 +311,7 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
               <button
                 type="button"
                 onClick={() => handleNavClick('donate')}
-                className="w-full py-3 rounded-xl bg-[#B83244] hover:bg-[#9A2434] text-white font-bold font-thaana text-base shadow-md flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-[#B83244] hover:bg-[#9A2434] text-white font-bold font-thaana text-base shadow-md flex items-center justify-center gap-2 cursor-pointer"
               >
                 <HeartHandshake className="w-4 h-4" />
                 <span>އެހީދެއްވުމަށް (Donate)</span>
@@ -445,19 +324,13 @@ export default function Header({ currentTab, onSelectTab, onSelectProgramCategor
                     setMobileMenuOpen(false);
                     onOpenDonateModal();
                   }}
-                  className="text-[#1B6B52] font-semibold hover:underline"
+                  className="text-[#1B6B52] font-semibold hover:underline cursor-pointer"
                 >
                   ސްލިޕް ފޮނުއްވުމަށް (Viber)
                 </button>
-                <a
-                  href={NGO_CONTACT.viberLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-[#7360F2] font-mono font-semibold"
-                >
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  <span dir="ltr">{NGO_CONTACT.viberNumberFormatted}</span>
-                </a>
+                <span dir="ltr" className="font-mono text-[#556660]">
+                  {NGO_CONTACT.viberNumberFormatted}
+                </span>
               </div>
             </div>
           </div>

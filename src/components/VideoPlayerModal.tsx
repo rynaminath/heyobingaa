@@ -14,8 +14,10 @@ export default function VideoPlayerModal({ media, onClose }: VideoPlayerModalPro
 
   if (!media) return null;
 
-  const youtubeWatchUrl = media.id === 'media-1' || media.videoEmbedUrl?.includes('3Q_Za7OtXNA')
-    ? 'https://www.youtube.com/watch?v=3Q_Za7OtXNA'
+  const videoIdMatch = media.videoEmbedUrl?.match(/embed\/([a-zA-Z0-9_-]{11})/);
+  const videoId = videoIdMatch ? videoIdMatch[1] : (media.id.startsWith('vid-') ? media.id.replace('vid-', '') : '');
+  const youtubeWatchUrl = videoId
+    ? `https://www.youtube.com/watch?v=${videoId}`
     : 'https://www.youtube.com/@heyobingaa';
 
   const handleShare = async () => {

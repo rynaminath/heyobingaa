@@ -3,6 +3,7 @@ import { NavigationTab, MediaItem, EventItem, ProgramItem } from './types';
 import { AuthProvider } from './context/AuthContext';
 import { AccessibilityProvider } from './context/AccessibilityContext';
 import { subscribeToEvents, subscribeToMedia, subscribeToPrograms } from './services/firestoreService';
+import { INITIAL_MEDIA } from './data/initialData';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -22,13 +23,12 @@ import AdminPage from './pages/AdminPage';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<NavigationTab>('home');
-  const [selectedProgramCategory, setSelectedProgramCategory] = useState<string | null>(null);
   const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
   const [activeMediaModal, setActiveMediaModal] = useState<MediaItem | null>(null);
 
-  // Pure Firestore real-time state driven by database
+  // Pure Firestore real-time state driven by database with complete initial channel media
   const [events, setEvents] = useState<EventItem[]>([]);
-  const [mediaList, setMediaList] = useState<MediaItem[]>([]);
+  const [mediaList, setMediaList] = useState<MediaItem[]>(INITIAL_MEDIA);
   const [programs, setPrograms] = useState<ProgramItem[]>([]);
 
   // Live Firebase Subscriptions
@@ -37,7 +37,15 @@ export default function App() {
       setEvents(data || []);
     });
     const unsubMedia = subscribeToMedia((data) => {
-      setMediaList(data || []);
+      if (data && data.length >= INITIAL_MEDIA.length) {
+        setMediaList(data);
+      } else if (data && data.length > 0) {
+        const ids = new Set(data.map((d) => d.id));
+        const combined = [...data, ...INITIAL_MEDIA.filter((m) => !ids.has(m.id))];
+        setMediaList(combined);
+      } else {
+        setMediaList(INITIAL_MEDIA);
+      }
     });
     const unsubPrograms = subscribeToPrograms((data) => {
       setPrograms(data || []);
@@ -215,11 +223,6 @@ export default function App() {
     setActiveMediaModal(null);
   };
 
-  const handleSelectProgramCategory = (cat: string) => {
-    setSelectedProgramCategory(cat);
-    handleNavigate('programs');
-  };
-
   const featuredEvent = events.find((e) => e.isFeatured) || events[0] || null;
 
   return (
@@ -229,11 +232,7 @@ export default function App() {
         {/* 1. Global Navigation Header */}
         <Header
           currentTab={currentTab}
-          onSelectTab={(tab) => {
-            setSelectedProgramCategory(null);
-            handleNavigate(tab);
-          }}
-          onSelectProgramCategory={handleSelectProgramCategory}
+          onSelectTab={handleNavigate}
           onOpenDonateModal={handleOpenDonateModal}
         />
 
@@ -268,9 +267,6 @@ export default function App() {
             <ProgramsPage
               onNavigate={handleNavigate}
               onOpenDonateModal={handleOpenDonateModal}
-              initialCategory={selectedProgramCategory}
-              onSelectCategory={(cat) => setSelectedProgramCategory(cat)}
-              programs={programs}
             />
           )}
 

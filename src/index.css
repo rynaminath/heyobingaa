@@ -252,6 +252,13 @@ html.theme-dark #header-topbar {
   background: linear-gradient(90deg, #08120F 0%, #122921 50%, #0A1713 100%) !important;
   border-color: #17332A !important;
 }
+html.theme-dark #footer-bottombar {
+  background: linear-gradient(90deg, #060D0B 0%, #0E1D19 50%, #08120F 100%) !important;
+  border-color: #17332A !important;
+}
+html.theme-dark .footer-texture {
+  opacity: 0.1 !important;
+}
 
 /* Hero Section Ambient Lights */
 html.theme-dark .hero-ambient-primary {
@@ -470,6 +477,15 @@ html.theme-blue #header-topbar {
   background: linear-gradient(90deg, #0B2238 0%, #1E5B94 50%, #103353 100%) !important;
   border-color: #12395E !important;
 }
+html.theme-blue #footer-bottombar {
+  background: linear-gradient(90deg, #091D30 0%, #153F67 50%, #0C2339 100%) !important;
+  border-color: #1B4E7E !important;
+}
+html.theme-blue .topbar-texture,
+html.theme-blue .bottombar-texture,
+html.theme-blue .footer-texture {
+  filter: hue-rotate(60deg) saturate(1.2) !important;
+}
 
 /* Hero Section Ambient Lights */
 html.theme-blue .hero-ambient-primary {
@@ -675,6 +691,15 @@ html.theme-red header {
 html.theme-red #header-topbar {
   background: linear-gradient(90deg, #38060E 0%, #991B2D 50%, #4A0B14 100%) !important;
   border-color: #5C0E1A !important;
+}
+html.theme-red #footer-bottombar {
+  background: linear-gradient(90deg, #2A050A 0%, #570D18 50%, #35080E 100%) !important;
+  border-color: #6E121E !important;
+}
+html.theme-red .topbar-texture,
+html.theme-red .bottombar-texture,
+html.theme-red .footer-texture {
+  filter: hue-rotate(190deg) saturate(1.4) !important;
 }
 
 /* Hero Section Ambient Lights */

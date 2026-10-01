@@ -120,18 +120,19 @@ export default function HeroSlideshowBanner() {
       id="hero-banner"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="hero-section group relative overflow-hidden text-white w-full h-[320px] sm:h-[360px] lg:h-[400px] border-b border-[#286352] shadow-xl transition-all duration-500 ease-out select-none"
+      className="hero-section group relative overflow-hidden text-white w-full h-[352px] sm:h-[400px] lg:h-[440px] border-b border-[#286352] shadow-xl transition-all duration-500 ease-out select-none"
       style={{
         backgroundColor: '#1E5243',
         backgroundImage: 'radial-gradient(ellipse at 50% 20%, #266352 0%, #1B4A3C 100%)'
       }}
     >
-      {/* Layer 1: Slideshow images spanning 98% (1% green border on both sides) with 1.5% soft fade into textured green background */}
+      {/* Layer 1: Slideshow images flush to left (no green on left), fading on right edge into slim green background */}
+      {/* NO texture over the image */}
       <div
-        className="absolute inset-y-0 left-[1%] w-[98%] overflow-hidden pointer-events-none z-0"
+        className="absolute inset-y-0 left-0 w-[97%] sm:w-[97.2%] overflow-hidden pointer-events-none z-0"
         style={{
-          WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 1.5%, rgba(0,0,0,1) 98.5%, rgba(0,0,0,0) 100%)',
-          maskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 1.5%, rgba(0,0,0,1) 98.5%, rgba(0,0,0,0) 100%)'
+          WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 98%, rgba(0,0,0,0) 100%)',
+          maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 98%, rgba(0,0,0,0) 100%)'
         }}
       >
         {SLIDES.map((slide, idx) => {
@@ -170,29 +171,37 @@ export default function HeroSlideshowBanner() {
         })}
       </div>
 
-      {/* Layer 2: Islamic Star & Lattice Tessellation Architectural Texture Overlay across entire banner */}
+      {/* Layer 2: Texture ONLY on the slim right side green area (33% of previous width) - NOT over the image */}
       <div 
-        className="hero-texture absolute inset-0 pointer-events-none opacity-[0.18] mix-blend-screen transition-transform duration-700 ease-out group-hover:scale-105 transform-gpu z-1"
+        className="absolute inset-y-0 right-0 w-[3.5%] sm:w-[3.3%] pointer-events-none z-1 overflow-hidden"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23A7F3D0' stroke-width='0.7' fill='none' fill-rule='evenodd'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Cpath d='M30 10l20 20-20 20-20-20z'/%3E%3Cpath d='M0 0l15 15L0 30l30 30 15-15L60 60V0L45 15 30 0z'/%3E%3Ccircle cx='30' cy='30' r='3.5' fill='%23A7F3D0' fill-opacity='0.25'/%3E%3C/g%3E%3C/svg%3E")`,
-          backgroundSize: '48px 48px'
+          WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%)',
+          maskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%)'
         }}
-        aria-hidden="true"
-      />
+      >
+        {/* Islamic Star & Lattice Tessellation Architectural Texture Overlay */}
+        <div 
+          className="hero-texture absolute inset-0 opacity-[0.24] mix-blend-screen transition-transform duration-700 ease-out group-hover:scale-105 transform-gpu"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23A7F3D0' stroke-width='0.7' fill='none' fill-rule='evenodd'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Cpath d='M30 10l20 20-20 20-20-20z'/%3E%3Cpath d='M0 0l15 15L0 30l30 30 15-15L60 60V0L45 15 30 0z'/%3E%3Ccircle cx='30' cy='30' r='3.5' fill='%23A7F3D0' fill-opacity='0.25'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '36px 36px'
+          }}
+          aria-hidden="true"
+        />
 
-      {/* Layer 3: Tactile Fine Stipple Grain Texture Overlay across entire banner */}
-      <div 
-        className="hero-texture absolute inset-0 pointer-events-none opacity-[0.10] mix-blend-overlay transition-transform duration-700 ease-out group-hover:scale-103 transform-gpu z-1"
-        style={{
-          backgroundImage: `radial-gradient(circle, #ffffff 1px, transparent 1px)`,
-          backgroundSize: '16px 16px'
-        }}
-        aria-hidden="true"
-      />
+        {/* Tactile Fine Stipple Grain Texture Overlay */}
+        <div 
+          className="hero-texture absolute inset-0 opacity-[0.14] mix-blend-overlay transition-transform duration-700 ease-out group-hover:scale-103 transform-gpu"
+          style={{
+            backgroundImage: `radial-gradient(circle, #ffffff 1px, transparent 1px)`,
+            backgroundSize: '16px 16px'
+          }}
+          aria-hidden="true"
+        />
+      </div>
 
-      {/* Layer 4: Subtle ambient theme glow lights */}
-      <div className="hero-ambient-primary absolute top-0 right-1/4 w-[380px] h-[380px] rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out group-hover:scale-110 z-1" />
-      <div className="hero-ambient-secondary absolute bottom-0 left-10 w-[340px] h-[340px] rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out group-hover:scale-110 z-1" />
+      {/* Layer 3: Subtle ambient theme glow light on the right */}
+      <div className="hero-ambient-primary absolute top-0 right-0 w-[280px] h-[280px] rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out group-hover:scale-110 z-1" />
 
       {/* Minimalist Slide Controls Bar (Bottom Center) - No captions or text overlays */}
       <div className="absolute bottom-3.5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/55 backdrop-blur-md border border-white/20 shadow-xl text-white">
