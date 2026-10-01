@@ -140,3 +140,14 @@ export interface HeroSlide {
   secondaryCtaLink?: NavigationTab;
   order?: number;
 }
+
+export interface RecordedActivityItem {
+  dates: string[];
+  description: string;
+}
+
+export interface RecordedActivitySection {
+  code: string;
+  category: string;
+  items: RecordedActivityItem[];
+}

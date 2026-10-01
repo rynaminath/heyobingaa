@@ -276,6 +276,9 @@ html.theme-dark #hero-banner {
 html.theme-dark #hero-banner .hero-texture {
   opacity: 0.1 !important;
 }
+html.theme-dark .hero-text-overlay {
+  background: linear-gradient(to left, rgba(11, 20, 18, 0.95), rgba(11, 20, 18, 0.65), transparent) !important;
+}
 
 /* ALL Gradient Header Banners & Boxes (About, Events, Programs, Volunteer, Donate, Media, Mission Card, Modals) */
 html.theme-dark [class*="from-[#134e3e]"],
@@ -492,6 +495,9 @@ html.theme-blue #hero-banner .hero-texture {
   filter: hue-rotate(60deg) saturate(1.2) !important;
   opacity: 0.12 !important;
 }
+html.theme-blue .hero-text-overlay {
+  background: linear-gradient(to left, rgba(19, 57, 92, 0.95), rgba(19, 57, 92, 0.65), transparent) !important;
+}
 
 /* ALL Gradient Header Banners & Boxes (About, Events, Programs, Volunteer, Donate, Media, Mission Card, Modals) */
 html.theme-blue [class*="from-[#134e3e]"],
@@ -694,6 +700,9 @@ html.theme-red #hero-banner {
 html.theme-red #hero-banner .hero-texture {
   filter: hue-rotate(190deg) saturate(1.4) !important;
   opacity: 0.12 !important;
+}
+html.theme-red .hero-text-overlay {
+  background: linear-gradient(to left, rgba(77, 9, 19, 0.95), rgba(77, 9, 19, 0.65), transparent) !important;
 }
 
 /* ALL Gradient Header Banners & Boxes (About, Events, Programs, Volunteer, Donate, Media, Mission Card, Modals) */

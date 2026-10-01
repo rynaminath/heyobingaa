@@ -1,188 +1,41 @@
 import { EventItem, MediaItem, NavigationTab } from '../types';
-import { BANK_ACCOUNTS, BANK_GROUPS, PARTNERS } from '../data/initialData';
+import { BANK_GROUPS } from '../data/initialData';
 import BankCard from '../components/BankCard';
 import HeroSlideshowBanner from '../components/HeroSlideshowBanner';
 import logoImg from '../images/logo.png';
 import { 
-  Calendar, 
-  MapPin, 
-  Clock, 
   Tv, 
   HeartHandshake, 
   ArrowLeft, 
   Sparkles, 
-  Play, 
-  ShieldCheck, 
   Users, 
-  CheckCircle2, 
-  ExternalLink 
+  CheckCircle2,
+  BookOpen
 } from 'lucide-react';
 
 interface HomePageProps {
   onNavigate: (tab: NavigationTab) => void;
   onOpenDonateModal: () => void;
-  onSelectMedia: (media: MediaItem) => void;
+  onSelectMedia?: (media: MediaItem) => void;
   featuredEvent?: EventItem | null;
-  featuredMediaList: MediaItem[];
+  featuredMediaList?: MediaItem[];
 }
 
 export default function HomePage({
   onNavigate,
-  onOpenDonateModal,
-  onSelectMedia,
-  featuredEvent,
-  featuredMediaList
+  onOpenDonateModal
 }: HomePageProps) {
-  const deafAccessibleMedia = featuredMediaList.find((m) => m.isDeafAccessible) || featuredMediaList[0] || null;
 
   return (
     <div className="space-y-16 pb-12 font-thaana">
-      {/* 1. HERO SLIDESHOW BANNER: 80% height, left flush fading image, right vertically-centered caption, 8s interval & 3s fade, upload modal */}
-      <HeroSlideshowBanner
-        onNavigate={onNavigate}
-        onOpenDonateModal={onOpenDonateModal}
-      />
-
-      {/* 2. DUAL SPOTLIGHT: Upcoming Flagship Event & Deaf-Accessible Media */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          {/* Right Column: Upcoming Flagship Event */}
-          <div className="lg:col-span-7 bg-[#13382E]/95 border border-[#2B705C] rounded-3xl p-6 sm:p-7 shadow-xl backdrop-blur-sm space-y-4 text-right flex flex-col justify-between hover:border-[#3CA88B] transition-all">
-            <div className="space-y-3">
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#235848] pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-md bg-[#1B6B52] text-white font-bold text-xs">
-                    ކުރިއަށް އޮތް އިސް ޙަރަކާތް
-                  </span>
-                  <span className="text-xs text-[#D1E0D9]">
-                    {featuredEvent?.partnerOrganization || 'މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް & ދާރިސް ޓީވީ ގުޅިގެން'}
-                  </span>
-                </div>
-                <span className="text-xs font-mono text-[#D1E0D9]">
-                  {featuredEvent?.time}
-                </span>
-              </div>
-
-              <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white leading-tight">
-                  ދަރުސް: "{featuredEvent?.title || 'އިސްލާމީ ހޭލުންތެރިކަމާއި އޯގާތެރި މުޖުތަމަޢެއް'}"
-                </h3>
-                <p className="text-sm font-semibold text-[#A7F3D0] mt-1">
-                  ވާހަކަދައްކަވަނީ: {featuredEvent?.speaker || 'ހެޔޮބިންގާ ޢިލްމީ ޓީމު'}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#D1E0D9] pt-1">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-[#A7F3D0] shrink-0" />
-                  <span>{featuredEvent?.venue || 'މާލެ'}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-[#A7F3D0] shrink-0" />
-                  <span>{featuredEvent?.dayText || 'ކުރިއަށް އޮތް ހުކުރު ދުވަސް'}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-[#A7F3D0] shrink-0" />
-                  <span>ވަގުތު: {featuredEvent?.time || '20:30'}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Tv className="w-4 h-4 text-[#A7F3D0] shrink-0" />
-                  <span>{featuredEvent?.broadcast || 'ދާރިސް ޓީވީ އަދި ޔޫޓިއުބް ލައިވް'}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-[#235848]">
-              <button
-                type="button"
-                onClick={() => onNavigate('events')}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1B6B52] hover:bg-[#145541] text-white font-bold text-xs transition-all shadow-md"
-              >
-                <span>ދަރުހުގެ ތަފްޞީލު ބައްލަވާ</span>
-                <ArrowLeft className="w-3.5 h-3.5" />
-              </button>
-
-              <button
-                type="button"
-                onClick={onOpenDonateModal}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-xs transition-colors"
-              >
-                <HeartHandshake className="w-3.5 h-3.5 text-[#A7F3D0]" />
-                <span>އިވެންޓަށް އެހީވެލައްވާ</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Left Column: Featured Dhaaris TV Deaf-Accessible Video */}
-          <div className="lg:col-span-5 bg-[#13382E]/95 border border-[#2B705C] rounded-3xl p-6 sm:p-7 shadow-xl backdrop-blur-sm space-y-4 text-right flex flex-col justify-between hover:border-[#3CA88B] transition-all">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#1B6B52] animate-pulse" />
-                  <span className="text-xs font-bold text-[#A7F3D0] font-latin">DHAARIS TV × HEYO BINGAA</span>
-                </div>
-                <span className="px-3 py-1 rounded-full bg-[#1B6B52] text-white text-xs font-bold shadow-xs">
-                  އިޝާރާތުގެ ބަހުރުވަ
-                </span>
-              </div>
-
-              {deafAccessibleMedia ? (
-                <div 
-                  onClick={() => onSelectMedia(deafAccessibleMedia)}
-                  className="relative aspect-video rounded-2xl overflow-hidden cursor-pointer group shadow-lg border border-[#234A3E]"
-                >
-                  <img
-                    src={deafAccessibleMedia.thumbnailUrl}
-                    alt={deafAccessibleMedia.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-between p-3.5">
-                    <span className="self-start px-2 py-0.5 rounded bg-black/60 text-xs text-white font-mono">
-                      {deafAccessibleMedia.duration}
-                    </span>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#1B6B52] hover:bg-[#145541] text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform shrink-0">
-                        <Play className="w-4 h-4 fill-current translate-x-0.5" />
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs text-[#A7F3D0] font-semibold">{deafAccessibleMedia.series}</p>
-                        <h4 className="text-xs sm:text-sm font-bold text-white line-clamp-1">{deafAccessibleMedia.title}</h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : null}
-
-              <p className="text-xs sm:text-sm text-[#D1E0D9] leading-relaxed line-clamp-2">
-                ދާރިސް ޓީވީއާ ގުޅިގެން، ރާއްޖޭގެ އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނާއި ފަރާތްތަކަށް އިސްލާމީ ޢިލްމާއި ތަރުބިއްޔަތު އިޝާރާތުގެ ބަހުރުވައިން ފޯރުކޮށްދިނުމުގެ މުހިންމު ސިލްސިލާ.
-              </p>
-            </div>
-
-            <div className="pt-2 flex items-center justify-between border-t border-[#234A3E]">
-              <span className="text-[#A7F3D0] text-xs">
-                ތަރުޖަމާ: {deafAccessibleMedia?.interpreter || 'ރަސްމީ ސައިން ޓީމު'}
-              </span>
-              <button
-                type="button"
-                onClick={() => onNavigate('videos')}
-                className="text-xs text-[#A7F3D0] hover:text-white underline underline-offset-4 font-bold"
-              >
-                ހުރިހާ ވީޑިއޯއެއް ބައްލަވާ →
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 1. HERO SLIDESHOW BANNER */}
+      <HeroSlideshowBanner />
 
       {/* 2. ABOUT SNIPPET: Sisters-led NGO with 13+ years community contribution */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-3xl p-6 sm:p-10 border border-[#E2E9E5] shadow-xs">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8 space-y-4 text-right">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#EBF5F0] text-[#1B6B52] text-xs font-bold border border-[#C8E0D5]">
-                <ShieldCheck className="w-4 h-4 text-[#1B6B52]" />
-                <span>ޖަމިއްޔާގެ އަސާސީ ވަނަވަރު</span>
-              </div>
               <h2 className="text-2xl sm:text-3xl font-bold text-[#1C2622] tracking-tight">
                 <span dir="ltr" className="inline-block font-mono">13+</span> އަހަރުގެ މައިދާނީ ޚިދުމަތް، ރަސްމީ ބިންގަލެއްގެ މަތީގައި
               </h2>
@@ -224,7 +77,7 @@ export default function HomePage({
                 <img src={logoImg} alt="Logo" className="w-8 h-8 object-contain brightness-110" />
               </div>
               <p className="text-base sm:text-lg font-bold leading-relaxed">
-                "ހެޔޮ ޖީލެއް ބިނާކުރުމާއި، ހެޔޮލަފާ މުޖުތަމަޢެއް ޤާއިމުކުރުމަށްޓަކައި އިޖުތިމާޢީ، ތަޢުލީމީ، ދީނީ، އަދި ތަރައްޤީގެ މަސައްކަތްތައް ކުރުން."
+                "މި ޖަމިއްޔާގެ މަޤްޞަދަކީ އިޖުތިމާއީ، ޢިލްމީ، ދީނީ، ތަރުބަވީ އަދި ފަންނީ ރަނގަޅު ޖީލެއް އުފައްދާ ހެޔޮ މުޖުތަމައުއެއް ބިނާކުރުމަށް މަސައްކަތް ކުރުމެވެ."
               </p>
               <div className="pt-2 border-t border-white/20 flex items-center justify-between text-xs text-[#EBF5F0]">
                 <span>ރަޖިސްޓްރީ ނަންބަރު: CR/12/2024</span>
@@ -248,13 +101,13 @@ export default function HomePage({
             <div className="text-right space-y-2">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FDF1F2] text-[#B83244] text-xs font-bold border border-[#F7D0D4]">
                 <HeartHandshake className="w-4 h-4 text-[#B83244]" />
-                <span>އެހީތެރިކަމުގެ ގޮވާލުން</span>
+                <span>އެހީތެރިވުމަށް</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-bold text-[#1C2622]">
                 ދީނީ އަދި އިޖުތިމާޢީ ޕްރޮގްރާމްތަކަށް ޞަދަޤާތް ކުރައްވާ
               </h3>
               <p className="text-xs sm:text-sm text-[#556660] max-w-xl leading-relaxed">
-                ހެޔޮބިންގާގެ ޙަރަކާތްތައް ހިންގުމަށް ބޭނުންވާ ފައިސާ ހޯދަނީ ޢާންމު ހެޔޮއެދޭ ފަރާތްތަކުގެ ދީލަތި އެހީއިންނެވެ. ބޭންކް އެކައުންޓަށް ޖަމާކުރެއްވުމަށްފަހު ފަސޭހައިން ސްލިޕް އަޕްލޯޑް ކުރައްވާށެވެ.
+                މައިގަނޑު ގޮތެއްގައި ހެޔޮބިންގާގެ ހަރަކާތްތައް ހިންގަނީ ޢާންމުންނާއި ހެޔޮ އެދޭ ފަރާތްތަކުގެ ދީލަތި އެހީ އިންނެވެ.
               </p>
             </div>
 
@@ -306,81 +159,57 @@ export default function HomePage({
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1: Sisters - Soft Green */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Area 1: Sisters Programs */}
           <div className="bg-white rounded-2xl p-6 border border-[#E2E9E5] shadow-xs space-y-3 text-right hover:border-[#1B6B52]/40 transition-colors">
             <div className="w-10 h-10 rounded-xl bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center">
               <Users className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-bold text-[#1C2622]">
-              ކަނބަލުންގެ މުރާޖަޢާ ވޯކްޝޮޕްތައް
+            <h4 className="text-base font-bold text-[#1C2622] leading-snug">
+              އުޚްތުންނަށް  ޚާއްސަ  ކުރެވޭ  ޕްރޮގްރާމްތައް
             </h4>
             <p className="text-xs text-[#556660] leading-relaxed">
-              އާދަކާދައިގެ ތަޤްރީރުތަކާ ޚިލާފަށް، އިންޓްރެކްޓިވް ގޮތެއްގައި ކަނބަލުންގެ ނަފްސާނީ އަދި އިސްލާމީ ތަރުބިއްޔަތު ހަރުދަނާކުރުމުގެ ސެޝަންތައް.
+             އުޚްތުންގެ  ނަފްސާނީ  އަދި ޖިސްމާނީ  ދުޅަހެޔޮކަމާއި  ފަންނީ  ހުނަރުތައް  ތަރައްޤީ  ކޮށް، ދީނީ  ހޭލުންތެރިކަން  އިތުރުކުރުމަށް  ހިންގޭ  އިންޓަރެކްޓިވް  ޕްރޮގްރާމްތައް
             </p>
           </div>
 
-          {/* Card 2: Toddlers - Soft Red */}
+          {/* Area 2: Kids & Youth Programs */}
           <div className="bg-white rounded-2xl p-6 border border-[#E2E9E5] shadow-xs space-y-3 text-right hover:border-[#B83244]/40 transition-colors">
             <div className="w-10 h-10 rounded-xl bg-[#FDF1F2] text-[#B83244] flex items-center justify-center">
               <Sparkles className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-bold text-[#1C2622]">
-              ތުއްތު ކުދިންގެ އިސްލާމީ ބިންގާ
+            <h4 className="text-base font-bold text-[#1C2622] leading-snug">
+              ކުޑަކުދިންނާއި  ފުރާވަރު  ކުދިންނަށް  އަމާޒު  ކުރެވޭ  ޕްރޮގްރާމްތައް
             </h4>
             <p className="text-xs text-[#556660] leading-relaxed">
-              3 އަހަރާއި 7 އަހަރާ ދެމެދުގެ ކުދިންނަށް ކުޅިވަރާއި ވާހަކަތަކުގެ ޒަރީޢާއިން އިސްލާމީ ރިވެތި އަޚްލާޤާއި ތައުޙީދު އުނގަންނައިދިނުން.
+             ކުޑަކުދިންނާއި  ފުރާވަރުގެ  ކުދިން  ގަޔާވާނެ  ފަދަ  މައޫޟޫއުތަކަށް  އިންޓަރރެކްޓިވްކޮށް ހިންގޭ  ދީނީ  އަދި  އިޖްތިމާޢީ  ތަރުބަވީ  ޕްރޮގްރާމްތައް
             </p>
           </div>
 
-          {/* Card 3: Deaf Community - Soft Blue */}
+          {/* Area 3: Deaf & Blind Special Needs Community */}
           <div className="bg-white rounded-2xl p-6 border border-[#E2E9E5] shadow-xs space-y-3 text-right hover:border-[#255D96]/40 transition-colors">
             <div className="w-10 h-10 rounded-xl bg-[#EDF4FC] text-[#255D96] flex items-center justify-center">
               <Tv className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-bold text-[#1C2622]">
-              އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކަށް ދާރިސް ޓީވީ ޕްރޮގްރާމްތައް
+            <h4 className="text-base font-bold text-[#1C2622] leading-snug">
+              އަޑުއިވުމާއި  ފެނުމުން  މަހްރޫމްވެފައިވާ  ޚާއްސަ  އެހީއަށް  ބޭނުންވާ  ފަރާތްތަކަށް  ހިންގޭ  ޕްރޮގްރާމްތައް
             </h4>
-            <p className="text-xs sm:text-sm text-[#556660] leading-relaxed">
-              އިޝާރާތުގެ ބަހުރުވައިން ދީނީ ޢިލްމު ގެނެސްދިނުމަށް ޚާއްޞަ ޓީވީ ސީރީޒްތައް ދާރިސް ޓީވީއާ ގުޅިގެން އުފެއްދުން.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. PARTNER NETWORK LOGOS / CARDS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl p-8 border border-[#E2E9E5] shadow-xs text-center space-y-6">
-          <div>
-            <span className="text-xs font-bold text-[#556660] uppercase tracking-wider block">
-              ގުޅިގެން މަސައްކަތްކުރާ އިދާރާތައް
-            </span>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#1C2622] mt-1">
-              ޕާޓްނަރ ނެޓްވަރކް (Collaborating Partners)
-            </h3>
-            <p className="text-xs sm:text-sm text-[#556660] max-w-2xl mx-auto mt-1">
-              ހެޔޮބިންގާއިން ދަނީ ރާއްޖޭގެ ރަސްމީ ވުޒާރާތަކާއި ޚިދުމަތްތެރި ޖަމްޢިއްޔާތަކާ ގުޅިގެން ޤައުމީ ފެންވަރުގައި މަސައްކަތް ކުރަމުންނެވެ.
+            <p className="text-xs text-[#556660] leading-relaxed">
+             ޚާއްސަ  އެހީއަށް  ބޭނުންވާ ފަރާތްތަކުގެ  މެދުގައި  ދީނީ  ހޭލުންތެރިކަން  އިތުރުކުރުމަށް  ތައްޔާރުކުރެވި އިޝާރާތުގެ  ބަހުން ހުށަހަޅައިދީ  ގެނެސްދެވޭ  ޓީވީ  ޕްރޮގްރާމްތަކާއި  އެހެނިހެން  ޕްރޮގްރާމްތައް
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 pt-4">
-            {PARTNERS.map((partner) => (
-              <div
-                key={partner.id}
-                className="p-4 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5] hover:border-[#1B6B52]/40 transition-all text-right flex flex-col justify-between"
-              >
-                <div>
-                  <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-white text-[#556660] border border-[#E2E9E5] inline-block mb-2">
-                    {partner.tag}
-                  </span>
-                  <h4 className="font-bold text-[#1C2622] text-sm">{partner.nameDv}</h4>
-                  <p className="text-xs text-[#556660] font-latin mt-0.5">{partner.nameEn}</p>
-                </div>
-                <p className="text-xs text-[#1B6B52] font-semibold mt-3 pt-2 border-t border-[#E2E9E5]">
-                  {partner.role}
-                </p>
-              </div>
-            ))}
+          {/* Area 4: General Public Lectures */}
+          <div className="bg-white rounded-2xl p-6 border border-[#E2E9E5] shadow-xs space-y-3 text-right hover:border-[#D97706]/40 transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-[#FEF6EE] text-[#D97706] flex items-center justify-center">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <h4 className="text-base font-bold text-[#1C2622] leading-snug">
+              ޢާންމުންނަށް  ބޭއްވޭ  ދަރުސްތައް
+            </h4>
+            <p className="text-xs text-[#556660] leading-relaxed">
+             ޢާންމުރައްޔިތުންގެ  މެދުގައި  ހޭލުންތެރިކަން  އިތުރުކުރުމަށް  ރާވާ  ހިންގޭ  ދީނީ  އަދި  ތަރުބަވީ  ޕްރޮގްރާމްތައް
+            </p>
           </div>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { EventItem, NavigationTab } from '../types';
+import ActivityRecordsTable from '../components/ActivityRecordsTable';
 import { 
   Calendar, 
   MapPin, 
@@ -288,6 +289,11 @@ END:VCALENDAR`;
       </div>
         </>
       )}
+
+      {/* Official Activity Records Log (2024 - 2025) */}
+      <section className="pt-4">
+        <ActivityRecordsTable />
+      </section>
     </div>
   );
 }

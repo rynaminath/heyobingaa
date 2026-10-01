@@ -172,7 +172,7 @@ export default function HeroSlidesModal({
               <span>ހީރޯ ސްލައިޑްޝޯ ބެނާ މެނޭޖަރ</span>
             </div>
             <h3 className="text-lg sm:text-xl font-extrabold text-[#1C2622]">
-              5 ފޮޓޯ އަދި ކެޕްޝަން ބަދަލުކުރެއްވުން
+              ސްލައިޑް ފޮޓޯތައް އަޕްލޯޑްކޮށް ބަދަލުކުރެއްވުން
             </h3>
           </div>
         </div>

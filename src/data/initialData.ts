@@ -1,4 +1,4 @@
-import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg, GalleryItem, HeroSlide } from '../types';
+import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg, GalleryItem, HeroSlide, RecordedActivitySection } from '../types';
 
 export const NGO_CONTACT = {
   viberNumber: '+9607522778',
@@ -534,7 +534,7 @@ export const INITIAL_HERO_SLIDES: HeroSlide[] = [
   {
     id: 'slide-5',
     imageUrl: '/images/gallery%20(3).jpg',
-    badge: 'އެހީތެރިކަމުގެ ގޮވާލުން (Support)',
+    badge: 'އެހީތެރިވުމަށް (Support)',
     title: 'ދީނީ އަދި އިޖުތިމާޢީ މަޝްރޫޢުތަކަށް ޞަދަޤާތް ކުރައްވާ',
     caption: 'ހެޔޮބިންގާގެ އެންމެހައި ދަޢުވަތީ އަދި ތަރުބަވީ މަސައްކަތްތައް ކުރިއަށްދަނީ ތިޔަބޭފުޅުންގެ ދީލަތި އެހީއިންނެވެ. ފަސޭހައިން އެކައުންޓަށް ޖަމާކުރައްވައި ސްލިޕް އަޕްލޯޑް ކުރައްވާ.',
     ctaText: 'އެހީ ފޯރުކޮށްދެއްވާ',
@@ -542,6 +542,57 @@ export const INITIAL_HERO_SLIDES: HeroSlide[] = [
     secondaryCtaText: 'އެކައުންޓް ނަންބަރުތައް',
     secondaryCtaLink: 'donate',
     order: 5
+  }
+];
+
+export const RECORDED_ACTIVITIES: RecordedActivitySection[] = [
+  {
+    code: '6.1',
+    category: '6.1- އިޖްތިމާޢީ ތަރައްޤީގެ ތެރެއިން',
+    items: [
+      {
+        dates: ['23/03/2024', '05/04/2024'],
+        description: 'ރަމަޟާން މަހުގެ ހުކުރު ދުވަސްތަކުގައި "ޔޫން" ޖަމިއްޔާގެ ފަރާތުން އިންތިޒާމު ކުރި "ސެޓް ޔޯރ ގޯލް" ހަރަކާތުގައި ބައިވެރިވުން'
+      }
+    ]
+  },
+  {
+    code: '6.5',
+    category: '6.5 - ހޭލުންތެރިކަން (ދީނީ، ސިއްހީ)',
+    items: [
+      {
+        dates: ['02/04/2024', '04/04/2024', '07/04/2024'],
+        description: 'ރަމަޟާން މަހާއި ގުޅުވައިގެން ކުޑަކުދިންނަށް ޚާއްސަކޮށްގެން "މިނީ މުސްލިމްސް" ގެ ނަމުގައި 3 ދުވަހުގެ ޕްރޮގްރާމެއް ބޭއްވުން'
+      }
+    ]
+  },
+  {
+    code: '6.2',
+    category: '6.2 ތަޢުލީމީ ތަމްރީންގެ ތެރެއިން',
+    items: [
+      {
+        dates: ['15/09/2024'],
+        description: 'އިސްލާމީ ކަންތައްތަކާއި ބެހޭ ވުޒާރާއިން އިންތިޒާމުކުރި ދީނީ އިޖްތިމާޢީ މަސައްކަތްކުރާ ޖަމިއްޔާތަކުގެ އަހަރީ ބައްދަލުވުމުގައި ބައިވެރިވުން'
+      },
+      {
+        dates: ['28/09/2024'],
+        description: 'އިސްލާމީ ކަންތައްތަކާއި ބެހޭ ވުޒާރާއިން އިންތިޒާމުކުރި ދައުވާ ވޯރކްޝޮޕުގައި ބައިވެރިވުން'
+      },
+      {
+        dates: ['23/11/2024'],
+        description: 'އިސްލާމީ ކަންތައްތަކާއި ބެހޭ ވުޒާރާއިން އިންތިޒާމުކުރި ފަތުވާ މަހާސިންތާގައި ބައިވެރިވުން'
+      }
+    ]
+  },
+  {
+    code: '6.8',
+    category: '6.8 މުނާސަބާ ފާހަގަކުރުމާއި އެހެނިހެން ޙަރަކާތްތަކުގެ ތެރެއިން',
+    items: [
+      {
+        dates: ['18/02/2025'],
+        description: 'މިނިސްޓަރ އޮފް ޔޫތު އެންޕަވަމެންޓު،އިންފޮމޭޝަން އެންޑް އާރޓްސް އިން ބޭއްވި މަދަނީ ޖަމިއްޔާތަކުގެ މާހެފުމުގައި ބައިވެރިވުން.'
+      }
+    ]
   }
 ];
 
