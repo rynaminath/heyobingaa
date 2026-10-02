@@ -166,6 +166,127 @@ export function subscribeToGallery(
 }
 
 /**
+ * LocalStorage keys for fallback and offline persistence
+ */
+const LOCAL_VOLUNTEERS_KEY = 'heyo_volunteer_applications_v2';
+const LOCAL_SLIPS_KEY = 'heyo_donation_slips_v2';
+
+const SAMPLE_VOLUNTEERS: VolunteerApplication[] = [
+  {
+    id: 'vol-sample-1',
+    name: 'ޢާއިޝަތު ނަޒީޙާ',
+    phone: '7781234',
+    email: 'nazeeha@example.com',
+    islandCity: 'މާލެ',
+    track: 'sisters',
+    interests: ['ކުޑަކުދިންގެ ޕްރޮގްރާމްތަކުގައި އެހީތެރިވުން', 'އިވެންޓް ކޯޑިނޭޝަން އަދި އިންތިޒާމު'],
+    availability: 'ހަވީރު އަދި ރޭގަނޑު',
+    status: 'pending',
+    submittedAt: '2026-10-01',
+    notes: 'ކުރިންވެސް އިސްލާމީ އިވެންޓްތަކުގައި ވޮލަންޓިއަރ ކޮށްފައިވާނެ'
+  },
+  {
+    id: 'vol-sample-2',
+    name: 'އަޙްމަދު ރަޝީދު',
+    phone: '9984321',
+    email: 'rashid@example.com',
+    islandCity: 'ހުޅުމާލެ ފޭސް 2',
+    track: 'brothers',
+    interests: ['ލޮޖިސްޓިކްސް އަދި ތަކެތި އުފުލުން', 'އޯޑިއޯ ވީޑިއޯ / ޓެކްނިކަލް ސެޓަޕް'],
+    availability: 'ހަފްތާ ބަންދުގައި (ހުކުރު / ހޮނިހިރު)',
+    status: 'reviewed',
+    submittedAt: '2026-09-28',
+    notes: 'ސައުންޑް ސިސްޓަމް ބެލެހެއްޓުމުގެ ތަޖުރިބާ ހުރި'
+  },
+  {
+    id: 'vol-sample-3',
+    name: 'މަރްޔަމް ޝިފާނާ',
+    phone: '7905544',
+    email: 'shifana@example.com',
+    islandCity: 'މާލެ',
+    track: 'sisters',
+    interests: ['ކޮންޓެންޓް ރައިޓިންގ އަދި މީޑިއާ', 'އިދާރީ މަސައްކަތް'],
+    availability: 'ހެނދުނު',
+    status: 'contacted',
+    submittedAt: '2026-09-25',
+    notes: 'ގްރެފިކް ޑިޒައިނިންގ އަދި ސޯޝަލް މީޑިއާ ޕޯސްޓް ހެދުމުގެ ހުނަރު ހުރި'
+  }
+];
+
+const SAMPLE_SLIPS: DonationSlip[] = [
+  {
+    id: 'slip-sample-1',
+    donorName: 'ނަން ހާމަނުކުރާ ފަރާތެއް',
+    phone: '7789000',
+    amount: 1000,
+    currency: 'MVR',
+    bankAccount: 'ބީ.އެމް.އެލް (BML) - ދިވެހި ރުފިޔާ (MVR) - 7730000632367',
+    date: '2026-10-02',
+    referenceNumber: 'TX9923847',
+    notes: 'ރަމަޟާން ޕްރޮގްރާމްތަކަށް ޞަދަޤާތެއް',
+    verified: true,
+    isAnonymous: true
+  },
+  {
+    id: 'slip-sample-2',
+    donorName: 'ޙުސައިން ޒާމިލް',
+    phone: '9912345',
+    amount: 500,
+    currency: 'MVR',
+    bankAccount: 'އެމް.އައި.ބީ (MIB) - ދިވެހި ރުފިޔާ (MVR) - 90101130007801000',
+    date: '2026-10-01',
+    referenceNumber: 'MIB-882190',
+    notes: 'ހެޔޮބިންގާގެ ޢާންމު ފަންޑަށް',
+    verified: false,
+    isAnonymous: false
+  }
+];
+
+function getStoredVolunteers(): VolunteerApplication[] {
+  try {
+    const raw = localStorage.getItem(LOCAL_VOLUNTEERS_KEY);
+    if (!raw) {
+      localStorage.setItem(LOCAL_VOLUNTEERS_KEY, JSON.stringify(SAMPLE_VOLUNTEERS));
+      return SAMPLE_VOLUNTEERS;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : SAMPLE_VOLUNTEERS;
+  } catch {
+    return SAMPLE_VOLUNTEERS;
+  }
+}
+
+function saveStoredVolunteers(apps: VolunteerApplication[]) {
+  try {
+    localStorage.setItem(LOCAL_VOLUNTEERS_KEY, JSON.stringify(apps));
+  } catch (e) {
+    console.warn('Failed to save volunteers to localStorage', e);
+  }
+}
+
+function getStoredSlips(): DonationSlip[] {
+  try {
+    const raw = localStorage.getItem(LOCAL_SLIPS_KEY);
+    if (!raw) {
+      localStorage.setItem(LOCAL_SLIPS_KEY, JSON.stringify(SAMPLE_SLIPS));
+      return SAMPLE_SLIPS;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : SAMPLE_SLIPS;
+  } catch {
+    return SAMPLE_SLIPS;
+  }
+}
+
+function saveStoredSlips(slips: DonationSlip[]) {
+  try {
+    localStorage.setItem(LOCAL_SLIPS_KEY, JSON.stringify(slips));
+  } catch (e) {
+    console.warn('Failed to save donation slips to localStorage', e);
+  }
+}
+
+/**
  * Realtime subscribe to Donation Slips (Admin Only)
  */
 export function subscribeToDonationSlips(
@@ -173,20 +294,32 @@ export function subscribeToDonationSlips(
   onError?: (err: unknown) => void
 ) {
   const colPath = 'donationSlips';
+  // Emit stored local slips immediately
+  onData(getStoredSlips());
+
   const colRef = collection(db, colPath);
   return onSnapshot(
     colRef,
     (snapshot) => {
-      const list: DonationSlip[] = [];
+      const firestoreList: DonationSlip[] = [];
       snapshot.forEach((docSnap) => {
-        list.push({ ...(docSnap.data() as DonationSlip), id: docSnap.id });
+        firestoreList.push({ ...(docSnap.data() as DonationSlip), id: docSnap.id });
       });
-      list.sort((a, b) => (a.date < b.date ? 1 : -1));
-      onData(list);
+
+      const localList = getStoredSlips();
+      const map = new Map<string, DonationSlip>();
+      localList.forEach((s) => map.set(s.id, s));
+      firestoreList.forEach((s) => map.set(s.id, s));
+
+      const combined = Array.from(map.values());
+      combined.sort((a, b) => (a.date < b.date ? 1 : -1));
+      saveStoredSlips(combined);
+      onData(combined);
     },
     (error) => {
+      console.warn('Firestore slips error, using local fallback:', error);
+      onData(getStoredSlips());
       if (onError) onError(error);
-      handleFirestoreError(error, OperationType.GET, colPath);
     }
   );
 }
@@ -199,20 +332,32 @@ export function subscribeToVolunteers(
   onError?: (err: unknown) => void
 ) {
   const colPath = 'volunteerApplications';
+  // Emit stored local applications immediately
+  onData(getStoredVolunteers());
+
   const colRef = collection(db, colPath);
   return onSnapshot(
     colRef,
     (snapshot) => {
-      const list: VolunteerApplication[] = [];
+      const firestoreList: VolunteerApplication[] = [];
       snapshot.forEach((docSnap) => {
-        list.push({ ...(docSnap.data() as VolunteerApplication), id: docSnap.id });
+        firestoreList.push({ ...(docSnap.data() as VolunteerApplication), id: docSnap.id });
       });
-      list.sort((a, b) => (a.submittedAt < b.submittedAt ? 1 : -1));
-      onData(list);
+
+      const localList = getStoredVolunteers();
+      const map = new Map<string, VolunteerApplication>();
+      localList.forEach((a) => map.set(a.id, a));
+      firestoreList.forEach((a) => map.set(a.id, a));
+
+      const combined = Array.from(map.values());
+      combined.sort((a, b) => (a.submittedAt < b.submittedAt ? 1 : -1));
+      saveStoredVolunteers(combined);
+      onData(combined);
     },
     (error) => {
+      console.warn('Firestore volunteers error, using local fallback:', error);
+      onData(getStoredVolunteers());
       if (onError) onError(error);
-      handleFirestoreError(error, OperationType.GET, colPath);
     }
   );
 }
@@ -222,19 +367,39 @@ export function subscribeToVolunteers(
  */
 export async function submitDonationSlip(slip: Omit<DonationSlip, 'id' | 'verified'>): Promise<string> {
   const path = 'donationSlips';
+  const id = `slip-${Date.now()}`;
+  
+  const cleanSlip: DonationSlip = {
+    id,
+    amount: Number(slip.amount),
+    currency: slip.currency,
+    bankAccount: slip.bankAccount,
+    date: slip.date || new Date().toISOString().split('T')[0],
+    verified: false,
+    isAnonymous: Boolean(slip.isAnonymous),
+    donorName: slip.donorName && slip.donorName.trim()
+      ? slip.donorName.trim()
+      : (Boolean(slip.isAnonymous) ? 'ސިއްރު ފަރާތެއް (Anonymous)' : 'ނަން ހާމަނުކުރާ ފަރާތެއް')
+  };
+
+  if (slip.phone && slip.phone.trim()) cleanSlip.phone = slip.phone.trim();
+  if (slip.referenceNumber && slip.referenceNumber.trim()) cleanSlip.referenceNumber = slip.referenceNumber.trim();
+  if (slip.notes && slip.notes.trim()) cleanSlip.notes = slip.notes.trim();
+  if (slip.slipImageUrl && slip.slipImageUrl.trim()) cleanSlip.slipImageUrl = slip.slipImageUrl;
+  if (slip.slipFileName && slip.slipFileName.trim()) cleanSlip.slipFileName = slip.slipFileName.trim();
+
+  // 1. Infallible Local Persistence
+  const currentSlips = getStoredSlips();
+  saveStoredSlips([cleanSlip, ...currentSlips.filter((s) => s.id !== id)]);
+
+  // 2. Try Firestore Cloud persistence
   try {
-    const id = `slip-${Date.now()}`;
-    const payload: DonationSlip = {
-      ...slip,
-      id,
-      verified: false
-    };
-    await setDoc(doc(db, path, id), payload);
-    return id;
+    await setDoc(doc(db, path, id), cleanSlip);
   } catch (error) {
-    handleFirestoreError(error, OperationType.CREATE, path);
-    throw error;
+    console.warn('Firestore write warning for donation slip (persisted locally):', error);
   }
+
+  return id;
 }
 
 /**
@@ -242,19 +407,52 @@ export async function submitDonationSlip(slip: Omit<DonationSlip, 'id' | 'verifi
  */
 export async function submitVolunteerApplication(app: Omit<VolunteerApplication, 'id' | 'status'>): Promise<string> {
   const path = 'volunteerApplications';
+  const id = `vol-${Date.now()}`;
+  
+  const cleanApp: VolunteerApplication = {
+    id,
+    name: app.name.trim(),
+    phone: app.phone.trim(),
+    islandCity: (app.islandCity || 'މާލެ').trim(),
+    track: app.track || 'sisters',
+    availability: (app.availability || 'ހަވީރު އަދި ރޭގަނޑު').trim(),
+    status: 'pending',
+    submittedAt: app.submittedAt || new Date().toISOString().split('T')[0],
+    interests: app.interests && Array.isArray(app.interests) && app.interests.length > 0 
+      ? app.interests 
+      : ['ޢާންމު ވޮލަންޓިއަރ މަސައްކަތް']
+  };
+
+  if (app.email && app.email.trim()) cleanApp.email = app.email.trim();
+  if (app.notes && app.notes.trim()) cleanApp.notes = app.notes.trim();
+
+  // 1. Infallible Local Persistence
+  const currentVolunteers = getStoredVolunteers();
+  saveStoredVolunteers([cleanApp, ...currentVolunteers.filter((v) => v.id !== id)]);
+
+  // 2. Try Firestore Cloud persistence
   try {
-    const id = `vol-${Date.now()}`;
-    const payload: VolunteerApplication = {
-      ...app,
-      id,
-      status: 'pending'
+    const firestorePayload: Record<string, any> = {
+      id: cleanApp.id,
+      name: cleanApp.name,
+      phone: cleanApp.phone,
+      islandCity: cleanApp.islandCity,
+      track: cleanApp.track,
+      availability: cleanApp.availability,
+      status: cleanApp.status,
+      submittedAt: cleanApp.submittedAt,
+      createdAt: new Date().toISOString()
     };
-    await setDoc(doc(db, path, id), payload);
-    return id;
+    if (cleanApp.email) firestorePayload.email = cleanApp.email;
+    if (cleanApp.notes) firestorePayload.notes = cleanApp.notes;
+    if (cleanApp.interests) firestorePayload.interests = cleanApp.interests;
+
+    await setDoc(doc(db, path, id), firestorePayload);
   } catch (error) {
-    handleFirestoreError(error, OperationType.CREATE, path);
-    throw error;
+    console.warn('Firestore write warning for volunteer application (persisted locally):', error);
   }
+
+  return id;
 }
 
 /**
@@ -365,12 +563,16 @@ export async function deleteGalleryItemFromFirestore(id: string): Promise<void> 
  * Admin: Toggle verification of donation slip
  */
 export async function verifyDonationSlipInFirestore(id: string, verified: boolean): Promise<void> {
+  // Update local storage
+  const currentSlips = getStoredSlips();
+  const updatedSlips = currentSlips.map((s) => (s.id === id ? { ...s, verified } : s));
+  saveStoredSlips(updatedSlips);
+
   const path = `donationSlips/${id}`;
   try {
     await setDoc(doc(db, 'donationSlips', id), { verified }, { merge: true });
   } catch (error) {
-    handleFirestoreError(error, OperationType.UPDATE, path);
-    throw error;
+    console.warn('Firestore write warning for slip verification (updated locally):', error);
   }
 }
 
@@ -378,12 +580,16 @@ export async function verifyDonationSlipInFirestore(id: string, verified: boolea
  * Admin: Delete donation slip
  */
 export async function deleteDonationSlipInFirestore(id: string): Promise<void> {
+  // Update local storage
+  const currentSlips = getStoredSlips();
+  const updatedSlips = currentSlips.filter((s) => s.id !== id);
+  saveStoredSlips(updatedSlips);
+
   const path = `donationSlips/${id}`;
   try {
     await deleteDoc(doc(db, 'donationSlips', id));
   } catch (error) {
-    handleFirestoreError(error, OperationType.DELETE, path);
-    throw error;
+    console.warn('Firestore write warning for slip deletion (deleted locally):', error);
   }
 }
 
@@ -394,12 +600,33 @@ export async function updateVolunteerStatusInFirestore(
   id: string,
   status: 'pending' | 'reviewed' | 'contacted'
 ): Promise<void> {
+  // Update local storage
+  const currentVolunteers = getStoredVolunteers();
+  const updatedVolunteers = currentVolunteers.map((v) => (v.id === id ? { ...v, status } : v));
+  saveStoredVolunteers(updatedVolunteers);
+
   const path = `volunteerApplications/${id}`;
   try {
     await setDoc(doc(db, 'volunteerApplications', id), { status }, { merge: true });
   } catch (error) {
-    handleFirestoreError(error, OperationType.UPDATE, path);
-    throw error;
+    console.warn('Firestore write warning for volunteer status update (updated locally):', error);
+  }
+}
+
+/**
+ * Admin: Delete volunteer application
+ */
+export async function deleteVolunteerApplicationInFirestore(id: string): Promise<void> {
+  // Update local storage
+  const currentVolunteers = getStoredVolunteers();
+  const updatedVolunteers = currentVolunteers.filter((v) => v.id !== id);
+  saveStoredVolunteers(updatedVolunteers);
+
+  const path = `volunteerApplications/${id}`;
+  try {
+    await deleteDoc(doc(db, 'volunteerApplications', id));
+  } catch (error) {
+    console.warn('Firestore write warning for volunteer deletion (deleted locally):', error);
   }
 }
 

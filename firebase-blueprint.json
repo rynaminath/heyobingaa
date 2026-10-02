@@ -261,12 +261,16 @@
         "slipImageUrl": {
           "type": "string",
           "description": "Uploaded slip image URL or base64 data URI.",
-          "maxLength": 500000
+          "maxLength": 800000
         },
         "slipFileName": {
           "type": "string",
           "description": "Filename of uploaded slip.",
-          "maxLength": 100
+          "maxLength": 200
+        },
+        "isAnonymous": {
+          "type": "boolean",
+          "description": "Whether donation was made anonymously."
         },
         "notes": {
           "type": "string",
@@ -276,14 +280,14 @@
         "date": {
           "type": "string",
           "description": "Date of donation.",
-          "maxLength": 30
+          "maxLength": 50
         },
         "verified": {
           "type": "boolean",
           "description": "Whether slip was verified by finance admin."
         }
       },
-      "required": ["donorName", "phone", "amount", "currency", "bankAccount"]
+      "required": ["amount", "currency", "bankAccount"]
     },
     "volunteerApplication": {
       "title": "VolunteerApplication",
@@ -321,6 +325,10 @@
           "description": "Available times.",
           "maxLength": 150
         },
+        "interests": {
+          "type": "string",
+          "description": "Volunteer areas of interest."
+        },
         "notes": {
           "type": "string",
           "description": "Skills and previous volunteer experience.",
@@ -329,7 +337,12 @@
         "submittedAt": {
           "type": "string",
           "description": "Submission date string.",
-          "maxLength": 30
+          "maxLength": 50
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp ISO string.",
+          "maxLength": 50
         },
         "status": {
           "type": "string",

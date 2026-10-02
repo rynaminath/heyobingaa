@@ -90,13 +90,14 @@ export interface VolunteerApplication {
   availability: string;
   notes?: string;
   submittedAt: string;
+  createdAt?: string;
   status: 'pending' | 'reviewed' | 'contacted';
 }
 
 export interface DonationSlip {
   id: string;
   donorName: string;
-  phone: string;
+  phone?: string;
   amount: number;
   currency: 'MVR' | 'USD';
   bankAccount: string;
@@ -106,6 +107,7 @@ export interface DonationSlip {
   notes?: string;
   date: string;
   verified: boolean;
+  isAnonymous?: boolean;
 }
 
 export interface PartnerOrg {

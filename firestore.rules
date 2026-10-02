@@ -67,14 +67,19 @@ service cloud.firestore {
     }
 
     function isValidDonationSlip(data) {
-      return data.donorName is string && data.donorName.size() > 0 && data.donorName.size() <= 100 &&
-             data.phone is string && data.phone.size() > 0 && data.phone.size() <= 30 &&
-             data.amount is number && data.amount > 0 &&
+      return data.amount is number && data.amount > 0 &&
              data.currency in ['MVR', 'USD'] &&
              data.bankAccount is string && data.bankAccount.size() > 0 && data.bankAccount.size() <= 120 &&
+             (!('donorName' in data) || (data.donorName is string && data.donorName.size() <= 100)) &&
+             (!('phone' in data) || (data.phone is string && data.phone.size() <= 30)) &&
              (!('referenceNumber' in data) || (data.referenceNumber is string && data.referenceNumber.size() <= 100)) &&
+             (!('slipImageUrl' in data) || (data.slipImageUrl is string && data.slipImageUrl.size() <= 800000)) &&
+             (!('slipFileName' in data) || (data.slipFileName is string && data.slipFileName.size() <= 200)) &&
+             (!('isAnonymous' in data) || data.isAnonymous is bool) &&
+             (!('date' in data) || (data.date is string && data.date.size() <= 50)) &&
              (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000)) &&
-             (!('verified' in data) || data.verified is bool);
+             (!('verified' in data) || data.verified is bool) &&
+             (!('id' in data) || (data.id is string && data.id.size() <= 128));
     }
 
     function isValidVolunteerApp(data) {
@@ -85,7 +90,11 @@ service cloud.firestore {
              data.availability is string && data.availability.size() > 0 && data.availability.size() <= 150 &&
              data.status in ['pending', 'reviewed', 'contacted'] &&
              (!('email' in data) || (data.email is string && data.email.size() <= 100)) &&
-             (!('notes' in data) || (data.notes is string && data.notes.size() <= 1500));
+             (!('notes' in data) || (data.notes is string && data.notes.size() <= 1500)) &&
+             (!('interests' in data) || (data.interests is list && data.interests.size() <= 20)) &&
+             (!('submittedAt' in data) || (data.submittedAt is string && data.submittedAt.size() <= 50)) &&
+             (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 50)) &&
+             (!('id' in data) || (data.id is string && data.id.size() <= 128));
     }
 
     function isValidSiteSettings(data) {

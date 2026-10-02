@@ -76,17 +76,17 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
     setVolError('');
 
     try {
-      const newAppPayload = {
+      const newAppPayload: Omit<VolunteerApplication, 'id' | 'status'> = {
         name: name.trim(),
         phone: phone.trim(),
-        email: email.trim() || undefined,
         islandCity: islandCity.trim(),
         track,
         interests: selectedInterests.length > 0 ? selectedInterests : ['ޢާންމު ވޮލަންޓިއަރ މަސައްކަތް'],
         availability,
-        notes: notes.trim() || undefined,
         submittedAt: new Date().toISOString().split('T')[0]
       };
+      if (email.trim()) newAppPayload.email = email.trim();
+      if (notes.trim()) newAppPayload.notes = notes.trim();
 
       const newId = await submitVolunteerApplication(newAppPayload);
 
@@ -104,6 +104,7 @@ export default function VolunteerPage({ onVolunteerRegistered }: VolunteerPagePr
       setPhone('');
       setEmail('');
       setNotes('');
+      setSelectedInterests([]);
     } catch (err) {
       console.error(err);
       setIsSubmittingVol(false);

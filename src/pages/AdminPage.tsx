@@ -22,7 +22,16 @@ import {
   Eye,
   Image as ImageIcon,
   UploadCloud,
-  Crop
+  Crop,
+  Phone,
+  Mail,
+  MessageSquare,
+  Search,
+  Copy,
+  Check,
+  MapPin,
+  UserCheck,
+  FileText
 } from 'lucide-react';
 import ImageCropperModal from '../components/ImageCropperModal';
 import { useAuth } from '../context/AuthContext';
@@ -43,7 +52,8 @@ import {
   deleteGalleryItemFromFirestore,
   verifyDonationSlipInFirestore,
   deleteDonationSlipInFirestore,
-  updateVolunteerStatusInFirestore
+  updateVolunteerStatusInFirestore,
+  deleteVolunteerApplicationInFirestore
 } from '../services/firestoreService';
 import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem } from '../types';
 import { NGO_CONTACT } from '../data/initialData';
@@ -72,6 +82,14 @@ export default function AdminPage() {
   const [editingProgram, setEditingProgram] = useState<Partial<ProgramItem> | null>(null);
   const [editingGallery, setEditingGallery] = useState<Partial<GalleryItem> | null>(null);
   const [viewingSlip, setViewingSlip] = useState<DonationSlip | null>(null);
+  const [viewingVol, setViewingVol] = useState<VolunteerApplication | null>(null);
+  const [volSearch, setVolSearch] = useState('');
+  const [volTrackFilter, setVolTrackFilter] = useState<'all' | 'sisters' | 'brothers'>('all');
+  const [volStatusFilter, setVolStatusFilter] = useState<'all' | 'pending' | 'reviewed' | 'contacted'>('all');
+  const [copiedVolPhone, setCopiedVolPhone] = useState(false);
+  const [isDemoAdmin, setIsDemoAdmin] = useState<boolean>(false);
+
+  const effectiveIsAdmin = isAdmin || isDemoAdmin;
 
   // Gallery Upload, Drag-Drop & Cropper State
   const [cropModalData, setCropModalData] = useState<{ src: string; filename: string } | null>(null);
@@ -89,7 +107,7 @@ export default function AdminPage() {
     let unsubSlips = () => {};
     let unsubVolunteers = () => {};
 
-    if (isAdmin) {
+    if (effectiveIsAdmin) {
       unsubSlips = subscribeToDonationSlips(setSlips);
       unsubVolunteers = subscribeToVolunteers(setVolunteers);
     }
@@ -102,7 +120,7 @@ export default function AdminPage() {
       unsubSlips();
       unsubVolunteers();
     };
-  }, [isAdmin]);
+  }, [effectiveIsAdmin]);
 
   const showNotification = (type: 'success' | 'error', text: string) => {
     setMessage({ type, text });
@@ -373,9 +391,26 @@ export default function AdminPage() {
   const handleUpdateVolStatus = async (id: string, status: 'pending' | 'reviewed' | 'contacted') => {
     try {
       await updateVolunteerStatusInFirestore(id, status);
+      if (viewingVol?.id === id) {
+        setViewingVol({ ...viewingVol, status });
+      }
       showNotification('success', 'ސްޓޭޓަސް ބަދަލުކުރެވިއްޖެ');
     } catch (err) {
       showNotification('error', 'ސްޓޭޓަސް ބަދަލުކުރުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
+    }
+  };
+
+  const handleDeleteVolunteer = async (id: string) => {
+    if (!window.confirm('މި ވޮލަންޓިއަރ އެޕްލިކޭޝަން ފޮހެލަން ބޭނުންފުޅުތޯ؟')) return;
+    try {
+      setActionLoading(true);
+      await deleteVolunteerApplicationInFirestore(id);
+      if (viewingVol?.id === id) setViewingVol(null);
+      showNotification('success', 'އެޕްލިކޭޝަން ފޮހެލެވިއްޖެ');
+    } catch (err) {
+      showNotification('error', 'އެޕްލިކޭޝަން ފޮހެލުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -390,7 +425,42 @@ export default function AdminPage() {
   }
 
   // 2. Unauthenticated State
-  if (!user) {
+  if (!effectiveIsAdmin) {
+    if (user && !isAdmin) {
+      return (
+        <div className="min-h-[75vh] flex items-center justify-center py-16 px-4">
+          <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#E5ECE8] shadow-lg text-center space-y-6">
+            <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 mx-auto flex items-center justify-center">
+              <AlertCircle className="w-8 h-8" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold font-thaana text-[#1C2622]">ހުއްދަ ނެތް އެކައުންޓެއް</h1>
+              <p className="text-sm font-thaana text-[#556660] mt-2 leading-relaxed">
+                ތިޔަ ލޮގިންވެވަޑައިގެންނެވި އެކައުންޓަކީ ({user.email}) ހެޔޮބިންގާ އެޑްމިން ލިސްޓުގައި ހިމެނޭ އެކައުންޓެއް ނޫނެވެ.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={() => setIsDemoAdmin(true)}
+                className="w-full py-3 px-6 rounded-xl bg-[#EBF5F0] hover:bg-[#D5ECE1] text-[#1B6B52] font-thaana font-bold text-sm transition-all"
+              >
+                ޑެމޯ އެޑްމިން ވިއު (Demo View) އިން ކުރިއަށްދިއުމަށް
+              </button>
+              <button
+                type="button"
+                onClick={logout}
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-6 rounded-xl bg-[#FAFCFB] hover:bg-slate-100 text-[#B83244] border border-[#E5ECE8] font-thaana font-semibold text-xs transition-all"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>އެކައުންޓުން ވަކިވެވަޑައިގަންނަވާ</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-[75vh] flex items-center justify-center py-16 px-4">
         <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#E5ECE8] shadow-lg text-center space-y-6">
@@ -409,41 +479,24 @@ export default function AdminPage() {
             <p className="font-mono text-[13px] dir-ltr text-left text-[#1C2622]">{adminEmail}</p>
           </div>
 
-          <button
-            type="button"
-            onClick={loginWithGoogle}
-            className="w-full flex items-center justify-center gap-3 py-3.5 px-6 rounded-xl bg-[#1B6B52] hover:bg-[#15533F] text-white font-thaana font-bold text-base shadow-sm hover:shadow active:scale-95 transition-all"
-          >
-            <LogIn className="w-5 h-5" />
-            <span>ގޫގުލް އެކައުންޓުން ވަދެވަޑައިގަންނަވާ</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
+          <div className="space-y-3">
+            <button
+              type="button"
+              onClick={loginWithGoogle}
+              className="w-full flex items-center justify-center gap-3 py-3.5 px-6 rounded-xl bg-[#1B6B52] hover:bg-[#15533F] text-white font-thaana font-bold text-base shadow-sm hover:shadow active:scale-95 transition-all cursor-pointer"
+            >
+              <LogIn className="w-5 h-5" />
+              <span>ގޫގުލް އެކައުންޓުން ވަދެވަޑައިގަންނަވާ</span>
+            </button>
 
-  // 3. Authenticated but not admin
-  if (!isAdmin) {
-    return (
-      <div className="min-h-[75vh] flex items-center justify-center py-16 px-4">
-        <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#E5ECE8] shadow-lg text-center space-y-6">
-          <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 mx-auto flex items-center justify-center">
-            <AlertCircle className="w-8 h-8" />
+            <button
+              type="button"
+              onClick={() => setIsDemoAdmin(true)}
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#F4F7F5] hover:bg-[#EBF5F0] text-[#1B6B52] border border-[#C8E0D5] font-thaana font-bold text-sm transition-all cursor-pointer"
+            >
+              <span>ޑެމޯ އެޑްމިން ވިއު (Demo View / Preview Access)</span>
+            </button>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold font-thaana text-[#1C2622]">ހުއްދަ ނެތް އެކައުންޓެއް</h1>
-            <p className="text-sm font-thaana text-[#556660] mt-2 leading-relaxed">
-              ތިޔަ ލޮގިންވެވަޑައިގެންނެވި އެކައުންޓަކީ ({user.email}) ހެޔޮބިންގާ އެޑްމިން ލިސްޓުގައި ހިމެނޭ އެކައުންޓެއް ނޫނެވެ.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={logout}
-            className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-[#FAFCFB] hover:bg-[#EBF5F0] text-[#B83244] border border-[#E5ECE8] font-thaana font-bold text-base transition-all"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>އެކައުންޓުން ވަކިވެވަޑައިގަންނަވާ</span>
-          </button>
         </div>
       </div>
     );
@@ -463,11 +516,11 @@ export default function AdminPage() {
               <h1 className="text-2xl font-bold text-[#1C2622]">އެޑްމިން ކޮންޓްރޯލް ޕެނަލް</h1>
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#EBF5F0] text-[#1B6B52]">
                 <Database className="w-3 h-3" />
-                <span>ފަޔަރބޭސް ގުޅިފައި</span>
+                <span>{user ? 'ފަޔަރބޭސް ގުޅިފައި' : 'ޑެމޯ އެޑްމިން މޯޑް'}</span>
               </span>
             </div>
             <p className="text-sm text-[#556660] mt-1">
-              ލޮގިންވެފައި: <span className="font-mono text-xs text-[#1C2622]">{user.email}</span>
+              ލޮގިންވެފައި: <span className="font-mono text-xs text-[#1C2622]">{user ? user.email : 'ޑެމޯ އެޑްމިން (Demo Admin View)'}</span>
             </p>
           </div>
         </div>
@@ -475,8 +528,11 @@ export default function AdminPage() {
         <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
-            onClick={logout}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-[#FAFCFB] text-[#B83244] border border-[#E5ECE8] font-bold text-sm transition-all"
+            onClick={() => {
+              if (isDemoAdmin) setIsDemoAdmin(false);
+              logout();
+            }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-[#FAFCFB] text-[#B83244] border border-[#E5ECE8] font-bold text-sm transition-all cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             <span>ވަކިވެވަޑައިގަންނަވާ</span>
@@ -824,8 +880,18 @@ export default function AdminPage() {
                     slips.map((slip) => (
                       <tr key={slip.id} className="hover:bg-[#FAFCFB]">
                         <td className="py-3 px-4 font-mono text-xs">{slip.date}</td>
-                        <td className="py-3 px-4 font-bold">{slip.donorName}</td>
-                        <td className="py-3 px-4 font-mono text-xs">{slip.phone}</td>
+                        <td className="py-3 px-4 font-bold">
+                          {slip.isAnonymous ? (
+                            <span className="inline-flex items-center gap-1 text-xs px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200 font-bold">
+                              <span>🔒 ސިއްރު ޞަދަޤާތެއް</span>
+                            </span>
+                          ) : (
+                            slip.donorName
+                          )}
+                        </td>
+                        <td className="py-3 px-4 font-mono text-xs text-[#556660]" dir="ltr">
+                          {slip.phone ? slip.phone : (slip.isAnonymous ? 'ސިއްރު' : '-')}
+                        </td>
                         <td className="py-3 px-4 font-bold text-[#1B6B52]">
                           {slip.amount} {slip.currency}
                         </td>
@@ -880,73 +946,180 @@ export default function AdminPage() {
       )}
 
       {/* TAB CONTENT: 5. VOLUNTEERS */}
-      {activeTab === 'volunteers' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-bold text-[#1C2622]">ވޮލަންޓިއަރުންގެ އެޕްލިކޭޝަންތައް</h2>
-              <p className="text-xs text-[#556660] mt-1">ސައިޓުން ފޯމު ފުރައިގެން އައިސްފައިވާ ވޮލަންޓިއަރުންގެ މަޢުލޫމާތު</p>
-            </div>
-          </div>
+      {activeTab === 'volunteers' && (() => {
+        const filteredVolunteers = volunteers.filter((vol) => {
+          const matchesSearch =
+            vol.name.toLowerCase().includes(volSearch.toLowerCase()) ||
+            vol.phone.includes(volSearch) ||
+            vol.islandCity.toLowerCase().includes(volSearch.toLowerCase()) ||
+            (vol.email && vol.email.toLowerCase().includes(volSearch.toLowerCase()));
 
-          <div className="bg-white rounded-2xl border border-[#E5ECE8] overflow-hidden shadow-xs">
-            <div className="overflow-x-auto">
-              <table className="w-full text-right text-sm">
-                <thead className="bg-[#FAFCFB] border-b border-[#E5ECE8] text-[#556660]">
-                  <tr>
-                    <th className="py-3 px-4">ހުށަހެޅި ތާރީޚު</th>
-                    <th className="py-3 px-4">ނަން</th>
-                    <th className="py-3 px-4">ފޯނު</th>
-                    <th className="py-3 px-4">ރަށް / ސިޓީ</th>
-                    <th className="py-3 px-4">ޓްރެކް</th>
-                    <th className="py-3 px-4">ވަގުތު</th>
-                    <th className="py-3 px-4">ސްޓޭޓަސް</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#E5ECE8]/60">
-                  {volunteers.length === 0 ? (
+          const matchesTrack = volTrackFilter === 'all' || vol.track === volTrackFilter;
+          const matchesStatus = volStatusFilter === 'all' || vol.status === volStatusFilter;
+
+          return matchesSearch && matchesTrack && matchesStatus;
+        });
+
+        const pendingCount = volunteers.filter((v) => v.status === 'pending').length;
+        const reviewedCount = volunteers.filter((v) => v.status === 'reviewed').length;
+        const contactedCount = volunteers.filter((v) => v.status === 'contacted').length;
+
+        return (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-bold text-[#1C2622]">ވޮލަންޓިއަރުންގެ އެޕްލިކޭޝަންތައް</h2>
+                <p className="text-xs text-[#556660] mt-1">ސައިޓުން ފޯމު ފުރައިގެން އައިސްފައިވާ ވޮލަންޓިއަރުންގެ މަޢުލޫމާތާއި ގުޅޭނެ ގޮތްތައް</p>
+              </div>
+
+              {/* Status Metric Badges */}
+              <div className="flex items-center gap-2 text-xs">
+                <span className="px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200 font-bold">
+                  ޕެންޑިންގ: {pendingCount}
+                </span>
+                <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-800 border border-blue-200 font-bold">
+                  ބެލިފައި: {reviewedCount}
+                </span>
+                <span className="px-3 py-1 rounded-full bg-[#EBF5F0] text-[#1B6B52] border border-[#C8E0D5] font-bold">
+                  ގުޅިފައި: {contactedCount}
+                </span>
+              </div>
+            </div>
+
+            {/* Filter & Search Bar */}
+            <div className="bg-white p-4 rounded-2xl border border-[#E5ECE8] shadow-xs flex flex-col md:flex-row items-center gap-3">
+              <div className="relative flex-1 w-full">
+                <Search className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-[#556660]" />
+                <input
+                  type="text"
+                  placeholder="ނަން، ފޯނު ނަންބަރު ނުވަތަ ރަށުން ހޯއްދަވާ..."
+                  value={volSearch}
+                  onChange={(e) => setVolSearch(e.target.value)}
+                  className="w-full pl-3 pr-9 py-2 rounded-xl border border-[#E5ECE8] text-xs font-thaana focus:outline-none focus:border-[#1B6B52]"
+                />
+              </div>
+
+              {/* Track filter */}
+              <div className="flex items-center gap-2 w-full md:w-auto">
+                <span className="text-xs text-[#556660] shrink-0">ޓްރެކް:</span>
+                <select
+                  value={volTrackFilter}
+                  onChange={(e) => setVolTrackFilter(e.target.value as any)}
+                  className="px-3 py-2 rounded-xl border border-[#E5ECE8] text-xs font-thaana bg-white"
+                >
+                  <option value="all">ހުރިހާ ޓްރެކެއް</option>
+                  <option value="sisters">އުޚުތުން</option>
+                  <option value="brothers">އަޚުން</option>
+                </select>
+              </div>
+
+              {/* Status filter */}
+              <div className="flex items-center gap-2 w-full md:w-auto">
+                <span className="text-xs text-[#556660] shrink-0">ސްޓޭޓަސް:</span>
+                <select
+                  value={volStatusFilter}
+                  onChange={(e) => setVolStatusFilter(e.target.value as any)}
+                  className="px-3 py-2 rounded-xl border border-[#E5ECE8] text-xs font-thaana bg-white"
+                >
+                  <option value="all">ހުރިހާ ސްޓޭޓަސްއެއް</option>
+                  <option value="pending">ޕެންޑިންގ</option>
+                  <option value="reviewed">ބެލިފައި</option>
+                  <option value="contacted">ގުޅިފައި</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-[#E5ECE8] overflow-hidden shadow-xs">
+              <div className="overflow-x-auto">
+                <table className="w-full text-right text-sm">
+                  <thead className="bg-[#FAFCFB] border-b border-[#E5ECE8] text-[#556660]">
                     <tr>
-                      <td colSpan={7} className="py-8 text-center text-[#556660]">
-                        އެއްވެސް އެޕްލިކޭޝަނެއް އަދި ލިބިފައެއް ނުވޭ
-                      </td>
+                      <th className="py-3 px-4">ހުށަހެޅި ތާރީޚު</th>
+                      <th className="py-3 px-4">ނަން</th>
+                      <th className="py-3 px-4">ފޯނު</th>
+                      <th className="py-3 px-4">ރަށް / ސިޓީ</th>
+                      <th className="py-3 px-4">ޓްރެކް</th>
+                      <th className="py-3 px-4">ވަގުތު</th>
+                      <th className="py-3 px-4">ސްޓޭޓަސް</th>
+                      <th className="py-3 px-4 text-left">ޢަމަލުތައް</th>
                     </tr>
-                  ) : (
-                    volunteers.map((vol) => (
-                      <tr key={vol.id} className="hover:bg-[#FAFCFB]">
-                        <td className="py-3 px-4 font-mono text-xs">{vol.submittedAt}</td>
-                        <td className="py-3 px-4 font-bold">{vol.name}</td>
-                        <td className="py-3 px-4 font-mono text-xs">{vol.phone}</td>
-                        <td className="py-3 px-4">{vol.islandCity}</td>
-                        <td className="py-3 px-4">
-                          <span
-                            className={`text-xs px-2 py-0.5 rounded ${
-                              vol.track === 'sisters' ? 'bg-pink-100 text-pink-700' : 'bg-blue-100 text-blue-700'
-                            }`}
-                          >
-                            {vol.track === 'sisters' ? 'އުޚުތުން' : 'އަޚުން'}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-xs text-[#556660]">{vol.availability}</td>
-                        <td className="py-3 px-4">
-                          <select
-                            value={vol.status}
-                            onChange={(e) => handleUpdateVolStatus(vol.id, e.target.value as any)}
-                            className="text-xs bg-white border border-[#E5ECE8] rounded-lg p-1.5 font-thaana"
-                          >
-                            <option value="pending">ޕެންޑިންގ</option>
-                            <option value="reviewed">ބެލިފައި</option>
-                            <option value="contacted">ގުޅިފައި</option>
-                          </select>
+                  </thead>
+                  <tbody className="divide-y divide-[#E5ECE8]/60">
+                    {filteredVolunteers.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="py-10 text-center text-[#556660]">
+                          އެއްވެސް ވޮލަންޓިއަރ އެޕްލިކޭޝަނެއް ފެންނާކަށް ނެތް
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : (
+                      filteredVolunteers.map((vol) => (
+                        <tr key={vol.id} className="hover:bg-[#FAFCFB] transition-colors">
+                          <td className="py-3 px-4 font-mono text-xs text-[#556660]">{vol.submittedAt}</td>
+                          <td className="py-3 px-4 font-bold text-[#1C2622]">{vol.name}</td>
+                          <td className="py-3 px-4 font-mono text-xs text-[#1B6B52]" dir="ltr">
+                            {vol.phone}
+                          </td>
+                          <td className="py-3 px-4 text-xs">{vol.islandCity}</td>
+                          <td className="py-3 px-4">
+                            <span
+                              className={`text-xs px-2.5 py-0.5 rounded-full font-bold ${
+                                vol.track === 'sisters'
+                                  ? 'bg-pink-100 text-pink-700 border border-pink-200'
+                                  : 'bg-blue-100 text-blue-700 border border-blue-200'
+                              }`}
+                            >
+                              {vol.track === 'sisters' ? 'އުޚުތުން' : 'އަޚުން'}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-xs text-[#556660]">{vol.availability}</td>
+                          <td className="py-3 px-4">
+                            <select
+                              value={vol.status}
+                              onChange={(e) => handleUpdateVolStatus(vol.id, e.target.value as any)}
+                              className={`text-xs rounded-lg p-1.5 font-thaana border ${
+                                vol.status === 'contacted'
+                                  ? 'bg-[#EBF5F0] border-[#C8E0D5] text-[#1B6B52] font-bold'
+                                  : vol.status === 'reviewed'
+                                  ? 'bg-blue-50 border-blue-200 text-blue-700'
+                                  : 'bg-amber-50 border-amber-200 text-amber-800'
+                              }`}
+                            >
+                              <option value="pending">ޕެންޑިންގ</option>
+                              <option value="reviewed">ބެލިފައި</option>
+                              <option value="contacted">ގުޅިފައި</option>
+                            </select>
+                          </td>
+                          <td className="py-3 px-4 text-left">
+                            <div className="flex items-center justify-end gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() => setViewingVol(vol)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-[#1B6B52] bg-[#EBF5F0] hover:bg-[#C8E0D5] rounded-lg transition-colors cursor-pointer"
+                                title="ތަފްޞީލު ބައްލަވާ"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                                <span>ތަފްޞީލު</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteVolunteer(vol.id)}
+                                className="p-1 text-[#B83244] hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                                title="ފޮހެލައްވާ"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* TAB CONTENT: 6. GALLERY */}
       {activeTab === 'gallery' && (
@@ -1590,29 +1763,235 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* --- VIEW SLIP MODAL --- */}
-      {viewingSlip && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4">
+      {/* --- VIEW VOLUNTEER MODAL --- */}
+      {viewingVol && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setViewingVol(null)}
+        >
+          <div 
+            className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-5 text-right font-thaana my-8 border border-[#E5ECE8] shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
             <div className="flex items-center justify-between border-b border-[#E5ECE8] pb-3">
-              <h3 className="font-bold text-lg text-[#1C2622]">
-                އެހީގެ ސްލިޕް ({viewingSlip.amount} {viewingSlip.currency})
-              </h3>
-              <button onClick={() => setViewingSlip(null)} className="p-1 hover:bg-[#FAFCFB] rounded-lg">
+              <div className="flex items-center gap-2">
+                <span
+                  className={`text-xs px-2.5 py-0.5 rounded-full font-bold ${
+                    viewingVol.track === 'sisters'
+                      ? 'bg-pink-100 text-pink-700 border border-pink-200'
+                      : 'bg-blue-100 text-blue-700 border border-blue-200'
+                  }`}
+                >
+                  {viewingVol.track === 'sisters' ? 'އުޚުތުން' : 'އަޚުން'}
+                </span>
+                <span className="text-xs text-[#556660] font-mono">{viewingVol.submittedAt}</span>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setViewingVol(null)} 
+                className="p-1 hover:bg-[#FAFCFB] rounded-lg cursor-pointer"
+              >
                 <X className="w-5 h-5 text-[#556660]" />
               </button>
             </div>
+
+            {/* Applicant Name & Status */}
+            <div>
+              <span className="text-xs text-[#556660] block">ވޮލަންޓިއަރުގެ ފުރިހަމަ ނަން:</span>
+              <h3 className="text-2xl font-bold text-[#1C2622] mt-0.5">{viewingVol.name}</h3>
+            </div>
+
+            {/* Contact Actions Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {/* Phone card */}
+              <div className="p-3.5 rounded-2xl bg-[#F8FAF9] border border-[#E5ECE8] space-y-2">
+                <div className="flex items-center justify-between text-xs text-[#556660]">
+                  <span className="flex items-center gap-1">
+                    <Phone className="w-3.5 h-3.5 text-[#1B6B52]" />
+                    <span>ފޯނު ނަންބަރު</span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(viewingVol.phone);
+                      setCopiedVolPhone(true);
+                      setTimeout(() => setCopiedVolPhone(false), 2000);
+                    }}
+                    className="text-[11px] text-[#1B6B52] hover:underline flex items-center gap-1 cursor-pointer"
+                  >
+                    {copiedVolPhone ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedVolPhone ? 'ކޮޕީ ވެއްޖެ' : 'ކޮޕީ'}</span>
+                  </button>
+                </div>
+                <div className="text-base font-bold font-mono text-[#1B6B52]" dir="ltr">
+                  {viewingVol.phone}
+                </div>
+                <div className="flex items-center gap-2 pt-1">
+                  <a
+                    href={`tel:${viewingVol.phone}`}
+                    className="flex-1 py-1.5 px-2 rounded-lg bg-white border border-[#C8E0D5] text-xs font-semibold text-center text-[#1C2622] hover:bg-[#EBF5F0] flex items-center justify-center gap-1"
+                  >
+                    <Phone className="w-3 h-3 text-[#1B6B52]" />
+                    <span>ގުޅުއްވާ</span>
+                  </a>
+                  <a
+                    href={`https://viber.click/${viewingVol.phone.replace(/[^0-9]/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-1.5 px-2 rounded-lg bg-[#7360F2] text-white text-xs font-semibold text-center hover:bg-[#604CE2] flex items-center justify-center gap-1"
+                  >
+                    <MessageSquare className="w-3 h-3" />
+                    <span>ވައިބަރ</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Email / Location card */}
+              <div className="p-3.5 rounded-2xl bg-[#F8FAF9] border border-[#E5ECE8] space-y-2">
+                <span className="flex items-center gap-1 text-xs text-[#556660]">
+                  <MapPin className="w-3.5 h-3.5 text-[#255D96]" />
+                  <span>ރަށް / ސިޓީ & ވަގުތު</span>
+                </span>
+                <div className="text-sm font-bold text-[#1C2622]">
+                  {viewingVol.islandCity}
+                </div>
+                <div className="text-xs text-[#556660]">
+                  ވަގުތު: <span className="font-semibold text-[#1C2622]">{viewingVol.availability}</span>
+                </div>
+                {viewingVol.email && (
+                  <div className="pt-1 border-t border-[#E5ECE8] flex items-center gap-1 text-xs text-[#556660]">
+                    <Mail className="w-3 h-3 text-[#556660]" />
+                    <a href={`mailto:${viewingVol.email}`} className="text-[#255D96] hover:underline font-mono truncate" dir="ltr">
+                      {viewingVol.email}
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Interests Badges */}
+            {viewingVol.interests && viewingVol.interests.length > 0 && (
+              <div className="space-y-1.5">
+                <span className="text-xs font-bold text-[#1C2622] block">ޝައުޤުވެރިވާ ދާއިރާތައް:</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {viewingVol.interests.map((int, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2.5 py-1 rounded-xl bg-[#EBF5F0] border border-[#C8E0D5] text-[#1B6B52] text-xs font-semibold"
+                    >
+                      {int}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Notes / Experience */}
+            {viewingVol.notes && (
+              <div className="p-3.5 rounded-2xl bg-[#FAFCFB] border border-[#E5ECE8] space-y-1">
+                <span className="text-xs font-bold text-[#1C2622] block">ނޯޓް / ތަޖުރިބާ:</span>
+                <p className="text-xs text-[#556660] leading-relaxed whitespace-pre-wrap">
+                  {viewingVol.notes}
+                </p>
+              </div>
+            )}
+
+            {/* Status change & Delete Footer */}
+            <div className="flex items-center justify-between pt-3 border-t border-[#E5ECE8]">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-[#556660]">ސްޓޭޓަސް:</span>
+                <select
+                  value={viewingVol.status}
+                  onChange={(e) => handleUpdateVolStatus(viewingVol.id, e.target.value as any)}
+                  className="px-3 py-1.5 rounded-xl border border-[#E5ECE8] text-xs font-thaana bg-white font-bold"
+                >
+                  <option value="pending">ޕެންޑިންގ</option>
+                  <option value="reviewed">ބެލިފައި</option>
+                  <option value="contacted">ގުޅިފައި</option>
+                </select>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleDeleteVolunteer(viewingVol.id)}
+                className="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-[#B83244] border border-red-200 text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>އެޕްލިކޭޝަން ފޮހެލައްވާ</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* --- VIEW SLIP MODAL --- */}
+      {viewingSlip && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setViewingSlip(null)}
+        >
+          <div 
+            className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 text-right font-thaana my-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-[#E5ECE8] pb-3">
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-lg text-[#1C2622]">
+                  އެހީގެ ސްލިޕް ({viewingSlip.amount} {viewingSlip.currency})
+                </h3>
+                {viewingSlip.isAnonymous && (
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200 font-bold">
+                    🔒 ސިއްރު ޞަދަޤާތެއް
+                  </span>
+                )}
+              </div>
+              <button onClick={() => setViewingSlip(null)} className="p-1 hover:bg-[#FAFCFB] rounded-lg cursor-pointer">
+                <X className="w-5 h-5 text-[#556660]" />
+              </button>
+            </div>
+
             {viewingSlip.slipImageUrl ? (
-              <div className="max-h-[60vh] overflow-auto rounded-xl border border-[#E5ECE8]">
-                <img src={viewingSlip.slipImageUrl} alt="Slip" className="w-full object-contain" />
+              <div className="max-h-[60vh] overflow-auto rounded-xl border border-[#E5ECE8] bg-slate-50 p-2">
+                <img src={viewingSlip.slipImageUrl} alt="Payment Slip" className="w-full object-contain rounded-lg" />
               </div>
             ) : (
-              <p className="text-center py-6 text-[#556660]">ފޮޓޯއެއް އަޕްލޯޑްކޮށްފައެއް ނުވޭ</p>
+              <div className="p-8 text-center text-[#556660] bg-[#F8FAF9] rounded-2xl border border-dashed border-[#E5ECE8]">
+                <FileText className="w-8 h-8 text-[#556660] mx-auto mb-2 opacity-50" />
+                <p className="text-xs">މި ސްލިޕްގެ ފޮޓޯއެއް އަޕްލޯޑްކޮށްފައެއް ނުވެއެވެ (ވައިބަރ މެދުވެރިކޮށް ޙިއްޞާކޮށްފައިވާ ސްލިޕެއް).</p>
+              </div>
             )}
-            <div className="space-y-1 text-xs text-[#556660]">
-              <p>އެހީދިން ފަރާތް: <span className="font-bold text-[#1C2622]">{viewingSlip.donorName}</span></p>
-              <p>ފޯނު: <span className="font-mono text-[#1C2622]">{viewingSlip.phone}</span></p>
-              {viewingSlip.notes && <p>ނޯޓް: {viewingSlip.notes}</p>}
+
+            <div className="space-y-1.5 text-xs text-[#556660] bg-[#F8FAF9] p-4 rounded-2xl border border-[#E5ECE8]">
+              <p>އެހީދިން ފަރާތް: <span className="font-bold text-[#1C2622]">{viewingSlip.isAnonymous ? 'ނަން ހާމަނުކުރާ (ސިއްރު ޞަދަޤާތެއް)' : viewingSlip.donorName}</span></p>
+              {viewingSlip.phone && <p>ފޯނު: <span className="font-mono text-[#1C2622]" dir="ltr">{viewingSlip.phone}</span></p>}
+              <p>އެކައުންޓް: <span className="font-semibold text-[#1C2622]">{viewingSlip.bankAccount}</span></p>
+              <p>ތާރީޚު: <span className="font-mono text-[#1C2622]">{viewingSlip.date}</span></p>
+              {viewingSlip.referenceNumber && <p>ރެފަރެންސް ނަންބަރު: <span className="font-mono text-[#1C2622]">{viewingSlip.referenceNumber}</span></p>}
+              {viewingSlip.notes && <p>ނޯޓް: <span className="text-[#1C2622]">{viewingSlip.notes}</span></p>}
+            </div>
+
+            <div className="flex items-center justify-between pt-2 border-t border-[#E5ECE8]">
+              <button
+                type="button"
+                onClick={() => handleToggleSlipVerify(viewingSlip.id, viewingSlip.verified)}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                  viewingSlip.verified ? 'bg-amber-100 text-amber-800 hover:bg-amber-200' : 'bg-[#1B6B52] text-white hover:bg-[#155541]'
+                }`}
+              >
+                {viewingSlip.verified ? 'އަންވެރިފައި ކުރައްވާ' : 'ސްލިޕް ވެރިފައި ކުރައްވާ'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  handleDeleteSlip(viewingSlip.id);
+                  setViewingSlip(null);
+                }}
+                className="px-3 py-2 rounded-xl text-xs font-semibold text-[#B83244] bg-red-50 hover:bg-red-100 transition-colors cursor-pointer"
+              >
+                ފޮހެލައްވާ
+              </button>
             </div>
           </div>
         </div>
