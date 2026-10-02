@@ -15,11 +15,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 
-interface DonatePageProps {
-  onReceiptSubmitted?: (slip?: any) => void;
-}
-
-export default function DonatePage({}: DonatePageProps) {
+export default function DonatePage() {
   const [copiedViber, setCopiedViber] = useState(false);
   const [copiedSample, setCopiedSample] = useState(false);
 

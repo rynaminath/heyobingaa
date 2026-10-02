@@ -28,8 +28,22 @@ interface HeaderProps {
 export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(true);
+  const [headerHeight, setHeaderHeight] = useState(115);
+  const headerRef = useRef<HTMLElement | null>(null);
   const lastScrollYRef = useRef(0);
   const accumulatedDownScrollRef = useRef(0);
+
+  // Measure header height dynamically to keep spacer in exact sync
+  useEffect(() => {
+    const updateHeight = () => {
+      if (headerRef.current) {
+        setHeaderHeight(headerRef.current.offsetHeight);
+      }
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
 
   // Header waits until at least the feature banner is scrolled up before hiding, and unhides when scrolled back
   useEffect(() => {
@@ -48,20 +62,20 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
           const deltaY = currentScrollY - lastScrollYRef.current;
 
           // Determine if feature banner has scrolled up completely
-          // If #hero-banner is present on page, check its bottom edge relative to top of viewport
-          const heroEl = document.getElementById('hero-banner');
+          // Checks for #hero-banner, .hero-section, or top page container
+          const heroEl = document.getElementById('hero-banner') || document.querySelector('.hero-section');
           let bannerStillInView = false;
 
           if (heroEl) {
             const rect = heroEl.getBoundingClientRect();
-            // Hero banner is still scrolling up if its bottom is above 20px
-            bannerStillInView = rect.bottom > 20;
+            // The feature banner is still scrolling up if its bottom edge is visible (rect.bottom > 0)
+            bannerStillInView = rect.bottom > 0;
           } else {
-            // For subpages, wait until at least 450px has been scrolled
-            bannerStillInView = currentScrollY < 450;
+            // For subpages without the hero banner, wait until at least 420px has scrolled up
+            bannerStillInView = currentScrollY < 420;
           }
 
-          if (bannerStillInView) {
+          if (bannerStillInView || currentScrollY < 60) {
             // The header MUST wait until at least the feature banner is scrolled up
             setHeaderVisible(true);
             accumulatedDownScrollRef.current = 0;
@@ -72,7 +86,7 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
           } else if (deltaY > 2) {
             // Feature banner has completely scrolled up, and user continues scrolling downward:
             accumulatedDownScrollRef.current += deltaY;
-            if (accumulatedDownScrollRef.current > 40) {
+            if (accumulatedDownScrollRef.current > 30) {
               setHeaderVisible(false);
             }
           }
@@ -104,12 +118,14 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
   };
 
   return (
-    <header 
-      id="main-header"
-      className={`sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5ECE8] shadow-xs transform-gpu will-change-transform transition-transform duration-300 ease-in-out ${
-        headerVisible ? 'translate-y-0' : '-translate-y-full pointer-events-none'
-      }`}
-    >
+    <>
+      <header 
+        ref={headerRef}
+        id="main-header"
+        className={`fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5ECE8] shadow-xs transform-gpu will-change-transform transition-transform duration-300 ease-in-out ${
+          headerVisible ? 'translate-y-0' : '-translate-y-full pointer-events-none'
+        }`}
+      >
       {/* Top Banner Notice: Contact & Social Media */}
       <div 
         id="header-topbar"
@@ -358,5 +374,13 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
         </div>
       )}
     </header>
+    {/* Spacer to prevent layout shifts and keep page content positioned below fixed header */}
+    <div 
+      id="header-spacer" 
+      aria-hidden="true" 
+      style={{ height: `${headerHeight}px` }} 
+      className="w-full shrink-0 pointer-events-none" 
+    />
+  </>
   );
 }

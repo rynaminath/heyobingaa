@@ -5,7 +5,6 @@ import { BANK_GROUPS, NGO_CONTACT } from '../data/initialData';
 interface DonationReceiptModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onReceiptSubmitted?: (slip: any) => void;
 }
 
 export default function DonationReceiptModal({
@@ -61,16 +60,16 @@ export default function DonationReceiptModal({
           <div className="text-right">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/15 text-xs text-[#EBF5F0] font-thaana mb-1">
               <HeartHandshake className="w-3.5 h-3.5" />
-              <span>އެހީގެ ސްލިޕް ފޮނުއްވުން</span>
+              <span>ހެޔޮބިންގާއަށް އެހީދެއްވުން</span>
             </div>
-            <h3 className="text-lg font-bold font-thaana">ޓްރާންސްފަރ & ވައިބަރ ސްލިޕް</h3>
+            <h3 className="text-lg font-bold font-thaana">އެކައުންޓް މަޢުލޫމާތާއި ވައިބަރ</h3>
             <p className="text-xs text-[#EBF5F0]/90 font-thaana mt-0.5">
-              ފައިސާ ޓްރާންސްފަރ ކުރެއްވުމަށްފަހު ސްލިޕް ވައިބަރ ކުރައްވާ
+              ފައިސާ ޓްރާންސްފަރ ކުރެއްވުމަށްފަހު، އެދިވަޑައިގަންނަވާނަމަ ސްލިޕް ވައިބަރ ކުރައްވާ
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors"
+            className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
             aria-label="ލައްޕާލައްވާ"
           >
             <X className="w-5 h-5" />
@@ -92,10 +91,10 @@ export default function DonationReceiptModal({
 
             <div>
               <h4 className="text-base font-bold text-[#1C2622]">
-                ސްލިޕް ވައިބަރ ކުރައްވާނީ:
+                ސްލިޕް ފޮނުއްވަން ބޭނުންފުޅުނަމަ ވައިބަރ ކުރައްވާނީ:
               </h4>
               <p className="text-xs text-[#556660] leading-relaxed mt-1">
-                ހެޔޮބިންގާގެ ރަސްމީ އެކައުންޓަށް ފައިސާ ޖަމާކުރެއްވުމަށްފަހު، ޓްރާންސްފަރ ސްލިޕް މި ނަންބަރަށް ވައިބަރ މެދުވެރިކޮށް ފޮނުއްވާލަދެއްވާށެވެ.
+                ހެޔޮބިންގާގެ ރަސްމީ އެކައުންޓަށް ފައިސާ ޖަމާކުރެއްވުމަށްފަހު، އެދިވަޑައިގަންނަވާނަމަ ޓްރާންސްފަރ ސްލިޕް މި ނަންބަރަށް ވައިބަރ މެދުވެރިކޮށް ފޮނުއްވާލަދެއްވާށެވެ.
               </p>
             </div>
 

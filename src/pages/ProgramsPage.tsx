@@ -112,21 +112,7 @@ export default function ProgramsPage({ onNavigate, onOpenDonateModal }: Programs
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 font-thaana">
-      {/* 1. Header Banner */}
-      <div className="bg-gradient-to-l from-[#134e3e] via-[#1B6B52] to-[#124b3b] text-white p-8 sm:p-10 rounded-3xl border border-[#145541] shadow-xl text-right space-y-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[#A7F3D0] text-xs font-semibold">
-          <Sparkles className="w-3.5 h-3.5 text-[#FDE68A]" />
-          <span>ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ ދަޢުވަތީ އަދި ތަރުބަވީ ޙަރަކާތްތައް</span>
-        </div>
-        <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-          ޕްރޮގްރާމްތަކާއި މުޖުތަމަޢީ ޙަރަކާތްތައް
-        </h1>
-        <p className="text-base sm:text-lg text-[#EBF5F0] max-w-3xl leading-relaxed">
-          ދިވެހި މުޖުތަމަޢުގެ އެންމެހައި ފަރާތްތަކަށް އިސްލާމީ ޞައްޙަ ޢަޤީދާއާއި ރިވެތި އަޚްލާޤާއި ހެޔޮލަފާ ތަރުބިއްޔަތު ފޯރުކޮށްދިނުމަށްޓަކައި ހިންގޭ ތަފާތު ޕްރޮގްރާމްތަކާއި ވޯކްޝޮޕްތައް.
-        </p>
-      </div>
-
-      {/* 2. FIRST CONTENT SECTION: Event Posters Portrait Slideshow (Moved to be the first section) */}
+      {/* 1. FIRST SECTION: Event Posters Portrait Slideshow */}
       <section className="bg-white rounded-3xl p-6 sm:p-10 border border-[#E2E9E5] shadow-xs space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E9E5] pb-5">
           <div className="text-right">
@@ -291,6 +277,20 @@ export default function ProgramsPage({ onNavigate, onOpenDonateModal }: Programs
           </div>
         )}
       </section>
+
+      {/* 2. Header Banner */}
+      <div className="bg-gradient-to-l from-[#134e3e] via-[#1B6B52] to-[#124b3b] text-white p-8 sm:p-10 rounded-3xl border border-[#145541] shadow-xl text-right space-y-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[#A7F3D0] text-xs font-semibold">
+          <Sparkles className="w-3.5 h-3.5 text-[#FDE68A]" />
+          <span>ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ ދަޢުވަތީ އަދި ތަރުބަވީ ޙަރަކާތްތައް</span>
+        </div>
+        <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+          ޕްރޮގްރާމްތަކާއި މުޖުތަމަޢީ ޙަރަކާތްތައް
+        </h1>
+        <p className="text-base sm:text-lg text-[#EBF5F0] max-w-3xl leading-relaxed">
+          ދިވެހި މުޖުތަމަޢުގެ އެންމެހައި ފަރާތްތަކަށް އިސްލާމީ ޞައްޙަ ޢަޤީދާއާއި ރިވެތި އަޚްލާޤާއި ހެޔޮލަފާ ތަރުބިއްޔަތު ފޯރުކޮށްދިނުމަށްޓަކައި ހިންގޭ ތަފާތު ޕްރޮގްރާމްތަކާއި ވޯކްޝޮޕްތައް.
+        </p>
+      </div>
 
       {/* 3. SECOND SECTION: Small Description About the Variety of Programs Conducted */}
       <section className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E9E5] shadow-xs text-right space-y-6">
