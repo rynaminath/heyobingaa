@@ -9,7 +9,6 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import DonationReceiptModal from './components/DonationReceiptModal';
 import VideoPlayerModal from './components/VideoPlayerModal';
-import AccessibilityMenu from './components/AccessibilityMenu';
 
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
@@ -308,9 +307,6 @@ export default function App() {
           media={activeMediaModal}
           onClose={handleCloseMediaModal}
         />
-
-        {/* 6. Floating Accessible Action Widget (Moved from Menu Bar) */}
-        <AccessibilityMenu variant="floating" />
       </div>
     </AuthProvider>
     </AccessibilityProvider>

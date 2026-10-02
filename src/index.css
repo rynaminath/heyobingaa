@@ -52,7 +52,7 @@
   html {
     font-size: 88%;
     -webkit-text-size-adjust: 100%;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   body {
@@ -64,7 +64,7 @@
     letter-spacing: 0.01em;
     background-color: #FAFCFB;
     color: #1C2622;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   p {

@@ -3,9 +3,16 @@ import {
   ChevronRight, 
   ChevronLeft, 
   Play, 
-  Pause 
+  Pause,
+  Sparkles,
+  ArrowLeft
 } from 'lucide-react';
+import { NavigationTab } from '../types';
 import { INITIAL_HERO_SLIDES } from '../data/initialData';
+
+interface HeroSlideshowBannerProps {
+  onNavigate?: (tab: NavigationTab) => void;
+}
 
 // Dynamically import all images uploaded to src/featurebannerimages
 const bannerImageModules = import.meta.glob<string>(
@@ -53,7 +60,7 @@ const KEN_BURNS_STYLES = [
   }
 ];
 
-export default function HeroSlideshowBanner() {
+export default function HeroSlideshowBanner({ onNavigate }: HeroSlideshowBannerProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [activeKenBurnsIdx, setActiveKenBurnsIdx] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
@@ -120,19 +127,19 @@ export default function HeroSlideshowBanner() {
       id="hero-banner"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="hero-section group relative overflow-hidden text-white w-full h-[352px] sm:h-[400px] lg:h-[440px] border-b border-[#286352] shadow-xl transition-all duration-500 ease-out select-none"
+      className="hero-section group relative overflow-hidden text-white w-full h-[450px] sm:h-[460px] lg:h-[470px] border-b border-[#286352] shadow-xl transition-all duration-500 ease-out select-none"
       style={{
         backgroundColor: '#1E5243',
-        backgroundImage: 'radial-gradient(ellipse at 50% 20%, #266352 0%, #1B4A3C 100%)'
+        backgroundImage: 'radial-gradient(ellipse at 50% 20%, #266352 0%, #174235 100%)'
       }}
     >
-      {/* Layer 1: Slideshow images flush to left (no green on left), fading on right edge into slim green background */}
+      {/* Layer 1: Slideshow images flush to left (no green on left), fading on right edge into the right green section */}
       {/* NO texture over the image */}
       <div
-        className="absolute inset-y-0 left-0 w-[97%] sm:w-[97.2%] overflow-hidden pointer-events-none z-0"
+        className="absolute inset-y-0 left-0 w-full lg:w-[70%] xl:w-[72%] overflow-hidden pointer-events-none z-0"
         style={{
-          WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 98%, rgba(0,0,0,0) 100%)',
-          maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 98%, rgba(0,0,0,0) 100%)'
+          WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 84%, rgba(0,0,0,0) 100%)',
+          maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 84%, rgba(0,0,0,0) 100%)'
         }}
       >
         {SLIDES.map((slide, idx) => {
@@ -171,12 +178,15 @@ export default function HeroSlideshowBanner() {
         })}
       </div>
 
-      {/* Layer 2: Texture ONLY on the slim right side green area (33% of previous width) - NOT over the image */}
+      {/* Mobile Subtle Dark Overlay Gradient so text directly on the green gradient is crystal clear */}
+      <div className="lg:hidden absolute inset-0 bg-gradient-to-t from-[#0D241C] via-[#0E2E23]/80 to-transparent z-10 pointer-events-none" />
+
+      {/* Layer 2: Texture ONLY on the right side green area - NOT over the image */}
       <div 
-        className="absolute inset-y-0 right-0 w-[3.5%] sm:w-[3.3%] pointer-events-none z-1 overflow-hidden"
+        className="absolute inset-y-0 right-0 w-full lg:w-[34%] xl:w-[31%] pointer-events-none z-1 overflow-hidden"
         style={{
-          WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%)',
-          maskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%)'
+          WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 16%, rgba(0,0,0,1) 100%)',
+          maskImage: 'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 16%, rgba(0,0,0,1) 100%)'
         }}
       >
         {/* Islamic Star & Lattice Tessellation Architectural Texture Overlay */}
@@ -201,10 +211,47 @@ export default function HeroSlideshowBanner() {
       </div>
 
       {/* Layer 3: Subtle ambient theme glow light on the right */}
-      <div className="hero-ambient-primary absolute top-0 right-0 w-[280px] h-[280px] rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out group-hover:scale-110 z-1" />
+      <div className="hero-ambient-primary absolute top-0 right-0 w-[350px] h-[350px] rounded-full blur-3xl pointer-events-none transition-all duration-700 ease-out group-hover:scale-110 z-1" />
 
-      {/* Minimalist Slide Controls Bar (Bottom Center) - No captions or text overlays */}
-      <div className="absolute bottom-3.5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/55 backdrop-blur-md border border-white/20 shadow-xl text-white">
+      {/* Layer 4: Jamiyyaage Maqsad Contents - Integrated directly into the green banner background (Narrower, No Box, No Logo) */}
+      <div className="absolute inset-y-0 right-0 w-full lg:w-[34%] xl:w-[31%] z-20 flex flex-col justify-center px-5 sm:px-6 lg:px-7 xl:px-8 py-6 text-right">
+        <div className="space-y-3.5 max-w-sm lg:max-w-[340px] xl:max-w-[360px] mr-auto lg:mr-0 ml-auto select-text">
+          {/* Header Row: Integrated Pill Badge (Logo removed as requested) */}
+          <div className="flex items-center justify-start border-b border-white/15 pb-2.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[#A7F3D0] text-xs font-semibold backdrop-blur-xs shadow-xs">
+              <Sparkles className="w-3.5 h-3.5 text-[#FDE68A]" />
+              <span>ޖަމިއްޔާގެ މަޤުޞަދު</span>
+            </div>
+          </div>
+
+          {/* Maqsad Quote Statement in Crisp, Proportional Thaana Typography */}
+          <blockquote className="relative pr-0.5">
+            <p className="text-sm sm:text-base lg:text-[16.5px] xl:text-[17.5px] font-bold leading-relaxed sm:leading-loose text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] font-thaana">
+              "މި ޖަމިއްޔާގެ މަޤްޞަދަކީ އިޖުތިމާއީ، ޢިލްމީ، ދީނީ، ތަރުބަވީ އަދި ފަންނީ ރަނގަޅު ޖީލެއް އުފައްދާ ހެޔޮ މުޖުތަމައުއެއް ބިނާކުރުމަށް މަސައްކަތް ކުރުމެވެ."
+            </p>
+          </blockquote>
+
+          {/* Footer Info & Read More Button seamlessly blended */}
+          <div className="pt-2.5 border-t border-white/15 flex items-center justify-between text-xs text-[#EBF5F0]">
+            <span className="font-mono text-[11px] sm:text-xs text-[#A7F3D0] drop-shadow-xs">
+              ރަޖިސްޓްރީ: CR/12/2024
+            </span>
+            {onNavigate && (
+              <button
+                type="button"
+                onClick={() => onNavigate('about')}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/10 hover:bg-white/20 active:bg-white/30 text-[#EBF5F0] hover:text-white border border-white/20 backdrop-blur-xs transition-all text-xs font-bold cursor-pointer shadow-xs active:scale-95"
+              >
+                <span>އިތުރަށް ކިޔުއްވާ</span>
+                <ArrowLeft className="w-3 h-3 text-[#A7F3D0]" />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Minimalist Slide Controls Bar (Bottom Left) */}
+      <div className="absolute bottom-3 sm:bottom-4 left-4 sm:left-6 lg:left-8 z-30 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 shadow-xl text-white">
         {/* Play / Pause toggle */}
         <button
           type="button"
@@ -246,7 +293,7 @@ export default function HeroSlideshowBanner() {
                 onClick={() => goToSlide(idx)}
                 className="relative h-1.5 sm:h-2 rounded-full overflow-hidden transition-all duration-300 cursor-pointer"
                 style={{
-                  width: isCurrent ? '26px' : '7px',
+                  width: isCurrent ? '24px' : '7px',
                   backgroundColor: isCurrent ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.35)'
                 }}
                 title={`ސްލައިޑް ${idx + 1}`}

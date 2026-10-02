@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { NavigationTab } from '../types';
 import Logo from './Logo';
 import { 
@@ -28,35 +28,65 @@ interface HeaderProps {
 export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
+  const accumulatedDownScrollRef = useRef(0);
 
-  // Auto-hide menu bar together with top bar after scrolling down, restore smoothly when scrolling up
+  // Header waits until at least the feature banner is scrolled up before hiding, and unhides when scrolled back
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      if (mobileMenuOpen) {
-        setHeaderVisible(true);
-        return;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (mobileMenuOpen) {
+            setHeaderVisible(true);
+            ticking = false;
+            return;
+          }
+
+          const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || window.scrollY || 0;
+          const deltaY = currentScrollY - lastScrollYRef.current;
+
+          // Determine if feature banner has scrolled up completely
+          // If #hero-banner is present on page, check its bottom edge relative to top of viewport
+          const heroEl = document.getElementById('hero-banner');
+          let bannerStillInView = false;
+
+          if (heroEl) {
+            const rect = heroEl.getBoundingClientRect();
+            // Hero banner is still scrolling up if its bottom is above 20px
+            bannerStillInView = rect.bottom > 20;
+          } else {
+            // For subpages, wait until at least 450px has been scrolled
+            bannerStillInView = currentScrollY < 450;
+          }
+
+          if (bannerStillInView) {
+            // The header MUST wait until at least the feature banner is scrolled up
+            setHeaderVisible(true);
+            accumulatedDownScrollRef.current = 0;
+          } else if (deltaY < -2) {
+            // When scrolled back (upward scroll): immediately unhide!
+            setHeaderVisible(true);
+            accumulatedDownScrollRef.current = 0;
+          } else if (deltaY > 2) {
+            // Feature banner has completely scrolled up, and user continues scrolling downward:
+            accumulatedDownScrollRef.current += deltaY;
+            if (accumulatedDownScrollRef.current > 40) {
+              setHeaderVisible(false);
+            }
+          }
+
+          lastScrollYRef.current = currentScrollY;
+          ticking = false;
+        });
+        ticking = true;
       }
-
-      const currentScrollY = window.scrollY;
-
-      // Always show if near top of page
-      if (currentScrollY < 40) {
-        setHeaderVisible(true);
-      } else if (currentScrollY > lastScrollY && currentScrollY > 70) {
-        // User scrolled down -> autohide entire header (menu bar + top bar)
-        setHeaderVisible(false);
-      } else if (currentScrollY < lastScrollY) {
-        // User scrolled back up -> restore entire header smoothly
-        setHeaderVisible(true);
-      }
-
-      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY, mobileMenuOpen]);
+  }, [mobileMenuOpen]);
 
   const navItems: { id: NavigationTab; label: string; icon: React.ReactNode }[] = [
     { id: 'home', label: 'ފުރަތަމަ ޞަފްޙާ', icon: <Home className="w-4 h-4" /> },
@@ -75,7 +105,8 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
 
   return (
     <header 
-      className={`sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5ECE8] shadow-xs transition-transform duration-300 ease-in-out ${
+      id="main-header"
+      className={`sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5ECE8] shadow-xs transform-gpu will-change-transform transition-transform duration-300 ease-in-out ${
         headerVisible ? 'translate-y-0' : '-translate-y-full pointer-events-none'
       }`}
     >
@@ -217,18 +248,8 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
             </nav>
           </div>
 
-          {/* Left Side: CTAs & Mobile Hamburger Toggle */}
+          {/* Left Side: Mobile Hamburger Toggle */}
           <div className="flex items-center gap-3">
-            {/* Desktop Donate Button */}
-            <button
-              type="button"
-              onClick={onOpenDonateModal}
-              className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1B6B52] hover:bg-[#145541] active:bg-[#0E3D2F] text-white font-bold font-thaana text-sm shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer active:scale-95"
-            >
-              <HeartHandshake className="w-4 h-4 text-[#A7F3D0]" />
-              <span>އެހީތެރިވެދެއްވާ (Donate)</span>
-            </button>
-
             {/* Mobile Menu Hamburger Toggle */}
             <button
               type="button"

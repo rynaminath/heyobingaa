@@ -8,10 +8,7 @@ import {
   Pause, 
   Maximize2, 
   X, 
-  Calendar,
-  Layers,
-  Heart,
-  BookCheck,
+  Layers, 
   CheckCircle2
 } from 'lucide-react';
 
@@ -129,68 +126,7 @@ export default function ProgramsPage({ onNavigate, onOpenDonateModal }: Programs
         </p>
       </div>
 
-      {/* 2. Small Description About the Variety of Programs Conducted (Areas box removed as it is already on home screen) */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E9E5] shadow-xs text-right space-y-6">
-        <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 text-xs font-bold text-[#1B6B52] uppercase tracking-wider">
-            <Layers className="w-4 h-4 text-[#1B6B52]" />
-            <span>ޕްރޮގްރާމްތަކުގެ ތަޢާރަފް</span>
-          </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-[#1C2622]">
-            ހިންގޭ ތަފާތު ޕްރޮގްރާމްތަކުގެ ޚުލާޞާއެއް
-          </h2>
-        </div>
-
-        <div className="text-sm sm:text-base text-[#445550] leading-relaxed space-y-3">
-          <p>
-            ހެޔޮބިންގާ ޖަމްޢިއްޔާއިން ހިންގާ ޙަރަކާތްތަކަކީ ހަމައެކަނި އާދައިގެ ތަޤުރީރުތަކަކަށް ސަމާލުކަންދިނުމުގެ ބަދަލުގައި، މުޖުތަމަޢުގެ އެކި ފަންތިތަކާއި އުމުރުފުރާތަކަށް ޢަމަލީގޮތުން ބައިވެރިވެވޭނެ ގޮތަށް ފަރުމާކުރެވިފައިވާ ތަފާތު ޕްރޮގްރާމްތަކެކެވެ. މީގެ ތެރޭގައި:
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
-            <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5]">
-              <CheckCircle2 className="w-5 h-5 text-[#1B6B52] shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <span className="font-bold text-[#1C2622] text-sm block">ޢިލްމީ އަދި ދަޢުވަތީ ވޯކްޝޮޕްތައް:</span>
-                <span className="text-xs text-[#556660] leading-relaxed block">
-                  ދީނީ ވާޖިބުތަކާއި އަޅުކަންތައްތަކުގެ ޞައްޙަ ގޮތް އުނގަންނައިދިނުމަށް ޢިލްމުވެރިންނާ އެކު ކުރިއަށް ގެންދެވޭ ސެޝަންތައް.
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5]">
-              <CheckCircle2 className="w-5 h-5 text-[#1B6B52] shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <span className="font-bold text-[#1C2622] text-sm block">މޫސުމީ އަދި ޚާއްޞަ ކެމްޕޭންތައް:</span>
-                <span className="text-xs text-[#556660] leading-relaxed block">
-                  ރޯދަމަހާއި ޛުލްޙިއްޖާގެ މާތް 10 ދުވަހާއި މުޙައްރަމް މަސް ފަދަ ބަރަކާތްތެރި މޫސުންތަކަށް ޚާއްޞަކޮށްގެން ހިންގޭ ދަރުސްތައް.
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5]">
-              <CheckCircle2 className="w-5 h-5 text-[#1B6B52] shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <span className="font-bold text-[#1C2622] text-sm block">އުޚްތުންނާއި ކުދިންގެ ތަރުބިއްޔަތު:</span>
-                <span className="text-xs text-[#556660] leading-relaxed block">
-                  ކަނބަލުންނާއި ފުރާވަރުގެ ކުދިންގެ ނަފްސާނީ އަދި އިޖްތިމާޢީ ދުޅަހެޔޮކަމަށް އަމާޒުކޮށްގެން ބާއްވާ ޙަރަކާތްތައް.
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5]">
-              <CheckCircle2 className="w-5 h-5 text-[#1B6B52] shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <span className="font-bold text-[#1C2622] text-sm block">ޚާއްޞަ އެހީއަށް ބޭނުންވާ ފަރާތްތައް:</span>
-                <span className="text-xs text-[#556660] leading-relaxed block">
-                  އަޑުއިވުމާއި ފެނުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކަށް އިޝާރާތުގެ ބަހުރުވައިން ތައްޔާރުކުރެވޭ ޚާއްޞަ ޕްރޮގްރާމްތައް.
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Event Posters Portrait Slideshow Section */}
+      {/* 2. FIRST CONTENT SECTION: Event Posters Portrait Slideshow (Moved to be the first section) */}
       <section className="bg-white rounded-3xl p-6 sm:p-10 border border-[#E2E9E5] shadow-xs space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E9E5] pb-5">
           <div className="text-right">
@@ -354,6 +290,67 @@ export default function ProgramsPage({ onNavigate, onOpenDonateModal }: Programs
             </div>
           </div>
         )}
+      </section>
+
+      {/* 3. SECOND SECTION: Small Description About the Variety of Programs Conducted */}
+      <section className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E9E5] shadow-xs text-right space-y-6">
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 text-xs font-bold text-[#1B6B52] uppercase tracking-wider">
+            <Layers className="w-4 h-4 text-[#1B6B52]" />
+            <span>ޕްރޮގްރާމްތަކުގެ ތަޢާރަފް</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-[#1C2622]">
+            ހިންގޭ ތަފާތު ޕްރޮގްރާމްތަކުގެ ޚުލާޞާއެއް
+          </h2>
+        </div>
+
+        <div className="text-sm sm:text-base text-[#445550] leading-relaxed space-y-3">
+          <p>
+            ހެޔޮބިންގާ ޖަމްޢިއްޔާއިން ހިންގާ ޙަރަކާތްތަކަކީ ހަމައެކަނި އާދައިގެ ތަޤުރީރުތަކަކަށް ސަމާލުކަންދިނުމުގެ ބަދަލުގައި، މުޖުތަމަޢުގެ އެކި ފަންތިތަކާއި އުމުރުފުރާތަކަށް ޢަމަލީގޮތުން ބައިވެރިވެވޭނެ ގޮތަށް ފަރުމާކުރެވިފައިވާ ތަފާތު ޕްރޮގްރާމްތަކެކެވެ. މީގެ ތެރޭގައި:
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
+            <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5]">
+              <CheckCircle2 className="w-5 h-5 text-[#1B6B52] shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="font-bold text-[#1C2622] text-sm block">ޢިލްމީ އަދި ދަޢުވަތީ ވޯކްޝޮޕްތައް:</span>
+                <span className="text-xs text-[#556660] leading-relaxed block">
+                  ދީނީ ވާޖިބުތަކާއި އަޅުކަންތައްތަކުގެ ޞައްޙަ ގޮތް އުނގަންނައިދިނުމަށް ޢިލްމުވެރިންނާ އެކު ކުރިއަށް ގެންދެވޭ ސެޝަންތައް.
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5]">
+              <CheckCircle2 className="w-5 h-5 text-[#1B6B52] shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="font-bold text-[#1C2622] text-sm block">މޫސުމީ އަދި ޚާއްޞަ ކެމްޕޭންތައް:</span>
+                <span className="text-xs text-[#556660] leading-relaxed block">
+                  ރޯދަމަހާއި ޛުލްޙިއްޖާގެ މާތް 10 ދުވަހާއި މުޙައްރަމް މަސް ފަދަ ބަރަކާތްތެރި މޫސުންތަކަށް ޚާއްޞަކޮށްގެން ހިންގޭ ދަރުސްތައް.
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5]">
+              <CheckCircle2 className="w-5 h-5 text-[#1B6B52] shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="font-bold text-[#1C2622] text-sm block">އުޚްތުންނާއި ކުދިންގެ ތަރުބިއްޔަތު:</span>
+                <span className="text-xs text-[#556660] leading-relaxed block">
+                  ކަނބަލުންނާއި ފުރާވަރުގެ ކުދިންގެ ނަފްސާނީ އަދި އިޖްތިމާޢީ ދުޅަހެޔޮކަމަށް އަމާޒުކޮށްގެން ބާއްވާ ޙަރަކާތްތައް.
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5]">
+              <CheckCircle2 className="w-5 h-5 text-[#1B6B52] shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="font-bold text-[#1C2622] text-sm block">ޚާއްޞަ އެހީއަށް ބޭނުންވާ ފަރާތްތައް:</span>
+                <span className="text-xs text-[#556660] leading-relaxed block">
+                  އަޑުއިވުމާއި ފެނުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކަށް އިޝާރާތުގެ ބަހުރުވައިން ތައްޔާރުކުރެވޭ ޚާއްޞަ ޕްރޮގްރާމްތައް.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* 4. Fullscreen Lightbox Modal */}

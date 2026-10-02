@@ -28,67 +28,65 @@ export default function HomePage({
 
   return (
     <div className="space-y-16 pb-12 font-thaana">
-      {/* 1. HERO SLIDESHOW BANNER */}
-      <HeroSlideshowBanner />
+      {/* 1. HERO SLIDESHOW BANNER (With Jamiyyaage Maqsad Box integrated into right side green) */}
+      <HeroSlideshowBanner onNavigate={onNavigate} />
 
       {/* 2. ABOUT SNIPPET: Sisters-led NGO with 13+ years community contribution */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-[#E2E9E5] shadow-xs">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8 space-y-4 text-right">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#1C2622] tracking-tight">
+        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-[#E2E9E5] shadow-xs text-right space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E9E5] pb-4">
+            <div>
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-[#1B6B52] uppercase tracking-wider">
+                <Sparkles className="w-4 h-4 text-[#1B6B52]" />
+                <span>ތާރީޚާއި ބިންގާ</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#1C2622] tracking-tight mt-1">
                 <span dir="ltr" className="inline-block font-mono">13+</span> އަހަރުގެ މައިދާނީ ޚިދުމަތް، ރަސްމީ ބިންގަލެއްގެ މަތީގައި
               </h2>
-              <p className="text-sm sm:text-base text-[#556660] leading-relaxed">
-                ހެޔޮބިންގާ އަކީ 15 ޖެނުއަރީ 2024 ގައި ރަސްމީކޮށް ރަޖިސްޓްރީ ކުރެވުނު ޖަމްޢިއްޔާއެއް ނަމަވެސް، މި ޖަމްޢިއްޔާގެ ފަހަތުގައިވަނީ އިސްލާމީ ދަޢުވަތާއި އިޖުތިމާޢީ ޚިދުމަތުގައި ވޭތުވެދިޔަ <span dir="ltr" className="inline-block font-mono font-bold">13+</span> އަހަރަށް ވުރެ ގިނަ ދުވަހު މައިދާނުގައި ހަރަކާތްތެރިވެފައިވާ ތަޖުރިބާކާރު ޓީމެކެވެ.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-xl bg-[#F8FAF9] border border-[#E2E9E5] flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center shrink-0 mt-0.5">
-                    <Users className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm text-[#1C2622]">އުޚުތުންގެ ލީޑަރޝިޕް</h4>
-                    <p className="text-xs text-[#556660] mt-0.5 leading-relaxed">
-                      ޖަމިއްޔާގެ އެންމެހައި ނިންމުންތަކާއި ހިންގުން ކުރިއަށްދަނީ ކަނބަލުންގެ ފުރިހަމަ އިސްނެގުމުގައެވެ.
-                    </p>
-                  </div>
-                </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onNavigate('about')}
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-[#1B6B52] hover:text-[#145541] font-bold self-end sm:self-auto cursor-pointer"
+            >
+              <span>ތަޢާރަފް ފުރިހަމަކޮށް ބައްލަވާ</span>
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+          </div>
 
-                <div className="p-4 rounded-xl bg-[#F8FAF9] border border-[#E2E9E5] flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center shrink-0 mt-0.5">
-                    <CheckCircle2 className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm text-[#1C2622]">އަޚުންގެ އެހީތެރިކަން</h4>
-                    <p className="text-xs text-[#556660] mt-0.5 leading-relaxed">
-                      ބޮޑެތި އިވެންޓްތަކުގެ ލޮޖިސްޓިކްސް އަދި ޓެކްނިކަލް މަސައްކަތްތަކުގައި ފިރިހެން ވޮލަންޓިއަރުން ބައިވެރިވެއެވެ.
-                    </p>
-                  </div>
-                </div>
+          <p className="text-sm sm:text-base text-[#556660] leading-relaxed max-w-4xl">
+            ހެޔޮބިންގާ އަކީ 15 ޖެނުއަރީ 2024 ގައި ރަސްމީކޮށް ރަޖިސްޓްރީ ކުރެވުނު ޖަމްޢިއްޔާއެއް ނަމަވެސް، މި ޖަމްޢިއްޔާގެ ފަހަތުގައިވަނީ އިސްލާމީ ދަޢުވަތާއި އިޖުތިމާޢީ ޚިދުމަތުގައި ވޭތުވެދިޔަ <span dir="ltr" className="inline-block font-mono font-bold">13+</span> އަހަރަށް ވުރެ ގިނަ ދުވަހު މައިދާނުގައި ހަރަކާތްތެރިވެފައިވާ ތަޖުރިބާކާރު ޓީމެކެވެ.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+            <div className="p-5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5] space-y-2.5">
+              <div className="w-10 h-10 rounded-xl bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center">
+                <Users className="w-5 h-5" />
               </div>
+              <h4 className="font-bold text-sm sm:text-base text-[#1C2622]">އުޚުތުންގެ ލީޑަރޝިޕް</h4>
+              <p className="text-xs sm:text-sm text-[#556660] leading-relaxed">
+                ޖަމިއްޔާގެ އެންމެހައި ނިންމުންތަކާއި ހިންގުން ކުރިއަށްދަނީ ކަނބަލުންގެ ފުރިހަމަ އިސްނެގުމުގައެވެ.
+              </p>
             </div>
 
-            <div className="lg:col-span-4 home-mission-card bg-gradient-to-br from-[#1B6B52] to-[#124837] text-white rounded-2xl p-6 text-right space-y-4 shadow-lg border border-[#1B6B52]">
-              <div className="flex items-center justify-between border-b border-white/20 pb-3">
-                <span className="text-xs text-[#EBF5F0] font-bold tracking-wider uppercase block">
-                  ޖަމިއްޔާގެ މަޤުޞަދު
-                </span>
-                <img src={logoImg} alt="Logo" className="w-8 h-8 object-contain brightness-110" />
+            <div className="p-5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5] space-y-2.5">
+              <div className="w-10 h-10 rounded-xl bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center">
+                <CheckCircle2 className="w-5 h-5" />
               </div>
-              <p className="text-base sm:text-lg font-bold leading-relaxed">
-                "މި ޖަމިއްޔާގެ މަޤްޞަދަކީ އިޖުތިމާއީ، ޢިލްމީ، ދީނީ، ތަރުބަވީ އަދި ފަންނީ ރަނގަޅު ޖީލެއް އުފައްދާ ހެޔޮ މުޖުތަމައުއެއް ބިނާކުރުމަށް މަސައްކަތް ކުރުމެވެ."
+              <h4 className="font-bold text-sm sm:text-base text-[#1C2622]">އަޚުންގެ އެހީތެރިކަން</h4>
+              <p className="text-xs sm:text-sm text-[#556660] leading-relaxed">
+                ބޮޑެތި އިވެންޓްތަކުގެ ލޮޖިސްޓިކްސް އަދި ޓެކްނިކަލް މަސައްކަތްތަކުގައި ފިރިހެން ވޮލަންޓިއަރުން ބައިވެރިވެއެވެ.
               </p>
-              <div className="pt-2 border-t border-white/20 flex items-center justify-between text-xs text-[#EBF5F0]">
-                <span>ރަޖިސްޓްރީ ނަންބަރު: CR/12/2024</span>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('about')}
-                  className="hover:text-white underline underline-offset-4"
-                >
-                  އިތުރަށް ކިޔުއްވާ
-                </button>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5] space-y-2.5">
+              <div className="w-10 h-10 rounded-xl bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center">
+                <BookOpen className="w-5 h-5" />
               </div>
+              <h4 className="font-bold text-sm sm:text-base text-[#1C2622]">ދަޢުވަތީ އަދި ތަރުބަވީ ބިންގާ</h4>
+              <p className="text-xs sm:text-sm text-[#556660] leading-relaxed">
+                އިޖުތިމާޢީ، ޢިލްމީ އަދި ދީނީ ހޭލުންތެރިކަން އިތުރުކޮށް ހެޔޮލަފާ ޖީލެއް ބިނާކުރުމުގެ މަތިވެރި ޢަޒުމް.
+              </p>
             </div>
           </div>
         </div>
