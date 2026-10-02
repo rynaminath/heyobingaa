@@ -122,18 +122,18 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
       <header 
         ref={headerRef}
         id="main-header"
-        className={`fixed top-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E5ECE8] shadow-xs transform-gpu will-change-transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#E5ECE8] shadow-xs transition-transform duration-300 ease-in-out ${
           headerVisible ? 'translate-y-0' : '-translate-y-full pointer-events-none'
         }`}
       >
       {/* Top Banner Notice: Contact & Social Media */}
       <div 
         id="header-topbar"
-        className="relative overflow-hidden bg-gradient-to-r from-[#0F3528] via-[#1A6850] via-[#20775C] to-[#124536] text-[#EBF5F0] border-b border-[#124335] py-1.5 px-3 sm:px-4 shadow-xs"
+        className="relative bg-gradient-to-r from-[#0F3528] via-[#1A6850] via-[#20775C] to-[#124536] text-[#EBF5F0] border-b border-[#124335] py-1.5 px-3 sm:px-4 shadow-xs"
       >
         {/* Layer 1: Islamic Star & Lattice Tessellation Texture Overlay */}
         <div 
-          className="topbar-texture absolute inset-0 pointer-events-none opacity-[0.16] mix-blend-screen"
+          className="topbar-texture absolute inset-0 pointer-events-none opacity-[0.16] mix-blend-screen overflow-hidden"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23A7F3D0' stroke-width='0.7' fill='none' fill-rule='evenodd'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Cpath d='M30 10l20 20-20 20-20-20z'/%3E%3Cpath d='M0 0l15 15L0 30l30 30 15-15L60 60V0L45 15 30 0z'/%3E%3Ccircle cx='30' cy='30' r='3.5' fill='%23A7F3D0' fill-opacity='0.25'/%3E%3C/g%3E%3C/svg%3E")`,
             backgroundSize: '42px 42px'
@@ -143,7 +143,7 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
 
         {/* Layer 2: Tactile Fine Stipple Grain Texture Overlay */}
         <div 
-          className="topbar-texture absolute inset-0 pointer-events-none opacity-[0.08] mix-blend-overlay"
+          className="topbar-texture absolute inset-0 pointer-events-none opacity-[0.08] mix-blend-overlay overflow-hidden"
           style={{
             backgroundImage: `radial-gradient(circle, #ffffff 1px, transparent 1px)`,
             backgroundSize: '16px 16px'
@@ -264,8 +264,13 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
             </nav>
           </div>
 
-          {/* Left Side: Mobile Hamburger Toggle */}
+          {/* Left Side: Desktop Accessibility Button & Mobile Hamburger Toggle */}
           <div className="flex items-center gap-3">
+            {/* Desktop Accessibility Button: Visible and accessible right on the main navbar */}
+            <div className="hidden lg:block">
+              <AccessibilityMenu variant="header-nav" />
+            </div>
+
             {/* Mobile Menu Hamburger Toggle */}
             <button
               type="button"

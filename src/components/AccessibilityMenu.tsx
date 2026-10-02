@@ -35,8 +35,61 @@ export default function AccessibilityMenu({
   } = useAccessibility();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [position, setPosition] = useState<{ top?: number; bottom?: number; right?: number }>({ top: 0, right: 0 });
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const updatePosition = () => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    const menuWidth = Math.min(360, window.innerWidth - 24);
+    const menuHeight = 440;
+
+    // Vertical position: immediately below the menu button
+    let top: number | undefined = rect.bottom + 8;
+    let bottom: number | undefined = undefined;
+
+    // If opening near bottom of viewport (e.g. footer button), place above button
+    if (top + menuHeight > window.innerHeight && rect.top > menuHeight) {
+      top = undefined;
+      bottom = window.innerHeight - rect.top + 8;
+    }
+
+    // Horizontal position: align with button right edge in RTL layout
+    let right: number | undefined = window.innerWidth - rect.right;
+
+    // Viewport containment: ensure at least 12px margin on left and right
+    if (right < 12) right = 12;
+    if (right + menuWidth > window.innerWidth - 12) {
+      right = Math.max(12, window.innerWidth - menuWidth - 12);
+    }
+
+    setPosition({ top, bottom, right });
+  };
+
+  const toggleMenu = () => {
+    if (!isOpen) {
+      updatePosition();
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      updatePosition();
+      const handleResize = () => updatePosition();
+      const handleScroll = () => updatePosition();
+
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [isOpen]);
 
   // Close when clicking outside
   useEffect(() => {
@@ -204,7 +257,7 @@ export default function AccessibilityMenu({
           ref={buttonRef}
           id="accessibility-settings-trigger"
           type="button"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={toggleMenu}
           aria-expanded={isOpen}
           aria-haspopup="dialog"
           aria-label="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
@@ -228,16 +281,38 @@ export default function AccessibilityMenu({
           ref={buttonRef}
           id="accessibility-settings-trigger-footer"
           type="button"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={toggleMenu}
           aria-expanded={isOpen}
           aria-haspopup="dialog"
           aria-label="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
-          className="hover:text-white flex items-center gap-1.5 transition-colors text-xs text-[#D1E0D9] font-thaana"
+          className="hover:text-white flex items-center gap-1.5 transition-colors text-xs text-[#D1E0D9] font-thaana cursor-pointer"
         >
           <Eye className="w-3.5 h-3.5 text-[#A7F3D0]" />
           <span>ފެނުމުގެ ފަސޭހަ</span>
           {isCustomized && (
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block animate-pulse" />
+          )}
+        </button>
+      ) : variant === 'header-nav' ? (
+        <button
+          ref={buttonRef}
+          id="accessibility-settings-trigger-nav"
+          type="button"
+          onClick={toggleMenu}
+          aria-expanded={isOpen}
+          aria-haspopup="dialog"
+          aria-label="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
+          className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-sm font-semibold font-thaana transition-all duration-200 border cursor-pointer ${
+            isCustomized
+              ? 'bg-[#1B6B52] text-white border-[#1B6B52] shadow-xs'
+              : 'bg-[#FAFCFB] hover:bg-[#EBF5F0] text-[#1C2622] hover:text-[#1B6B52] border-[#E2E9E5]'
+          }`}
+          title="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
+        >
+          <Eye className={`w-4 h-4 shrink-0 ${isCustomized ? 'text-[#A7F3D0]' : 'text-[#1B6B52]'}`} />
+          <span>ފެނުމުގެ ފަސޭހަ</span>
+          {isCustomized && (
+            <span className="w-2 h-2 rounded-full bg-amber-400 border border-white shrink-0 animate-pulse" />
           )}
         </button>
       ) : (
@@ -245,11 +320,11 @@ export default function AccessibilityMenu({
           ref={buttonRef}
           id="accessibility-settings-trigger"
           type="button"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={toggleMenu}
           aria-expanded={isOpen}
           aria-haspopup="dialog"
           aria-label="ފެނުމާއި ކިޔުމުގެ ފަސޭހަ (Accessibility Settings)"
-          className={`group relative inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold font-thaana transition-all duration-200 ${
+          className={`group relative inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold font-thaana transition-all duration-200 cursor-pointer ${
             variant === 'topbar'
               ? isOpen
                 ? 'bg-white text-[#1B6B52] shadow-xs'
@@ -276,48 +351,59 @@ export default function AccessibilityMenu({
         </button>
       )}
 
-      {/* Popover Dropdown Menu */}
+      {/* Topmost Popover positioned directly below the menu button */}
       {isOpen && (
-        <div
-          ref={menuRef}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Accessibility Settings"
-          className={`absolute w-80 sm:w-88 bg-white text-[#1C2622] rounded-2xl shadow-2xl border border-[#E5ECE8] p-4 z-50 animate-in fade-in zoom-in-95 duration-150 text-right font-thaana ${
-            variant === 'floating'
-              ? 'bottom-full mb-3 left-0'
-              : variant === 'footer'
-              ? 'bottom-full mb-3 left-0 sm:left-auto sm:right-0'
-              : 'left-0 sm:left-auto sm:right-0 mt-2'
-          }`}
-          style={{ direction: 'rtl' }}
-        >
-          {/* Menu Header */}
-          <div className="flex items-center justify-between pb-3 border-b border-[#E5ECE8]">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center">
-                <Eye className="w-4 h-4" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-[#1C2622] leading-tight">
-                  ފެނުމާއި ކިޔުމުގެ ފަސޭހަ
-                </h4>
-                <p className="text-[11px] text-[#556660] font-latin">
-                  Accessibility & Readability Settings
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setIsOpen(false)}
-              className="p-1 rounded-lg text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1C2622] transition-colors"
-              aria-label="Close"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+        <>
+          {/* Subtle click-outside dismiss backdrop */}
+          <div
+            className="fixed inset-0"
+            style={{ zIndex: 99998 }}
+            onClick={() => setIsOpen(false)}
+          />
 
-          {/* Section 1: Font Size Controls */}
+          {/* Topmost Popover dropdown positioned right below the menu button */}
+          <div
+            ref={menuRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Accessibility Settings"
+            style={{
+              position: 'fixed',
+              top: position.top !== undefined ? `${position.top}px` : undefined,
+              bottom: position.bottom !== undefined ? `${position.bottom}px` : undefined,
+              right: position.right !== undefined ? `${position.right}px` : undefined,
+              zIndex: 99999,
+              direction: 'rtl'
+            }}
+            className="w-[calc(100vw-24px)] sm:w-88 max-w-[360px] bg-white text-[#1C2622] rounded-2xl shadow-2xl border-2 border-[#1B6B52]/25 p-4 sm:p-5 text-right font-thaana animate-in fade-in zoom-in-95 duration-150"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Menu Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-[#E5ECE8]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center shrink-0">
+                  <Eye className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-[#1C2622] leading-tight">
+                    ފެނުމާއި ކިޔުމުގެ ފަސޭހަ
+                  </h4>
+                  <p className="text-[11px] text-[#556660]">
+                    Accessibility & Readability Settings
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 rounded-lg text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1C2622] transition-colors cursor-pointer"
+                aria-label="Close"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Section 1: Font Size Controls */}
           <div className="py-3 border-b border-[#E5ECE8] space-y-2">
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-[#1C2622]">އަކުރުގެ ސައިޒު (Font Size):</span>
@@ -445,6 +531,7 @@ export default function AccessibilityMenu({
             </button>
           </div>
         </div>
+      </>
       )}
     </div>
   );
