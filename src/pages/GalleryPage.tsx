@@ -197,9 +197,6 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
                   <h3 className="text-base sm:text-lg font-bold font-thaana drop-shadow-md">
                     {currentImage.title}
                   </h3>
-                  <p className="text-xs text-[#E5ECE8] font-mono opacity-80" dir="ltr">
-                    {currentImage.filename}
-                  </p>
                 </div>
                 <div className="text-xs font-thaana text-emerald-300">
                   ހެޔޮބިންގާ ޖަމްޢިއްޔާ
