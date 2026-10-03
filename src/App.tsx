@@ -227,7 +227,7 @@ export default function App() {
   return (
     <AccessibilityProvider>
       <AuthProvider>
-        <div className="min-h-screen bg-[#FAFCFB] text-[#1C2622] flex flex-col selection:bg-[#1B6B52] selection:text-white font-thaana">
+        <div className="min-h-screen flex flex-col selection:bg-[#1B6B52] selection:text-white font-thaana">
         {/* 1. Global Navigation Header */}
         <Header
           currentTab={currentTab}

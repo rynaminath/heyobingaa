@@ -50,7 +50,7 @@ export default function ActivityRecordsTable({ showTitle = true }: ActivityRecor
               <React.Fragment key={section.code}>
                 {/* Category Header Row */}
                 <tr className="bg-[#E5ECE9] border-t border-b border-[#CBD8D2]">
-                  <td colSpan={2} className="py-2.5 px-4 sm:px-6 text-center text-xs sm:text-sm font-extrabold text-[#193F34]">
+                  <td colSpan={2} className="py-2.5 px-4 sm:px-6 text-center text-xs sm:text-sm font-extrabold text-[#1B6B52]">
                     <span>{section.category}</span>
                   </td>
                 </tr>

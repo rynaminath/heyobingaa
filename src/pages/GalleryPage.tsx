@@ -79,7 +79,7 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
   const currentImage = images[currentIndex] || images[0];
 
   return (
-    <div className="min-h-screen bg-[#FAFCFB] font-thaana py-8 sm:py-12">
+    <div className="min-h-screen font-thaana py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-[#E5ECE8]">

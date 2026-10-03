@@ -677,7 +677,7 @@ export default function DonatePage() {
                 <p className="p-3 rounded-xl bg-white border border-[#E2E9E5] text-xs text-[#556660] leading-relaxed">
                   "{sampleMessage}"
                 </p>
-                <p className="text-[11px] text-[#8BAEA0]">
+                <p className="text-[11px] text-[#556660]">
                   މި މެސެޖު ކޮޕީކުރެއްވުމަށްފަހު، ސްލިޕްގެ ފޮޓޯއާއެކު ވައިބަރ އިން ފޮނުއްވާލެވޭނެއެވެ.
                 </p>
               </div>
@@ -741,7 +741,7 @@ export default function DonatePage() {
               <Users className="w-5 h-5" />
             </div>
             <h3 className="text-base font-bold text-[#1C2622]">
-              ޢާންމު ދަޢުވަތާއި އިޖުތިމާޢީ އެހީ
+              ޢާންމު ދީނީ އަދި އިޖުތިމާޢީ އެހީ
             </h3>
             <p className="text-xs text-[#556660] leading-relaxed">
               މިނިސްޓްރީ އޮފް އިސްލާމިކް އެފެއާޒް ހޯލް ފަދަ ބޮޑެތި މާލަންތަކުގައި ބޭއްވޭ ޤައުމީ ދަރުސްތަކުގެ ލޮޖިސްޓިކްސްއާއި، ބައިނަލްއަޤްވާމީ ކާރިސާތަކުގެ އެހީ.

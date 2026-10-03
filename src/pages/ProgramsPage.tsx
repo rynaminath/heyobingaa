@@ -304,7 +304,7 @@ export default function ProgramsPage({ onNavigate, onOpenDonateModal }: Programs
           </h2>
         </div>
 
-        <div className="text-sm sm:text-base text-[#445550] leading-relaxed space-y-3">
+        <div className="text-sm sm:text-base text-[#556660] leading-relaxed space-y-3">
           <p>
             ހެޔޮބިންގާ ޖަމްޢިއްޔާއިން ހިންގާ ޙަރަކާތްތަކަކީ ހަމައެކަނި އާދައިގެ ތަޤުރީރުތަކަކަށް ސަމާލުކަންދިނުމުގެ ބަދަލުގައި، މުޖުތަމަޢުގެ އެކި ފަންތިތަކާއި އުމުރުފުރާތަކަށް ޢަމަލީގޮތުން ބައިވެރިވެވޭނެ ގޮތަށް ފަރުމާކުރެވިފައިވާ ތަފާތު ޕްރޮގްރާމްތަކެކެވެ. މީގެ ތެރޭގައި:
           </p>

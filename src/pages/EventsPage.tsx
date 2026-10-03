@@ -73,16 +73,16 @@ END:VCALENDAR`;
 
       {/* Reminder notification toast */}
       {savedReminder && (
-        <div className="p-4 rounded-2xl bg-[#F9EDED] border border-[#8B2E34]/30 text-[#2D2926] text-sm flex items-center justify-between gap-3 shadow-md animate-in slide-in-from-top-2">
+        <div className="p-4 rounded-2xl bg-[#EBF5F0] border border-[#C8E0D5] text-[#1C2622] text-sm flex items-center justify-between gap-3 shadow-md animate-in slide-in-from-top-2">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-[#8B2E34] shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-[#1B6B52] shrink-0" />
             <span>
               "{savedReminder}" ކަލަންޑަރަށް އިތުރުކުރެވިއްޖެ! އިވެންޓް ފެށުމުގެ ކުރިން ހަނދާންކޮށްދޭނެއެވެ.
             </span>
           </div>
           <button
             onClick={() => setSavedReminder(null)}
-            className="text-xs font-bold text-[#8B2E34] underline"
+            className="text-xs font-bold text-[#1B6B52] hover:text-[#145541] underline cursor-pointer"
           >
             ބަންދުކުރައްވާ
           </button>
@@ -215,7 +215,7 @@ END:VCALENDAR`;
               <button
                 type="button"
                 onClick={onOpenDonateModal}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#8B2E34] hover:bg-[#702328] text-white font-bold text-xs shadow-md transition-all"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1B6B52] hover:bg-[#145541] text-white font-bold text-xs shadow-md transition-all cursor-pointer"
               >
                 <HeartHandshake className="w-4 h-4 text-[#F27D26]" />
                 <span>ދަރުސް އިންތިޒާމަށް އެހީވެލައްވާ</span>
@@ -227,7 +227,7 @@ END:VCALENDAR`;
 
       {/* Other Events Grid */}
       <div className="space-y-4">
-        <h3 className="text-xl font-bold text-[#2D2926] text-right">
+        <h3 className="text-xl font-bold text-[#1C2622] text-right">
           އިތުރު ދަރުސްތަކާއި ޕްރޮގްރާމްތައް
         </h3>
 
@@ -235,32 +235,32 @@ END:VCALENDAR`;
           {filteredEvents.filter(e => !e.isFeatured).map((ev) => (
             <div
               key={ev.id}
-              className="bg-white rounded-2xl border border-[#E8E4DC] p-6 shadow-xs hover:border-[#8B2E34]/40 hover:shadow-md transition-all text-right space-y-4 flex flex-col justify-between"
+              className="bg-white rounded-2xl border border-[#E5ECE8] p-6 shadow-xs hover:border-[#1B6B52]/40 hover:shadow-md transition-all text-right space-y-4 flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#F9EDED] text-[#8B2E34] font-bold">
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#EBF5F0] text-[#1B6B52] font-bold">
                     {ev.status === 'upcoming' ? 'ކުރިއަށް އޮތީ' : 'ނިމިފައި'}
                   </span>
-                  <span className="text-xs text-[#6E6963] font-mono">{ev.date}</span>
+                  <span className="text-xs text-[#556660] font-mono">{ev.date}</span>
                 </div>
 
-                <h4 className="text-lg font-bold text-[#2D2926]">{ev.title}</h4>
-                <p className="text-xs font-semibold text-[#8B2E34]">ވާހަކަދައްކަވަނީ: {ev.speaker}</p>
-                <p className="text-xs text-[#6E6963] leading-relaxed">{ev.description}</p>
+                <h4 className="text-lg font-bold text-[#1C2622]">{ev.title}</h4>
+                <p className="text-xs font-semibold text-[#1B6B52]">ވާހަކަދައްކަވަނީ: {ev.speaker}</p>
+                <p className="text-xs text-[#556660] leading-relaxed">{ev.description}</p>
               </div>
 
-              <div className="space-y-2 pt-3 border-t border-[#E8E4DC] text-xs text-[#6E6963]">
+              <div className="space-y-2 pt-3 border-t border-[#E5ECE8] text-xs text-[#556660]">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#6E6963] shrink-0" />
+                  <MapPin className="w-3.5 h-3.5 text-[#556660] shrink-0" />
                   <span>{ev.venue}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-[#6E6963] shrink-0" />
+                  <Clock className="w-3.5 h-3.5 text-[#556660] shrink-0" />
                   <span>{ev.dayText} - {ev.time}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users className="w-3.5 h-3.5 text-[#6E6963] shrink-0" />
+                  <Users className="w-3.5 h-3.5 text-[#556660] shrink-0" />
                   <span>{ev.audience}</span>
                 </div>
               </div>
@@ -269,7 +269,7 @@ END:VCALENDAR`;
                 <button
                   type="button"
                   onClick={() => handleSetReminder(ev.title)}
-                  className="text-xs text-[#8B2E34] hover:text-[#702328] font-bold flex items-center gap-1"
+                  className="text-xs text-[#1B6B52] hover:text-[#145541] font-bold flex items-center gap-1 cursor-pointer"
                 >
                   <Bell className="w-3.5 h-3.5" />
                   <span>ހަނދާންކޮށްދިނުން (Remind Me)</span>

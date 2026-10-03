@@ -309,29 +309,80 @@ html.theme-dark [class*="via-[#EBF5F0]"] {
 }
 
 /* Base Cards, White Containers, and Page Backgrounds */
+html.theme-dark [class*="bg-[#FAFCFB]"] {
+  background-color: #0E1614 !important;
+  color: #F1F6F4 !important;
+}
 html.theme-dark .bg-white,
-html.theme-dark [class*="bg-[#FAFCFB]"],
-html.theme-dark [class*="bg-gray-50"],
-html.theme-dark [class*="bg-[#F8FAF9]"] {
+html.theme-dark [class*="bg-[#F8FAF9]"],
+html.theme-dark [class*="bg-gray-50"] {
   background-color: #15221F !important;
   color: #F1F6F4 !important;
   border-color: #223832 !important;
 }
 
-/* Texts */
+/* Light Gradients & Tinted Containers in Dark Mode */
+html.theme-dark [class*="from-[#FAFCFB]"],
+html.theme-dark [class*="from-[#F4F8F6]"] {
+  background: #15221F !important;
+  background-image: none !important;
+  border-color: #223832 !important;
+}
+html.theme-dark [class*="bg-[#F4F7F5]"] {
+  background-color: #101C19 !important;
+  border-color: #223B34 !important;
+}
+html.theme-dark [class*="bg-[#E5ECE9]"] {
+  background-color: #182B24 !important;
+  border-color: #28473C !important;
+}
+html.theme-dark [class*="bg-[#F0F5F2]"] {
+  background-color: #15241F !important;
+  border-color: #254037 !important;
+}
+html.theme-dark [class*="hover:bg-[#F9FCFA]"]:hover {
+  background-color: #192D26 !important;
+}
+
+/* Base Headings & Text directly on Dark Background */
+html.theme-dark body,
+html.theme-dark main,
+html.theme-dark section {
+  color: #F1F6F4;
+}
+
+/* Texts & Headings directly on Dark Background */
 html.theme-dark [class*="text-[#1C2622]"],
-html.theme-dark [class*="text-[#1E2623]"] {
+html.theme-dark [class*="text-[#1E2623]"],
+html.theme-dark [class*="text-[#2D2926]"] {
   color: #F1F6F4 !important;
 }
 html.theme-dark [class*="text-[#556660]"],
-html.theme-dark [class*="text-gray-"] {
-  color: #9BB3AA !important;
+html.theme-dark [class*="text-[#6E6963]"],
+html.theme-dark [class*="text-[#445550]"],
+html.theme-dark [class*="text-gray-"],
+html.theme-dark [class*="text-slate-"] {
+  color: #B4CCC3 !important;
 }
-html.theme-dark [class*="text-[#1B6B52]"] {
+html.theme-dark [class*="text-[#1B6B52]"],
+html.theme-dark [class*="text-[#193F34]"] {
   color: #34D399 !important;
 }
-html.theme-dark [class*="hover:text-[#1B6B52]"]:hover {
+html.theme-dark [class*="hover:text-[#1B6B52]"]:hover,
+html.theme-dark [class*="hover:text-[#145541]"]:hover {
   color: #6EE7B7 !important;
+}
+html.theme-dark [class*="text-[#145541]"] {
+  color: #34D399 !important;
+}
+html.theme-dark [class*="text-[#8B2E34]"] {
+  color: #FCA5A5 !important;
+}
+html.theme-dark [class*="text-[#B83244]"] {
+  color: #FCA5A5 !important;
+}
+html.theme-dark [class*="text-[#8BAEA0]"] {
+  color: #A7F3D0 !important;
 }
 html.theme-dark [class*="text-[#A7F3D0]"],
 html.theme-dark [class*="text-emerald-400"],
@@ -343,6 +394,24 @@ html.theme-dark [class*="text-[#255D96]"] {
 }
 html.theme-dark [class*="text-[#0F4232]"] {
   color: #6EE7B7 !important;
+}
+html.theme-dark [class*="text-[#D8D2C7]"] {
+  color: #D1E0D9 !important;
+}
+html.theme-dark [class*="text-[#D1E0D9]"] {
+  color: #E2EFE9 !important;
+}
+
+/* Inactive button & tab pills on main background */
+html.theme-dark button[class*="bg-[#FAFCFB]"],
+html.theme-dark [class*="bg-[#FAFCFB]"][class*="border"] {
+  background-color: #15221F !important;
+  border-color: #2D483F !important;
+  color: #D1E0D9 !important;
+}
+html.theme-dark button[class*="bg-[#FAFCFB]"]:hover {
+  background-color: #1E332B !important;
+  color: #FFFFFF !important;
 }
 
 /* Light Green Tinted Boxes & Badges */
@@ -534,6 +603,47 @@ html.theme-blue [class*="via-[#EBF5F0]"] {
   background: #EBF4FA !important;
   background-image: none !important;
   border-color: #CFE2F5 !important;
+}
+
+/* Base Cards, White Containers, and Page Backgrounds */
+html.theme-blue [class*="bg-[#FAFCFB]"] {
+  background-color: #F4F8FC !important;
+}
+html.theme-blue [class*="bg-[#F8FAF9]"] {
+  background-color: #EDF4FC !important;
+}
+
+/* Base Headings & Text directly on Blue Background */
+html.theme-blue body,
+html.theme-blue main,
+html.theme-blue section,
+html.theme-blue h1,
+html.theme-blue h2,
+html.theme-blue h3,
+html.theme-blue h4,
+html.theme-blue h5,
+html.theme-blue h6 {
+  color: #0F1E2E;
+}
+
+/* Texts */
+html.theme-blue [class*="text-[#1C2622]"],
+html.theme-blue [class*="text-[#1E2623]"],
+html.theme-blue [class*="text-[#2D2926]"] {
+  color: #0F1E2E !important;
+}
+html.theme-blue [class*="text-[#556660]"],
+html.theme-blue [class*="text-[#6E6963]"],
+html.theme-blue [class*="text-[#445550]"],
+html.theme-blue [class*="text-gray-"],
+html.theme-blue [class*="text-slate-"] {
+  color: #456282 !important;
+}
+html.theme-blue [class*="text-[#8B2E34]"] {
+  color: #1E5B94 !important;
+}
+html.theme-blue [class*="text-[#8BAEA0]"] {
+  color: #2563EB !important;
 }
 
 /* Primary Blue Buttons & Accents (replaces #1B6B52) */
@@ -749,6 +859,47 @@ html.theme-red [class*="via-[#EBF5F0]"] {
   background: #FDF2F4 !important;
   background-image: none !important;
   border-color: #F5D5DB !important;
+}
+
+/* Base Cards, White Containers, and Page Backgrounds */
+html.theme-red [class*="bg-[#FAFCFB]"] {
+  background-color: #FCF7F8 !important;
+}
+html.theme-red [class*="bg-[#F8FAF9]"] {
+  background-color: #FDF2F4 !important;
+}
+
+/* Base Headings & Text directly on Red Background */
+html.theme-red body,
+html.theme-red main,
+html.theme-red section,
+html.theme-red h1,
+html.theme-red h2,
+html.theme-red h3,
+html.theme-red h4,
+html.theme-red h5,
+html.theme-red h6 {
+  color: #26070C;
+}
+
+/* Texts */
+html.theme-red [class*="text-[#1C2622]"],
+html.theme-red [class*="text-[#1E2623]"],
+html.theme-red [class*="text-[#2D2926]"] {
+  color: #26070C !important;
+}
+html.theme-red [class*="text-[#556660]"],
+html.theme-red [class*="text-[#6E6963]"],
+html.theme-red [class*="text-[#445550]"],
+html.theme-red [class*="text-gray-"],
+html.theme-red [class*="text-slate-"] {
+  color: #70444C !important;
+}
+html.theme-red [class*="text-[#8B2E34]"] {
+  color: #991B2D !important;
+}
+html.theme-red [class*="text-[#8BAEA0]"] {
+  color: #DC2626 !important;
 }
 
 /* Primary Red Buttons & Accents (replaces #1B6B52) */

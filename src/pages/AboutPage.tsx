@@ -162,10 +162,10 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
       {/* 5 Core Pillars */}
       <section className="space-y-6 text-right">
         <div>
-          <span className="text-xs font-bold text-[#8B2E34] uppercase tracking-wider">
+          <span className="text-xs font-bold text-[#1B6B52] uppercase tracking-wider">
             މަސައްކަތުގެ އަސާސްތައް
           </span>
-          <h3 className="text-2xl font-bold text-[#2D2926] mt-1">
+          <h3 className="text-2xl font-bold text-[#1C2622] mt-1">
             ހެޔޮބިންގާގެ މައިގަނޑު 5 ދާއިރާ
           </h3>
         </div>
@@ -174,13 +174,13 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
           {pillars.map((pillar, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-2xl p-6 border border-[#E8E4DC] shadow-xs space-y-3 hover:border-[#8B2E34]/40 transition-colors"
+              className="bg-white rounded-2xl p-6 border border-[#E5ECE8] shadow-xs space-y-3 hover:border-[#1B6B52]/40 transition-colors"
             >
-              <div className="w-8 h-8 rounded-lg bg-[#F9EDED] text-[#8B2E34] font-bold text-xs flex items-center justify-center font-mono">
+              <div className="w-8 h-8 rounded-lg bg-[#EBF5F0] text-[#1B6B52] font-bold text-xs flex items-center justify-center font-mono">
                 0{idx + 1}
               </div>
-              <h4 className="font-bold text-[#2D2926] text-base">{pillar.title}</h4>
-              <p className="text-xs text-[#6E6963] leading-relaxed">{pillar.desc}</p>
+              <h4 className="font-bold text-[#1C2622] text-base">{pillar.title}</h4>
+              <p className="text-xs text-[#556660] leading-relaxed">{pillar.desc}</p>
             </div>
           ))}
         </div>
