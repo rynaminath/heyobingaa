@@ -38,7 +38,7 @@ export default function HomePage({
             <div>
               <div className="inline-flex items-center gap-2 text-xs font-bold text-[#1B6B52] uppercase tracking-wider">
                 <Sparkles className="w-4 h-4 text-[#1B6B52]" />
-                <span>ތާރީޚާއި ބިންގާ</span>
+                <span>ތާރީޚާއި  ތަޖުރިބާ</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold text-[#1C2622] tracking-tight mt-1">
                 <span dir="ltr" className="inline-block font-mono">13+</span> އަހަރުގެ މައިދާނީ ޚިދުމަތް، ރަސްމީ ބިންގަލެއްގެ މަތީގައި
@@ -55,7 +55,7 @@ export default function HomePage({
           </div>
 
           <p className="text-sm sm:text-base text-[#556660] leading-relaxed max-w-4xl">
-            ހެޔޮބިންގާ އަކީ 15 ޖެނުއަރީ 2024 ގައި ރަސްމީކޮށް ރަޖިސްޓްރީ ކުރެވުނު ޖަމްޢިއްޔާއެއް ނަމަވެސް، މި ޖަމްޢިއްޔާގެ ފަހަތުގައިވަނީ އިސްލާމީ ދަޢުވަތާއި އިޖުތިމާޢީ ޚިދުމަތުގައި ވޭތުވެދިޔަ <span dir="ltr" className="inline-block font-mono font-bold">13+</span> އަހަރަށް ވުރެ ގިނަ ދުވަހު މައިދާނުގައި ހަރަކާތްތެރިވެފައިވާ ތަޖުރިބާކާރު ޓީމެކެވެ.
+            ހެޔޮބިންގާ އަކީ 15 ޖެނުއަރީ 2024 ގައި ރަސްމީކޮށް ރަޖިސްޓްރީ ކުރެވުނު ޖަމްޢިއްޔާއެއް ނަމަވެސް، މި ޖަމްޢިއްޔާގެ ފަހަތުގައިވަނީ އިސްލާމީ ދަޢުވަތާއި އިޖުތިމާޢީ ޚިދުމަތުގައި ވޭތުވެދިޔަ <span dir="ltr" className="inline-block font-mono font-bold">13+</span> އަހަރަށް ވުރެ ގިނަ ދުވަހު މައިދާނުގައި ހަރަކާތްތެރިވެފައިވާ ތަޖުރިބާކާރު އުޚްތުއްގެ ޓީމެކެވެ.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
@@ -83,7 +83,7 @@ export default function HomePage({
               <div className="w-10 h-10 rounded-xl bg-[#EBF5F0] text-[#1B6B52] flex items-center justify-center">
                 <BookOpen className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-sm sm:text-base text-[#1C2622]">ދަޢުވަތީ އަދި ތަރުބަވީ ބިންގާ</h4>
+              <h4 className="font-bold text-sm sm:text-base text-[#1C2622]">ދީނީ އަދި ތަރުބަވީ ބިންގާ</h4>
               <p className="text-xs sm:text-sm text-[#556660] leading-relaxed">
                 އިޖުތިމާޢީ، ޢިލްމީ އަދި ދީނީ ހޭލުންތެރިކަން އިތުރުކޮށް ހެޔޮލަފާ ޖީލެއް ބިނާކުރުމުގެ މަތިވެރި ޢަޒުމް.
               </p>

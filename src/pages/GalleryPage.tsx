@@ -92,7 +92,7 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
               ފޮޓޯ ގެލެރީ (Photo Gallery)
             </h1>
             <p className="text-xs sm:text-sm text-[#556660] mt-1 max-w-2xl">
-              ޖަމްޢިއްޔާގެ ދަޢުވަތީ، އިޖުތިމާޢީ އަދި ތަރުބަވީ ޙަރަކާތްތަކާއި ބައްދަލުވުންތަކުގެ ތަޞްވީރުތައް.
+              ޖަމްޢިއްޔާގެ ދީނީ، އިޖުތިމާޢީ އަދި ތަރުބަވީ ޙަރަކާތްތަކާއި ބައްދަލުވުންތަކުގެ ތަޞްވީރުތައް.
             </p>
           </div>
 

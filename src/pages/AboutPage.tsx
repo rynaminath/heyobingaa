@@ -18,7 +18,7 @@ interface AboutPageProps {
 export default function AboutPage({ onNavigate }: AboutPageProps) {
   const pillars = [
     {
-      title: 'ދީނީ އަދި ދަޢުވަތީ (Religious & Dawah)',
+      title: 'ދީނީ (Religious)',
       desc: 'ޞައްޙަ އިސްލާމީ ޢަޤީދާއާއި ޢިލްމު ފެތުރުމާއި، ބޮޑެތި ދަރުސްތަކާއި ޓީވީ ޕްރޮގްރާމްތައް އިންތިޒާމުކުރުން.'
     },
     {
@@ -35,7 +35,7 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
     },
     {
       title: 'ތަރައްޤީއާއި ޓެކްނިކަލް (Developmental & Technical)',
-      desc: 'ދަޢުވަތީ މައިދާނުގައި ޓެކްނޮލޮޖީއާއި މީޑިއާގެ ޒަމާނީ ވަސީލަތްތައް ބޭނުންކޮށް، ދެމެހެއްޓެނިވި ހިންގުމުގެ ނިޒާމު ޤާއިމުކުރުން.'
+      desc: 'ދީނީ މައިދާނުގައި ޓެކްނޮލޮޖީއާއި މީޑިއާގެ ޒަމާނީ ވަސީލަތްތައް ބޭނުންކޮށް، ދެމެހެއްޓެނިވި ހިންގުމުގެ ނިޒާމު ޤާއިމުކުރުން.'
     }
   ];
 
@@ -64,7 +64,7 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
           </div>
 
           <h2 className="text-2xl font-bold text-[#1C2622] leading-snug">
-            <span dir="ltr" className="inline-block font-mono">13+</span> އަހަރުގެ ދަޢުވަތީ ތަޖުރިބާއިން ރަސްމީ ބިންގަލަކަށް
+            <span dir="ltr" className="inline-block font-mono">13+</span> އަހަރުގެ ދީނީ ތަޖުރިބާއިން ރަސްމީ ބިންގަލަކަށް
           </h2>
 
           <p className="text-base text-[#556660] leading-relaxed">

@@ -264,13 +264,8 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
             </nav>
           </div>
 
-          {/* Left Side: Desktop Accessibility Button & Mobile Hamburger Toggle */}
+          {/* Left Side: Mobile Hamburger Toggle */}
           <div className="flex items-center gap-3">
-            {/* Desktop Accessibility Button: Visible and accessible right on the main navbar */}
-            <div className="hidden lg:block">
-              <AccessibilityMenu variant="header-nav" />
-            </div>
-
             {/* Mobile Menu Hamburger Toggle */}
             <button
               type="button"

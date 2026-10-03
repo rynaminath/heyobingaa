@@ -282,10 +282,10 @@ export default function ProgramsPage({ onNavigate, onOpenDonateModal }: Programs
       <div className="bg-gradient-to-l from-[#134e3e] via-[#1B6B52] to-[#124b3b] text-white p-8 sm:p-10 rounded-3xl border border-[#145541] shadow-xl text-right space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[#A7F3D0] text-xs font-semibold">
           <Sparkles className="w-3.5 h-3.5 text-[#FDE68A]" />
-          <span>ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ ދަޢުވަތީ އަދި ތަރުބަވީ ޙަރަކާތްތައް</span>
+          <span>ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ ދީނީ އަދި ތަރުބަވީ ޙަރަކާތްތައް</span>
         </div>
         <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-          ޕްރޮގްރާމްތަކާއި މުޖުތަމަޢީ ޙަރަކާތްތައް
+          ޕްރޮގްރާމްތަކާއި ޙަރަކާތްތައް
         </h1>
         <p className="text-base sm:text-lg text-[#EBF5F0] max-w-3xl leading-relaxed">
           ދިވެހި މުޖުތަމަޢުގެ އެންމެހައި ފަރާތްތަކަށް އިސްލާމީ ޞައްޙަ ޢަޤީދާއާއި ރިވެތި އަޚްލާޤާއި ހެޔޮލަފާ ތަރުބިއްޔަތު ފޯރުކޮށްދިނުމަށްޓަކައި ހިންގޭ ތަފާތު ޕްރޮގްރާމްތަކާއި ވޯކްޝޮޕްތައް.
@@ -313,7 +313,7 @@ export default function ProgramsPage({ onNavigate, onOpenDonateModal }: Programs
             <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-[#F8FAF9] border border-[#E2E9E5]">
               <CheckCircle2 className="w-5 h-5 text-[#1B6B52] shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <span className="font-bold text-[#1C2622] text-sm block">ޢިލްމީ އަދި ދަޢުވަތީ ވޯކްޝޮޕްތައް:</span>
+                <span className="font-bold text-[#1C2622] text-sm block">ޢިލްމީ އަދި ދީނީ ވޯކްޝޮޕްތައް:</span>
                 <span className="text-xs text-[#556660] leading-relaxed block">
                   ދީނީ ވާޖިބުތަކާއި އަޅުކަންތައްތަކުގެ ޞައްޙަ ގޮތް އުނގަންނައިދިނުމަށް ޢިލްމުވެރިންނާ އެކު ކުރިއަށް ގެންދެވޭ ސެޝަންތައް.
                 </span>
