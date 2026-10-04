@@ -427,12 +427,156 @@
         }
       },
       "required": ["title", "url"]
+    },
+    "author": {
+      "title": "Author",
+      "description": "Authorized authors who can write and submit articles for admin approval.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Author Google account email address.",
+          "maxLength": 100
+        },
+        "name": {
+          "type": "string",
+          "description": "Author display name in Dhivehi.",
+          "maxLength": 120
+        },
+        "title": {
+          "type": "string",
+          "description": "Author title or credential (e.g., ދީނީ ލިޔުންތެރިޔާ).",
+          "maxLength": 120
+        },
+        "bio": {
+          "type": "string",
+          "description": "Brief author biography.",
+          "maxLength": 1000
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "suspended"],
+          "description": "Author active status."
+        },
+        "addedAt": {
+          "type": "string",
+          "description": "Timestamp when author was registered.",
+          "maxLength": 50
+        },
+        "addedBy": {
+          "type": "string",
+          "description": "Admin UID who authorized this author.",
+          "maxLength": 128
+        }
+      },
+      "required": ["email", "name", "status"]
+    },
+    "article": {
+      "title": "Article",
+      "description": "Educational, religious, and social articles published or submitted for review.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the article in Dhivehi.",
+          "maxLength": 250
+        },
+        "excerpt": {
+          "type": "string",
+          "description": "Short summary or excerpt for article previews.",
+          "maxLength": 500
+        },
+        "content": {
+          "type": "string",
+          "description": "Complete body content of the article.",
+          "maxLength": 50000
+        },
+        "featuredImage": {
+          "type": "string",
+          "description": "Standardized 16:9 featured cover image URL or base64 data URI.",
+          "maxLength": 800000
+        },
+        "category": {
+          "type": "string",
+          "enum": ["tawheed", "fiqh", "family", "youth", "seerah", "ramadan", "general"],
+          "description": "Topic category code."
+        },
+        "categoryLabel": {
+          "type": "string",
+          "description": "Dhivehi label for category.",
+          "maxLength": 100
+        },
+        "authorName": {
+          "type": "string",
+          "description": "Published author name (customizable by admins).",
+          "maxLength": 120
+        },
+        "authorId": {
+          "type": "string",
+          "description": "UID of submitting author.",
+          "maxLength": 128
+        },
+        "authorEmail": {
+          "type": "string",
+          "description": "Email of author.",
+          "maxLength": 100
+        },
+        "authorRole": {
+          "type": "string",
+          "description": "Role of author.",
+          "maxLength": 100
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "pending_approval", "published", "rejected"],
+          "description": "Workflow lifecycle status."
+        },
+        "publishedAt": {
+          "type": "string",
+          "description": "Publish date string.",
+          "maxLength": 50
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp.",
+          "maxLength": 50
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Update timestamp.",
+          "maxLength": 50
+        },
+        "readingTimeMinutes": {
+          "type": "number",
+          "description": "Estimated reading duration in minutes."
+        },
+        "approvedBy": {
+          "type": "string",
+          "description": "Admin UID who approved and published.",
+          "maxLength": 128
+        },
+        "rejectionReason": {
+          "type": "string",
+          "description": "Reason or revision request if rejected.",
+          "maxLength": 1000
+        }
+      },
+      "required": ["title", "excerpt", "content", "featuredImage", "authorName", "status", "category"]
     }
   },
   "firestore": {
     "/admins/{adminId}": {
       "schema": "admin",
       "description": "List of authorized administrator users."
+    },
+    "/authors/{authorId}": {
+      "schema": "author",
+      "description": "Authorized authors who can create and submit articles."
+    },
+    "/articles/{articleId}": {
+      "schema": "article",
+      "description": "Articles directory with 16:9 featured images and author approval workflow."
     },
     "/events/{eventId}": {
       "schema": "event",

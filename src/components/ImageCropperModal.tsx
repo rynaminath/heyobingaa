@@ -16,6 +16,9 @@ interface ImageCropperModalProps {
   filename?: string;
   onCropComplete: (croppedDataUrl: string, filename: string) => void;
   onClose: () => void;
+  lockAspect?: '16:9' | null;
+  customTitle?: string;
+  customSubtitle?: string;
 }
 
 type AspectRatio = '16:9' | '4:3' | '1:1' | 'free';
@@ -24,9 +27,13 @@ export default function ImageCropperModal({
   imageSrc,
   filename = 'image.jpg',
   onCropComplete,
-  onClose
+  onClose,
+  lockAspect = null,
+  customTitle,
+  customSubtitle
 }: ImageCropperModalProps) {
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('16:9');
+
   const [zoom, setZoom] = useState<number>(1);
   const [rotation, setRotation] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -257,7 +264,14 @@ export default function ImageCropperModal({
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#4D0B14]">
           <div className="flex items-center gap-2">
             <Crop className="w-5 h-5 text-[#FBD38D]" />
-            <h3 className="font-bold text-base sm:text-lg text-white">ފޮޓޯ ކްރޮޕްކުރައްވާ (Crop & Adjust)</h3>
+            <div>
+              <h3 className="font-bold text-base sm:text-lg text-white">
+                {customTitle || 'ފޮޓޯ ކްރޮޕްކުރައްވާ (Crop & Adjust)'}
+              </h3>
+              {customSubtitle && (
+                <p className="text-xs text-[#FBD38D]/80 font-thaana mt-0.5">{customSubtitle}</p>
+              )}
+            </div>
           </div>
           <button
             type="button"
@@ -342,45 +356,52 @@ export default function ImageCropperModal({
         <div className="p-4 sm:p-5 border-t border-[#4D0B14] bg-[#220409] space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Aspect Ratio Buttons */}
-            <div className="flex items-center gap-1.5 bg-black/40 p-1 rounded-xl border border-white/10">
-              <span className="text-xs text-white/60 px-2 font-mono">ރޭޝިއޯ:</span>
-              <button
-                type="button"
-                onClick={() => applyAspectRatio('16:9')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
-                  aspectRatio === '16:9' ? 'bg-[#801320] text-white shadow-xs' : 'text-white/70 hover:text-white'
-                }`}
-              >
-                16:9 (ލޭންޑްސްކޭޕް)
-              </button>
-              <button
-                type="button"
-                onClick={() => applyAspectRatio('4:3')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
-                  aspectRatio === '4:3' ? 'bg-[#801320] text-white shadow-xs' : 'text-white/70 hover:text-white'
-                }`}
-              >
-                4:3
-              </button>
-              <button
-                type="button"
-                onClick={() => applyAspectRatio('1:1')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
-                  aspectRatio === '1:1' ? 'bg-[#801320] text-white shadow-xs' : 'text-white/70 hover:text-white'
-                }`}
-              >
-                1:1 (ގޮޅި)
-              </button>
-              <button
-                type="button"
-                onClick={() => applyAspectRatio('free')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
-                  aspectRatio === 'free' ? 'bg-[#801320] text-white shadow-xs' : 'text-white/70 hover:text-white'
-                }`}
-              >
-                ފްރީ
-              </button>
-            </div>
+            {lockAspect === '16:9' ? (
+              <div className="flex items-center gap-2 bg-[#801320] text-white px-3.5 py-1.5 rounded-xl border border-white/20 text-xs font-bold shadow-xs">
+                <span className="text-[#FBD38D]">✨</span>
+                <span>16:9 ސްޓޭންޑަޑް ސައިޒް (Standardized 16:9 Only)</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 bg-black/40 p-1 rounded-xl border border-white/10">
+                <span className="text-xs text-white/60 px-2 font-mono">ރޭޝިއޯ:</span>
+                <button
+                  type="button"
+                  onClick={() => applyAspectRatio('16:9')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                    aspectRatio === '16:9' ? 'bg-[#801320] text-white shadow-xs' : 'text-white/70 hover:text-white'
+                  }`}
+                >
+                  16:9 (ލޭންޑްސްކޭޕް)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyAspectRatio('4:3')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                    aspectRatio === '4:3' ? 'bg-[#801320] text-white shadow-xs' : 'text-white/70 hover:text-white'
+                  }`}
+                >
+                  4:3
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyAspectRatio('1:1')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                    aspectRatio === '1:1' ? 'bg-[#801320] text-white shadow-xs' : 'text-white/70 hover:text-white'
+                  }`}
+                >
+                  1:1 (ގޮޅި)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyAspectRatio('free')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                    aspectRatio === 'free' ? 'bg-[#801320] text-white shadow-xs' : 'text-white/70 hover:text-white'
+                  }`}
+                >
+                  ފްރީ
+                </button>
+              </div>
+            )}
 
             {/* Transform Controls: Zoom & Rotate */}
             <div className="flex items-center gap-3">

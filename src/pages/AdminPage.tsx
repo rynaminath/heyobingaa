@@ -34,6 +34,8 @@ import {
   FileText
 } from 'lucide-react';
 import ImageCropperModal from '../components/ImageCropperModal';
+import AdminArticlesTab from '../components/admin/AdminArticlesTab';
+import AdminAuthorsTab from '../components/admin/AdminAuthorsTab';
 import { useAuth } from '../context/AuthContext';
 import {
   subscribeToEvents,
@@ -42,6 +44,8 @@ import {
   subscribeToGallery,
   subscribeToDonationSlips,
   subscribeToVolunteers,
+  subscribeToAllArticles,
+  subscribeToAuthors,
   saveEventToFirestore,
   deleteEventFromFirestore,
   saveMediaToFirestore,
@@ -53,15 +57,21 @@ import {
   verifyDonationSlipInFirestore,
   deleteDonationSlipInFirestore,
   updateVolunteerStatusInFirestore,
-  deleteVolunteerApplicationInFirestore
+  deleteVolunteerApplicationInFirestore,
+  saveArticleToFirestore,
+  approveAndPublishArticleInFirestore,
+  rejectArticleInFirestore,
+  deleteArticleFromFirestore,
+  saveAuthorToFirestore,
+  deleteAuthorFromFirestore
 } from '../services/firestoreService';
-import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem } from '../types';
+import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem, ArticleItem, AuthorProfile } from '../types';
 import { NGO_CONTACT } from '../data/initialData';
 
-type AdminTab = 'events' | 'media' | 'programs' | 'gallery' | 'slips' | 'volunteers';
+type AdminTab = 'events' | 'media' | 'programs' | 'gallery' | 'articles' | 'authors' | 'slips' | 'volunteers';
 
 export default function AdminPage() {
-  const { user, isAdmin, loading, loginWithGoogle, logout, adminEmail } = useAuth();
+  const { user, isAdmin, isAuthor, authorProfile, loading, loginWithGoogle, logout, adminEmail } = useAuth();
   const [activeTab, setActiveTab] = useState<AdminTab>('events');
 
   // Firestore Data states
@@ -69,6 +79,8 @@ export default function AdminPage() {
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);
   const [programs, setPrograms] = useState<ProgramItem[]>([]);
   const [galleryList, setGalleryList] = useState<GalleryItem[]>([]);
+  const [articlesList, setArticlesList] = useState<ArticleItem[]>([]);
+  const [authorsList, setAuthorsList] = useState<AuthorProfile[]>([]);
   const [slips, setSlips] = useState<DonationSlip[]>([]);
   const [volunteers, setVolunteers] = useState<VolunteerApplication[]>([]);
 
@@ -88,8 +100,17 @@ export default function AdminPage() {
   const [volStatusFilter, setVolStatusFilter] = useState<'all' | 'pending' | 'reviewed' | 'contacted'>('all');
   const [copiedVolPhone, setCopiedVolPhone] = useState(false);
   const [isDemoAdmin, setIsDemoAdmin] = useState<boolean>(false);
+  const [isDemoAuthor, setIsDemoAuthor] = useState<boolean>(false);
 
   const effectiveIsAdmin = isAdmin || isDemoAdmin;
+  const effectiveIsAuthor = isAuthor || isDemoAuthor || effectiveIsAdmin;
+
+  // If user is author and not admin, default to articles tab
+  useEffect(() => {
+    if (effectiveIsAuthor && !effectiveIsAdmin) {
+      setActiveTab('articles');
+    }
+  }, [effectiveIsAuthor, effectiveIsAdmin]);
 
   // Gallery Upload, Drag-Drop & Cropper State
   const [cropModalData, setCropModalData] = useState<{ src: string; filename: string } | null>(null);
@@ -103,6 +124,8 @@ export default function AdminPage() {
     const unsubMedia = subscribeToMedia(setMediaList);
     const unsubPrograms = subscribeToPrograms(setPrograms);
     const unsubGallery = subscribeToGallery(setGalleryList);
+    const unsubArticles = subscribeToAllArticles(setArticlesList);
+    const unsubAuthors = subscribeToAuthors(setAuthorsList);
 
     let unsubSlips = () => {};
     let unsubVolunteers = () => {};
@@ -117,6 +140,8 @@ export default function AdminPage() {
       unsubMedia();
       unsubPrograms();
       unsubGallery();
+      unsubArticles();
+      unsubAuthors();
       unsubSlips();
       unsubVolunteers();
     };
@@ -286,7 +311,7 @@ export default function AdminPage() {
   const handleSaveGalleryItem = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingGallery?.title || !editingGallery?.url) {
-      showNotification('error', 'ކޮންމެހެން ފުރަންޖެހޭ ބައިތައް ފުރިހަމަކުރައްވާ');
+      showNotification('error', 'ކޮންމެހެން ފުރަންޖެހޭ ބައިތައް (ކެޕްޝަން އަދި ފޮޓޯ) ފުރިހަމަކުރައްވާ');
       return;
     }
     try {
@@ -294,10 +319,11 @@ export default function AdminPage() {
       const id = editingGallery.id || `gallery-${Date.now()}`;
       const payload: GalleryItem = {
         id,
-        title: editingGallery.title,
+        title: editingGallery.title.trim(),
         url: editingGallery.url,
         filename: editingGallery.filename || '',
         category: editingGallery.category || 'community',
+        date: editingGallery.date || new Date().toISOString().split('T')[0],
         order: Number(editingGallery.order || (galleryList.length + 1)),
         createdAt: editingGallery.createdAt || new Date().toISOString()
       };
@@ -305,6 +331,7 @@ export default function AdminPage() {
       setEditingGallery(null);
       showNotification('success', 'ގެލެރީ ތަޞްވީރު ރައްކާކުރެވިއްޖެ');
     } catch (err) {
+      console.error(err);
       showNotification('error', 'ގެލެރީ ރައްކާކުރުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
     } finally {
       setActionLoading(false);
@@ -343,28 +370,105 @@ export default function AdminPage() {
 
   const handleCropFinished = (croppedDataUrl: string, filename: string) => {
     setCropModalData(null);
-    const titleFromFilename = filename
-      .replace(/\.[^/.]+$/, '')
-      .replace(/[-_]/g, ' ')
-      .trim();
+    const maxOrder = galleryList.reduce((max, g) => Math.max(max, g.order || 0), 0);
+    const defaultNum = editingGallery?.order || (maxOrder > 0 ? maxOrder + 1 : galleryList.length + 1);
 
-    if (editingGallery) {
-      setEditingGallery((prev) => ({
-        ...prev,
-        url: croppedDataUrl,
-        filename: filename,
-        title: prev?.title || titleFromFilename || 'ހެޔޮބިންގާ ފޮޓޯ'
-      }));
-    } else {
-      setEditingGallery({
-        title: titleFromFilename || 'ހެޔޮބިންގާ ފޮޓޯ',
-        url: croppedDataUrl,
-        filename: filename,
-        category: 'community',
-        order: galleryList.length + 1
-      });
+    setEditingGallery((prev) => ({
+      ...prev,
+      id: prev?.id,
+      url: croppedDataUrl,
+      filename: filename,
+      title: prev?.title && prev.title !== 'ހެޔޮބިންގާ ފޮޓޯ' ? prev.title : `ތަޞްވީރު ${defaultNum}`,
+      category: prev?.category || 'community',
+      order: defaultNum,
+      date: prev?.date || new Date().toISOString().split('T')[0]
+    }));
+    showNotification('success', `ތަޞްވީރު ނަންބަރު #${defaultNum} ތައްޔާރުކުރެވިއްޖެ! ކެޕްޝަން އަދި ބައިތައް އިޞްލާޙުކުރެއްވުމަށްފަހު ރައްކާކުރައްވާ.`);
+  };
+
+  // --- Articles CRUD ---
+  const handleSaveArticle = async (article: ArticleItem) => {
+    try {
+      setActionLoading(true);
+      await saveArticleToFirestore(article);
+      showNotification(
+        'success',
+        article.status === 'published'
+          ? 'ލިޔުން ކާމިޔާބުކަމާއެކު ޝާއިޢުކުރެވިއްޖެ!'
+          : 'ލިޔުން ރައްކާކުރެވިއްޖެ'
+      );
+    } catch (err) {
+      console.error(err);
+      showNotification('error', 'ލިޔުން ރައްކާކުރުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
+    } finally {
+      setActionLoading(false);
     }
-    showNotification('success', 'ފޮޓޯ ކާމިޔާބުކަމާއެކު ކްރޮޕްކޮށް ތައްޔާރުކުރެވިއްޖެ! ތަފްޞީލު ރައްކާކުރައްވާށެވެ.');
+  };
+
+  const handleApproveAndPublishArticle = async (articleId: string, customAuthorName?: string) => {
+    try {
+      setActionLoading(true);
+      await approveAndPublishArticleInFirestore(articleId, user?.uid || 'admin', customAuthorName);
+      showNotification('success', 'ލިޔުން އެޕްރޫވްކޮށް ވަގުތުން ޝާއިޢުކުރެވިއްޖެ!');
+    } catch (err) {
+      console.error(err);
+      showNotification('error', 'ލިޔުން އެޕްރޫވްކުރުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleRejectArticle = async (articleId: string, reason: string) => {
+    try {
+      setActionLoading(true);
+      await rejectArticleInFirestore(articleId, reason);
+      showNotification('success', 'ލިޔުން އަލުން މުރާޖަޢާކުރުމަށް ފޮނުވިއްޖެ');
+    } catch (err) {
+      console.error(err);
+      showNotification('error', 'އަޕްޑޭޓްކުރުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteArticle = async (articleId: string) => {
+    try {
+      setActionLoading(true);
+      await deleteArticleFromFirestore(articleId);
+      showNotification('success', 'ލިޔުން ފޮހެލެވިއްޖެ');
+    } catch (err) {
+      console.error(err);
+      showNotification('error', 'ލިޔުން ފޮހެލުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // --- Authors CRUD ---
+  const handleSaveAuthor = async (author: AuthorProfile) => {
+    try {
+      setActionLoading(true);
+      await saveAuthorToFirestore(author);
+      showNotification('success', 'ލިޔުންތެރިޔާގެ މަޢުލޫމާތު ރައްކާކުރެވިއްޖެ');
+    } catch (err) {
+      console.error(err);
+      showNotification('error', 'ލިޔުންތެރިޔާ ރައްކާކުރުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteAuthor = async (authorId: string) => {
+    try {
+      setActionLoading(true);
+      await deleteAuthorFromFirestore(authorId);
+      showNotification('success', 'ލިޔުންތެރިޔާ ފޮހެލެވިއްޖެ');
+    } catch (err) {
+      console.error(err);
+      showNotification('error', 'ލިޔުންތެރިޔާ ފޮހެލުމުގައި މައްސަލައެއް ދިމާވެއްޖެ');
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   // --- Slips Actions ---
@@ -425,8 +529,8 @@ export default function AdminPage() {
   }
 
   // 2. Unauthenticated State
-  if (!effectiveIsAdmin) {
-    if (user && !isAdmin) {
+  if (!effectiveIsAdmin && !effectiveIsAuthor) {
+    if (user) {
       return (
         <div className="min-h-[75vh] flex items-center justify-center py-16 px-4">
           <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#E5ECE8] shadow-lg text-center space-y-6">
@@ -436,21 +540,31 @@ export default function AdminPage() {
             <div>
               <h1 className="text-2xl font-bold font-thaana text-[#1C2622]">ހުއްދަ ނެތް އެކައުންޓެއް</h1>
               <p className="text-sm font-thaana text-[#556660] mt-2 leading-relaxed">
-                ތިޔަ ލޮގިންވެވަޑައިގެންނެވި އެކައުންޓަކީ ({user.email}) ހެޔޮބިންގާ އެޑްމިން ލިސްޓުގައި ހިމެނޭ އެކައުންޓެއް ނޫނެވެ.
+                ތިޔަ ލޮގިންވެވަޑައިގެންނެވި އެކައުންޓަކީ ({user.email}) ހެޔޮބިންގާ އެޑްމިން ނުވަތަ ލިޔުންތެރިންގެ ލިސްޓުގައި ހިމެނޭ އެކައުންޓެއް ނޫނެވެ.
               </p>
             </div>
             <div className="space-y-2">
               <button
                 type="button"
                 onClick={() => setIsDemoAdmin(true)}
-                className="w-full py-3 px-6 rounded-xl bg-[#EBF5F0] hover:bg-[#D5ECE1] text-[#1B6B52] font-thaana font-bold text-sm transition-all"
+                className="w-full py-3 px-6 rounded-xl bg-[#EBF5F0] hover:bg-[#D5ECE1] text-[#1B6B52] font-thaana font-bold text-sm transition-all cursor-pointer"
               >
-                ޑެމޯ އެޑްމިން ވިއު (Demo View) އިން ކުރިއަށްދިއުމަށް
+                ޑެމޯ އެޑްމިން ވިއު (Demo Admin View)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDemoAuthor(true);
+                  setActiveTab('articles');
+                }}
+                className="w-full py-3 px-6 rounded-xl bg-[#F0F7F4] hover:bg-[#E5F2EC] text-[#1B6B52] font-thaana font-bold text-sm transition-all cursor-pointer border border-[#C8E0D5]"
+              >
+                ޑެމޯ ލިޔުންތެރިޔާ ވިއު (Demo Author View - ލިޔުންތައް)
               </button>
               <button
                 type="button"
                 onClick={logout}
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-6 rounded-xl bg-[#FAFCFB] hover:bg-slate-100 text-[#B83244] border border-[#E5ECE8] font-thaana font-semibold text-xs transition-all"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-6 rounded-xl bg-[#FAFCFB] hover:bg-slate-100 text-[#B83244] border border-[#E5ECE8] font-thaana font-semibold text-xs transition-all cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
                 <span>އެކައުންޓުން ވަކިވެވަޑައިގަންނަވާ</span>
@@ -468,14 +582,14 @@ export default function AdminPage() {
             <ShieldCheck className="w-8 h-8" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold font-thaana text-[#1C2622]">އެޑްމިން ޕޯޓަލް</h1>
+            <h1 className="text-2xl font-bold font-thaana text-[#1C2622]">މެނޭޖްމަންޓް ޕޯޓަލް</h1>
             <p className="text-sm font-thaana text-[#556660] mt-2 leading-relaxed">
-              މިއީ ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ ވެބްސައިޓްގެ ކޮންޓެންޓާއި ޑޭޓާ ބެލެހެއްޓުމަށް ޚާއްޞަ ޕޯޓަލްއެވެ.
+              ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ އެޑްމިނުންނާއި ލިޔުންތެރިންނަށް ޚާއްޞަ ޕޯޓަލް.
             </p>
           </div>
 
           <div className="bg-[#FAFCFB] p-4 rounded-2xl border border-[#E5ECE8] text-right text-xs font-thaana text-[#556660] space-y-1">
-            <p className="font-bold text-[#1B6B52]">ހުއްދަ ދެވިފައިވާ އެޑްމިން:</p>
+            <p className="font-bold text-[#1B6B52]">ހުއްދަ ދެވިފައިވާ އިސް އެޑްމިން:</p>
             <p className="font-mono text-[13px] dir-ltr text-left text-[#1C2622]">{adminEmail}</p>
           </div>
 
@@ -494,7 +608,18 @@ export default function AdminPage() {
               onClick={() => setIsDemoAdmin(true)}
               className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#F4F7F5] hover:bg-[#EBF5F0] text-[#1B6B52] border border-[#C8E0D5] font-thaana font-bold text-sm transition-all cursor-pointer"
             >
-              <span>ޑެމޯ އެޑްމިން ވިއު (Demo View / Preview Access)</span>
+              <span>ޑެމޯ އެޑްމިން ވިއު (Demo Admin View)</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setIsDemoAuthor(true);
+                setActiveTab('articles');
+              }}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-white hover:bg-[#FAFCFB] text-[#556660] border border-[#E5ECE8] font-thaana font-bold text-xs transition-all cursor-pointer"
+            >
+              <span>ޑެމޯ ލިޔުންތެރިޔާ ވިއު (Demo Author View - ލިޔުންތަކަށް ޚާއްޞަ)</span>
             </button>
           </div>
         </div>
@@ -556,77 +681,118 @@ export default function AdminPage() {
 
       {/* Tab Navigation */}
       <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar border-b border-[#E5ECE8]">
-        <button
-          onClick={() => setActiveTab('events')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
-            activeTab === 'events'
-              ? 'bg-[#1B6B52] text-white shadow-sm'
-              : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
-          }`}
-        >
-          <Calendar className="w-4 h-4" />
-          <span>އިވެންޓްތައް ({events.length})</span>
-        </button>
+        {!effectiveIsAdmin && effectiveIsAuthor ? (
+          <button
+            onClick={() => setActiveTab('articles')}
+            className="px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 bg-[#1B6B52] text-white shadow-sm shrink-0"
+          >
+            <FileText className="w-4 h-4" />
+            <span>ލިޔުންތައް ({articlesList.filter(a => a.authorId === (user?.uid || '') || a.authorEmail === (user?.email || '')).length})</span>
+          </button>
+        ) : (
+          <>
+            <button
+              onClick={() => setActiveTab('events')}
+              className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
+                activeTab === 'events'
+                  ? 'bg-[#1B6B52] text-white shadow-sm'
+                  : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
+              }`}
+            >
+              <Calendar className="w-4 h-4" />
+              <span>އިވެންޓްތައް ({events.length})</span>
+            </button>
 
-        <button
-          onClick={() => setActiveTab('media')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
-            activeTab === 'media'
-              ? 'bg-[#1B6B52] text-white shadow-sm'
-              : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
-          }`}
-        >
-          <Video className="w-4 h-4" />
-          <span>ވީޑިއޯ & މީޑިއާ ({mediaList.length})</span>
-        </button>
+            <button
+              onClick={() => setActiveTab('media')}
+              className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
+                activeTab === 'media'
+                  ? 'bg-[#1B6B52] text-white shadow-sm'
+                  : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
+              }`}
+            >
+              <Video className="w-4 h-4" />
+              <span>ވީޑިއޯ & މީޑިއާ ({mediaList.length})</span>
+            </button>
 
-        <button
-          onClick={() => setActiveTab('programs')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
-            activeTab === 'programs'
-              ? 'bg-[#1B6B52] text-white shadow-sm'
-              : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
-          }`}
-        >
-          <BookOpen className="w-4 h-4" />
-          <span>ޕްރޮގްރާމްތައް ({programs.length})</span>
-        </button>
+            <button
+              onClick={() => setActiveTab('programs')}
+              className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
+                activeTab === 'programs'
+                  ? 'bg-[#1B6B52] text-white shadow-sm'
+                  : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
+              }`}
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>ޕްރޮގްރާމްތައް ({programs.length})</span>
+            </button>
 
-        <button
-          onClick={() => setActiveTab('gallery')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
-            activeTab === 'gallery'
-              ? 'bg-[#1B6B52] text-white shadow-sm'
-              : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
-          }`}
-        >
-          <ImageIcon className="w-4 h-4" />
-          <span>ގެލެރީ ({galleryList.length})</span>
-        </button>
+            <button
+              onClick={() => setActiveTab('gallery')}
+              className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
+                activeTab === 'gallery'
+                  ? 'bg-[#1B6B52] text-white shadow-sm'
+                  : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
+              }`}
+            >
+              <ImageIcon className="w-4 h-4" />
+              <span>ގެލެރީ ({galleryList.length})</span>
+            </button>
 
-        <button
-          onClick={() => setActiveTab('slips')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
-            activeTab === 'slips'
-              ? 'bg-[#1B6B52] text-white shadow-sm'
-              : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
-          }`}
-        >
-          <HeartHandshake className="w-4 h-4" />
-          <span>އެހީގެ ސްލިޕްތައް ({slips.length})</span>
-        </button>
+            <button
+              onClick={() => setActiveTab('articles')}
+              className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
+                activeTab === 'articles'
+                  ? 'bg-[#1B6B52] text-white shadow-sm'
+                  : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              <span>ލިޔުންތައް ({articlesList.length})</span>
+              {articlesList.filter(a => a.status === 'pending_approval').length > 0 && (
+                <span className="bg-amber-500 text-white text-[11px] font-mono px-2 py-0.5 rounded-full font-bold">
+                  {articlesList.filter(a => a.status === 'pending_approval').length}
+                </span>
+              )}
+            </button>
 
-        <button
-          onClick={() => setActiveTab('volunteers')}
-          className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
-            activeTab === 'volunteers'
-              ? 'bg-[#1B6B52] text-white shadow-sm'
-              : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
-          }`}
-        >
-          <Users className="w-4 h-4" />
-          <span>ވޮލަންޓިއަރުން ({volunteers.length})</span>
-        </button>
+            <button
+              onClick={() => setActiveTab('authors')}
+              className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
+                activeTab === 'authors'
+                  ? 'bg-[#1B6B52] text-white shadow-sm'
+                  : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
+              }`}
+            >
+              <UserCheck className="w-4 h-4" />
+              <span>ލިޔުންތެރިން ({authorsList.length})</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('slips')}
+              className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
+                activeTab === 'slips'
+                  ? 'bg-[#1B6B52] text-white shadow-sm'
+                  : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
+              }`}
+            >
+              <HeartHandshake className="w-4 h-4" />
+              <span>އެހީގެ ސްލިޕްތައް ({slips.length})</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('volunteers')}
+              className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
+                activeTab === 'volunteers'
+                  ? 'bg-[#1B6B52] text-white shadow-sm'
+                  : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
+              }`}
+            >
+              <Users className="w-4 h-4" />
+              <span>ވޮލަންޓިއަރުން ({volunteers.length})</span>
+            </button>
+          </>
+        )}
       </div>
 
       {/* TAB CONTENT: 1. EVENTS */}
@@ -1154,19 +1320,22 @@ export default function AdminPage() {
 
               <button
                 type="button"
-                onClick={() =>
+                onClick={() => {
+                  const maxOrder = galleryList.reduce((max, g) => Math.max(max, g.order || 0), 0);
+                  const nextNum = maxOrder > 0 ? maxOrder + 1 : galleryList.length + 1;
                   setEditingGallery({
-                    title: '',
+                    title: `ތަޞްވީރު ${nextNum}`,
                     url: '',
-                    filename: '',
+                    filename: `gallery (${nextNum}).jpg`,
                     category: 'community',
-                    order: galleryList.length + 1
-                  })
-                }
+                    date: new Date().toISOString().split('T')[0],
+                    order: nextNum
+                  });
+                }}
                 className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#FAFCFB] hover:bg-[#EBF5F0] text-[#1B6B52] border border-[#C8E0D5] font-bold text-sm transition-all"
               >
                 <Plus className="w-4 h-4" />
-                <span>ޔޫއާރްއެލް / އަމިއްލައަށް އިތުރުކުރައްވާ</span>
+                <span>އައު ތަޞްވީރެއް އިތުރުކުރައްވާ</span>
               </button>
             </div>
           </div>
@@ -1269,6 +1438,35 @@ export default function AdminPage() {
             )}
           </div>
         </div>
+      )}
+
+      {/* TAB CONTENT: 7. ARTICLES */}
+      {activeTab === 'articles' && (
+        <AdminArticlesTab
+          articles={articlesList}
+          authors={authorsList}
+          isAdmin={effectiveIsAdmin}
+          isAuthor={effectiveIsAuthor}
+          authorProfile={authorProfile}
+          currentUserId={user?.uid || 'admin-uid'}
+          currentUserEmail={user?.email || 'admin@heyobingaa.org'}
+          actionLoading={actionLoading}
+          onSaveArticle={handleSaveArticle}
+          onApproveAndPublish={handleApproveAndPublishArticle}
+          onRejectArticle={handleRejectArticle}
+          onDeleteArticle={handleDeleteArticle}
+        />
+      )}
+
+      {/* TAB CONTENT: 8. AUTHORS (Admin Only) */}
+      {effectiveIsAdmin && activeTab === 'authors' && (
+        <AdminAuthorsTab
+          authors={authorsList}
+          actionLoading={actionLoading}
+          onSaveAuthor={handleSaveAuthor}
+          onDeleteAuthor={handleDeleteAuthor}
+          currentAdminUid={user?.uid || 'admin-uid'}
+        />
       )}
 
       {/* --- EVENT EDIT/ADD MODAL --- */}
@@ -1617,143 +1815,223 @@ export default function AdminPage() {
       {/* --- GALLERY EDIT/ADD MODAL --- */}
       {editingGallery && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-5 max-h-[90vh] overflow-y-auto font-thaana shadow-2xl">
             <div className="flex items-center justify-between border-b border-[#E5ECE8] pb-3">
-              <h3 className="text-lg font-bold text-[#1C2622]">
-                {editingGallery.id ? 'ގެލެރީ ފޮޓޯ އިސްލާޙުކުރައްވާ' : 'އައު ގެލެރީ ފޮޓޯއެއް އިތުރުކުރައްވާ'}
-              </h3>
-              <button onClick={() => setEditingGallery(null)} className="p-1 hover:bg-[#FAFCFB] rounded-lg">
+              <div>
+                <h3 className="text-lg font-bold text-[#1C2622]">
+                  {editingGallery.id ? 'ގެލެރީ ފޮޓޯ އިސްލާޙުކުރައްވާ' : 'އައު ގެލެރީ ފޮޓޯއެއް އިތުރުކުރައްވާ'}
+                </h3>
+                <p className="text-xs text-[#556660] mt-0.5">
+                  ކޮންމެ ތަޞްވީރަކަށްވެސް ޑިފޯލްޓް ނަންބަރަކާއި ކެޕްޝަނެއް ދެވޭނެއެވެ. ބޭނުންފުޅު ނަމަ ބަދަލުކުރައްވާ.
+                </p>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setEditingGallery(null)} 
+                className="p-1 hover:bg-[#FAFCFB] rounded-lg cursor-pointer"
+              >
                 <X className="w-5 h-5 text-[#556660]" />
               </button>
             </div>
 
             <form onSubmit={handleSaveGalleryItem} className="space-y-4">
+              {/* 1. Gallery Image Number (Editable with Default) */}
+              <div className="p-4 rounded-2xl bg-[#FAFCFB] border border-[#E5ECE8] space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-[#1C2622]">
+                    ތަޞްވީރު ނަންބަރު (Gallery Image Number) *
+                  </label>
+                  <span className="text-[11px] font-bold text-[#1B6B52] bg-[#EBF5F0] px-2 py-0.5 rounded-md font-mono">
+                    #{editingGallery.order ?? 1}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-base font-bold text-[#556660] font-mono">#</span>
+                  <input
+                    type="number"
+                    min={1}
+                    required
+                    value={editingGallery.order ?? 1}
+                    onChange={(e) => {
+                      const newNum = Number(e.target.value) || 1;
+                      const oldNum = editingGallery.order ?? 1;
+                      const currentTitle = editingGallery.title || '';
+                      const isDefaultTitle = !currentTitle || currentTitle === `ތަޞްވީރު ${oldNum}` || currentTitle === 'ހެޔޮބިންގާ ފޮޓޯ';
+                      setEditingGallery({
+                        ...editingGallery,
+                        order: newNum,
+                        title: isDefaultTitle ? `ތަޞްވީރު ${newNum}` : currentTitle
+                      });
+                    }}
+                    className="w-28 px-3.5 py-2 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono text-base font-bold bg-white text-center"
+                  />
+                  <span className="text-xs text-[#556660] leading-relaxed">
+                    ޑިފޯލްޓް ނަންބަރު ހަމަޖެހިފައި (ބޭނުންފުޅު ނަމަ ބަދަލުކުރައްވާ).
+                  </span>
+                </div>
+              </div>
+
+              {/* 2. Caption / Description */}
               <div>
-                <label className="block text-xs font-bold text-[#556660] mb-1">ފޮޓޯގެ ނަން / ކެޕްޝަން *</label>
+                <label className="block text-xs font-bold text-[#1C2622] mb-1">
+                  ކެޕްޝަން / ސުރުޚީ (Caption / Title) *
+                </label>
                 <input
                   type="text"
                   required
                   value={editingGallery.title || ''}
                   onChange={(e) => setEditingGallery({ ...editingGallery, title: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none"
-                  placeholder="ހެޔޮބިންގާ ޙަރަކާތްތައް • ތަޞްވީރު..."
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-bold text-sm"
+                  placeholder={`ތަޞްވީރު ${editingGallery.order ?? 1} - ހެޔޮބިންގާ ޙަރަކާތްތައް`}
                 />
+                <p className="text-[11px] text-[#556660] mt-1">
+                  ތަޞްވީރާ ގުޅޭ ކެޕްޝަން މިތަނުގައި ފަސޭހަކަމާއެކު ލިޔުއްވާށެވެ.
+                </p>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-[#556660] mb-1">ފޮޓޯ އަޕްލޯޑްކުރުން ނުވަތަ URL</label>
-                
-                {/* Modal Drag & Drop Box */}
-                <div
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                  }}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                      handleFileForCrop(e.dataTransfer.files[0]);
-                    }
-                  }}
-                  onClick={() => modalFileInputRef.current?.click()}
-                  className="border-2 border-dashed border-[#C8E0D5] hover:border-[#1B6B52] bg-[#FAFCFB] hover:bg-[#EBF5F0]/50 rounded-2xl p-4 text-center cursor-pointer transition-colors mb-3"
-                >
-                  <input
-                    ref={modalFileInputRef}
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        handleFileForCrop(e.target.files[0]);
-                        e.target.value = '';
-                      }
-                    }}
-                  />
-                  <div className="flex items-center justify-center gap-2 text-[#1B6B52]">
-                    <UploadCloud className="w-5 h-5" />
-                    <span className="text-xs font-bold">ފޮޓޯ ފައިލެއް ނަންގަވާ ނުވަތަ މިތަނަށް ޑްރެގްކޮށްލައްވާ</span>
-                  </div>
-                  <p className="text-[11px] text-[#556660] mt-1">ނެންގެވުމާއެކު ވަގުތުން ކްރޮޕްކުރުމަށް ހުޅުވޭނެއެވެ</p>
-                </div>
-
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[11px] text-[#556660]">ނުވަތަ ސީދާ URL ޖައްސަވާ:</span>
-                </div>
-                <input
-                  type="text"
-                  required
-                  value={editingGallery.url || ''}
-                  onChange={(e) => setEditingGallery({ ...editingGallery, url: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono text-xs"
-                  placeholder="/images/gallery (1).jpg ނުވަތަ https://... ނުވަތަ data:image/..."
-                />
-              </div>
-
+              {/* 3. Category & Date */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#556660] mb-1">ފައިލް ނަން</label>
-                  <input
-                    type="text"
-                    value={editingGallery.filename || ''}
-                    onChange={(e) => setEditingGallery({ ...editingGallery, filename: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono text-xs"
-                    placeholder="gallery (1).jpg"
-                  />
+                  <label className="block text-xs font-bold text-[#556660] mb-1">ކެޓަގަރީ (Category)</label>
+                  <select
+                    value={editingGallery.category || 'community'}
+                    onChange={(e) => setEditingGallery({ ...editingGallery, category: e.target.value as any })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none bg-white text-xs font-bold"
+                  >
+                    <option value="community">އިޖުތިމާޢީ ޙަރަކާތްތައް (Community)</option>
+                    <option value="events">ދަރުސްތަކާއި އިވެންޓްތައް (Events)</option>
+                    <option value="workshops">ވޯކްޝޮޕްތަކާއި ކްލާސްތައް (Workshops)</option>
+                    <option value="deaf_services">އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ފަރާތްތަކަށް (Deaf Services)</option>
+                  </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-[#556660] mb-1">ތަރުތީބު ނަންބަރު (Order)</label>
+                  <label className="block text-xs font-bold text-[#556660] mb-1">ތާރީޚު (Date)</label>
                   <input
-                    type="number"
-                    value={editingGallery.order ?? 1}
-                    onChange={(e) => setEditingGallery({ ...editingGallery, order: Number(e.target.value) })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono"
+                    type="date"
+                    value={editingGallery.date || new Date().toISOString().split('T')[0]}
+                    onChange={(e) => setEditingGallery({ ...editingGallery, date: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono text-xs"
                   />
                 </div>
               </div>
 
-              {editingGallery.url && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="block text-xs font-bold text-[#556660]">ޕްރިވިއު އަދި ކްރޮޕްކުރުން:</label>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setCropModalData({
-                          src: editingGallery.url!,
-                          filename: editingGallery.filename || 'gallery-image.jpg'
-                        })
-                      }
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#EBF5F0] hover:bg-[#D5ECE1] text-[#1B6B52] text-xs font-bold transition-colors"
-                    >
-                      <Crop className="w-3.5 h-3.5" />
-                      <span>ކްރޮޕްކުރައްވާ / އެޖަސްޓްކުރައްވާ</span>
-                    </button>
-                  </div>
-                  <div className="relative aspect-16/9 rounded-xl overflow-hidden bg-black/10 border border-[#E5ECE8]">
-                    <img
-                      src={editingGallery.url}
-                      alt="Preview"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLElement).style.display = 'none';
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
+              {/* 4. Filename */}
+              <div>
+                <label className="block text-xs font-bold text-[#556660] mb-1">ފައިލް ނަން (Filename)</label>
+                <input
+                  type="text"
+                  value={editingGallery.filename || ''}
+                  onChange={(e) => setEditingGallery({ ...editingGallery, filename: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono text-xs"
+                  placeholder={`gallery (${editingGallery.order ?? 1}).jpg`}
+                />
+              </div>
 
+              {/* 5. Photo Upload & Preview Section */}
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-[#1C2622]">
+                  ތަޞްވީރު / ފޮޓޯ (Photo) *
+                </label>
+                
+                {editingGallery.url ? (
+                  <div className="space-y-3">
+                    <div className="relative aspect-16/10 rounded-2xl overflow-hidden bg-black/10 border border-[#E5ECE8]">
+                      <img
+                        src={editingGallery.url}
+                        alt={editingGallery.title || 'Preview'}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-2 right-2 bg-black/70 text-white text-xs font-mono px-2.5 py-1 rounded-lg backdrop-blur-xs font-bold">
+                        #{editingGallery.order ?? 1}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setCropModalData({
+                            src: editingGallery.url!,
+                            filename: editingGallery.filename || 'gallery-image.jpg'
+                          })
+                        }
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#EBF5F0] hover:bg-[#D5ECE1] text-[#1B6B52] text-xs font-bold transition-colors cursor-pointer"
+                      >
+                        <Crop className="w-4 h-4" />
+                        <span>ކްރޮޕްކުރައްވާ / ސައިޒު ބަދަލުކުރައްވާ</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => modalFileInputRef.current?.click()}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#FAFCFB] text-[#556660] border border-[#E5ECE8] text-xs font-bold transition-colors cursor-pointer"
+                      >
+                        <UploadCloud className="w-4 h-4" />
+                        <span>އެހެން ފޮޓޯއެއް އަޕްލޯޑްކުރައްވާ</span>
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  /* Drag & Drop Upload Zone */
+                  <div
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                        handleFileForCrop(e.dataTransfer.files[0]);
+                      }
+                    }}
+                    onClick={() => modalFileInputRef.current?.click()}
+                    className="border-2 border-dashed border-[#C8E0D5] hover:border-[#1B6B52] bg-[#FAFCFB] hover:bg-[#EBF5F0]/50 rounded-2xl p-6 text-center cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center justify-center gap-2 text-[#1B6B52] mb-1">
+                      <UploadCloud className="w-6 h-6" />
+                      <span className="text-sm font-bold">ފޮޓޯ ފައިލެއް ނަންގަވާ ނުވަތަ މިތަނަށް ޑްރެގްކޮށްލައްވާ</span>
+                    </div>
+                    <p className="text-xs text-[#556660]">ފޮޓޯ ނެންގެވުމާއެކު ވަގުތުން ކްރޮޕްކުރުމަށް ހުޅުވޭނެއެވެ • JPG, PNG, WebP</p>
+                  </div>
+                )}
+
+                <input
+                  ref={modalFileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      handleFileForCrop(e.target.files[0]);
+                      e.target.value = '';
+                    }
+                  }}
+                />
+
+                <div className="pt-1">
+                  <span className="text-[11px] text-[#556660] block mb-1">ނުވަތަ ސީދާ ފޮޓޯ URL ޖައްސަވާ:</span>
+                  <input
+                    type="text"
+                    value={editingGallery.url || ''}
+                    onChange={(e) => setEditingGallery({ ...editingGallery, url: e.target.value })}
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono text-xs"
+                    placeholder="https://... ނުވަތަ /images/gallery (1).jpg"
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E5ECE8]">
                 <button
                   type="button"
                   onClick={() => setEditingGallery(null)}
-                  className="px-4 py-2.5 rounded-xl border border-[#E5ECE8] text-[#556660] font-bold text-sm"
+                  className="px-4 py-2.5 rounded-xl border border-[#E5ECE8] text-[#556660] font-bold text-sm cursor-pointer hover:bg-slate-50"
                 >
                   ކެންސަލް
                 </button>
                 <button
                   type="submit"
-                  disabled={actionLoading}
-                  className="px-6 py-2.5 rounded-xl bg-[#1B6B52] hover:bg-[#15533F] text-white font-bold text-sm"
+                  disabled={actionLoading || !editingGallery.url}
+                  className="px-6 py-2.5 rounded-xl bg-[#1B6B52] hover:bg-[#15533F] disabled:opacity-50 text-white font-bold text-sm cursor-pointer shadow-xs"
                 >
                   ރައްކާކުރައްވާ
                 </button>

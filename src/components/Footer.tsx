@@ -108,6 +108,11 @@ export default function Footer({ onNavigate, onOpenDonateModal }: FooterProps) {
                 </button>
               </li>
               <li>
+                <button onClick={() => onNavigate('articles')} className="hover:text-white transition-colors">
+                  ދީނީ އަދި ޢިލްމީ ލިޔުންތައް (Articles)
+                </button>
+              </li>
+              <li>
                 <button onClick={() => onNavigate('videos')} className="hover:text-white transition-colors">
                   ވީޑިއޯތައް (Videos)
                 </button>

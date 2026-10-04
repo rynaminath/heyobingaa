@@ -12,13 +12,15 @@ import {
 } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { db, auth, handleFirestoreError, OperationType } from '../lib/firebase';
-import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem } from '../types';
+import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem, ArticleItem, AuthorProfile } from '../types';
 import {
   INITIAL_EVENTS,
   INITIAL_MEDIA,
   PROGRAMS,
   NGO_CONTACT,
-  INITIAL_GALLERY
+  INITIAL_GALLERY,
+  INITIAL_AUTHORS,
+  INITIAL_ARTICLES
 } from '../data/initialData';
 
 // Bootstrapped admin email
@@ -42,6 +44,65 @@ export async function checkUserIsAdmin(user: User | null): Promise<boolean> {
   } catch (err) {
     console.warn('Error checking admin status:', err);
     return false;
+  }
+}
+
+/**
+ * Check if the given authenticated user is an author
+ * (Admins are automatically authors, or users registered in 'authors' collection)
+ */
+export async function checkUserIsAuthor(user: User | null): Promise<{
+  isAuthor: boolean;
+  authorProfile?: AuthorProfile;
+}> {
+  if (!user) return { isAuthor: false };
+
+  // Admins always have author privileges
+  const isAdmin = await checkUserIsAdmin(user);
+  if (isAdmin) {
+    return {
+      isAuthor: true,
+      authorProfile: {
+        id: user.uid,
+        email: user.email || BOOTSTRAP_ADMIN_EMAIL,
+        name: user.displayName || 'ހެޔޮބިންގާ އިދާރާ',
+        title: 'އެޑްމިނިސްޓްރޭޓަރ & ލިޔުންތެރިޔާ',
+        status: 'active',
+        addedAt: new Date().toISOString()
+      }
+    };
+  }
+
+  try {
+    // Check by UID first
+    const authorDocRef = doc(db, 'authors', user.uid);
+    const snap = await getDoc(authorDocRef);
+    if (snap.exists() && snap.data().status === 'active') {
+      return {
+        isAuthor: true,
+        authorProfile: { ...(snap.data() as AuthorProfile), id: snap.id }
+      };
+    }
+
+    // Check by email query in authors collection
+    if (user.email) {
+      const q = query(collection(db, 'authors'), where('email', '==', user.email.toLowerCase()));
+      const querySnap = await getDocs(q);
+      if (!querySnap.empty) {
+        const docData = querySnap.docs[0].data() as AuthorProfile;
+        if (docData.status === 'active') {
+          return {
+            isAuthor: true,
+            authorProfile: { ...docData, id: querySnap.docs[0].id }
+          };
+        }
+      }
+    }
+
+    return { isAuthor: false };
+  } catch (err) {
+    console.warn('Error checking author status:', err);
+    return { isAuthor: false };
   }
 }
 
@@ -638,6 +699,8 @@ export async function seedInitialDataToFirestore(): Promise<{
   mediaCount: number;
   programsCount: number;
   galleryCount: number;
+  articlesCount: number;
+  authorsCount: number;
 }> {
   let eventsCount = 0;
   let mediaCount = 0;
@@ -668,7 +731,21 @@ export async function seedInitialDataToFirestore(): Promise<{
     galleryCount++;
   }
 
-  // 5. Seed site settings
+  // 5. Seed Authors
+  let authorsCount = 0;
+  for (const a of INITIAL_AUTHORS) {
+    await setDoc(doc(db, 'authors', a.id), a, { merge: true });
+    authorsCount++;
+  }
+
+  // 6. Seed Articles
+  let articlesCount = 0;
+  for (const art of INITIAL_ARTICLES) {
+    await setDoc(doc(db, 'articles', art.id), art, { merge: true });
+    articlesCount++;
+  }
+
+  // 7. Seed site settings
   await setDoc(
     doc(db, 'siteSettings', 'global'),
     {
@@ -678,5 +755,212 @@ export async function seedInitialDataToFirestore(): Promise<{
     { merge: true }
   );
 
-  return { eventsCount, mediaCount, programsCount, galleryCount };
+  return { eventsCount, mediaCount, programsCount, galleryCount, articlesCount, authorsCount };
 }
+
+/**
+ * Realtime subscribe to Published Articles (Public)
+ */
+export function subscribeToPublishedArticles(
+  onData: (articles: ArticleItem[]) => void,
+  onError?: (err: unknown) => void
+) {
+  const colPath = 'articles';
+  const colRef = collection(db, colPath);
+  return onSnapshot(
+    colRef,
+    (snapshot) => {
+      if (snapshot.empty) {
+        onData(INITIAL_ARTICLES);
+        return;
+      }
+      const list: ArticleItem[] = [];
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data() as ArticleItem;
+        if (data.status === 'published') {
+          list.push({ ...data, id: docSnap.id });
+        }
+      });
+      // Sort newest published first
+      list.sort((a, b) => ((b.publishedAt || b.createdAt) > (a.publishedAt || a.createdAt) ? 1 : -1));
+      if (list.length === 0) {
+        onData(INITIAL_ARTICLES);
+      } else {
+        onData(list);
+      }
+    },
+    (error) => {
+      console.warn('Articles snapshot error, using initial articles:', error);
+      onData(INITIAL_ARTICLES);
+      if (onError) onError(error);
+      handleFirestoreError(error, OperationType.GET, colPath);
+    }
+  );
+}
+
+/**
+ * Realtime subscribe to All Articles (Admin or Author view)
+ */
+export function subscribeToAllArticles(
+  onData: (articles: ArticleItem[]) => void,
+  onError?: (err: unknown) => void
+) {
+  const colPath = 'articles';
+  const colRef = collection(db, colPath);
+  return onSnapshot(
+    colRef,
+    (snapshot) => {
+      if (snapshot.empty) {
+        onData(INITIAL_ARTICLES);
+        return;
+      }
+      const list: ArticleItem[] = [];
+      snapshot.forEach((docSnap) => {
+        list.push({ ...(docSnap.data() as ArticleItem), id: docSnap.id });
+      });
+      list.sort((a, b) => (b.createdAt > a.createdAt ? 1 : -1));
+      onData(list);
+    },
+    (error) => {
+      console.warn('All articles subscription error, using initial articles:', error);
+      onData(INITIAL_ARTICLES);
+      if (onError) onError(error);
+      handleFirestoreError(error, OperationType.GET, colPath);
+    }
+  );
+}
+
+/**
+ * Realtime subscribe to Authors list
+ */
+export function subscribeToAuthors(
+  onData: (authors: AuthorProfile[]) => void,
+  onError?: (err: unknown) => void
+) {
+  const colPath = 'authors';
+  const colRef = collection(db, colPath);
+  return onSnapshot(
+    colRef,
+    (snapshot) => {
+      if (snapshot.empty) {
+        onData(INITIAL_AUTHORS);
+        return;
+      }
+      const list: AuthorProfile[] = [];
+      snapshot.forEach((docSnap) => {
+        list.push({ ...(docSnap.data() as AuthorProfile), id: docSnap.id });
+      });
+      onData(list);
+    },
+    (error) => {
+      console.warn('Authors subscription warning:', error);
+      onData(INITIAL_AUTHORS);
+      if (onError) onError(error);
+      handleFirestoreError(error, OperationType.GET, colPath);
+    }
+  );
+}
+
+/**
+ * Save or update an Article in Firestore
+ */
+export async function saveArticleToFirestore(article: ArticleItem): Promise<void> {
+  const path = `articles/${article.id}`;
+  try {
+    await setDoc(doc(db, 'articles', article.id), article, { merge: true });
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+    throw error;
+  }
+}
+
+/**
+ * Admin: Approve and Publish an Article
+ */
+export async function approveAndPublishArticleInFirestore(
+  articleId: string,
+  adminUid: string,
+  customAuthorName?: string
+): Promise<void> {
+  const path = `articles/${articleId}`;
+  try {
+    const updatePayload: Record<string, any> = {
+      status: 'published',
+      publishedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      approvedBy: adminUid,
+      approvedAt: new Date().toISOString()
+    };
+    if (customAuthorName && customAuthorName.trim().length > 0) {
+      updatePayload.authorName = customAuthorName.trim();
+    }
+    await setDoc(doc(db, 'articles', articleId), updatePayload, { merge: true });
+  } catch (error) {
+    handleFirestoreError(error, OperationType.UPDATE, path);
+    throw error;
+  }
+}
+
+/**
+ * Admin: Reject / Send back article for revision
+ */
+export async function rejectArticleInFirestore(
+  articleId: string,
+  rejectionReason: string
+): Promise<void> {
+  const path = `articles/${articleId}`;
+  try {
+    await setDoc(
+      doc(db, 'articles', articleId),
+      {
+        status: 'rejected',
+        rejectionReason,
+        updatedAt: new Date().toISOString()
+      },
+      { merge: true }
+    );
+  } catch (error) {
+    handleFirestoreError(error, OperationType.UPDATE, path);
+    throw error;
+  }
+}
+
+/**
+ * Delete an Article from Firestore
+ */
+export async function deleteArticleFromFirestore(articleId: string): Promise<void> {
+  const path = `articles/${articleId}`;
+  try {
+    await deleteDoc(doc(db, 'articles', articleId));
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, path);
+    throw error;
+  }
+}
+
+/**
+ * Admin: Save or update an Author in Firestore
+ */
+export async function saveAuthorToFirestore(author: AuthorProfile): Promise<void> {
+  const path = `authors/${author.id}`;
+  try {
+    await setDoc(doc(db, 'authors', author.id), author, { merge: true });
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+    throw error;
+  }
+}
+
+/**
+ * Admin: Delete an Author from Firestore
+ */
+export async function deleteAuthorFromFirestore(authorId: string): Promise<void> {
+  const path = `authors/${authorId}`;
+  try {
+    await deleteDoc(doc(db, 'authors', authorId));
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, path);
+    throw error;
+  }
+}
+

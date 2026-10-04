@@ -21,17 +21,12 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
   useEffect(() => {
     const unsubscribe = subscribeToGallery(
       (items) => {
-        if (items.length > 0) {
-          setImages(items);
-        } else {
-          // If database is empty, maintain INITIAL_GALLERY
-          setImages(INITIAL_GALLERY);
-        }
+        setImages(items || []);
         setLoading(false);
       },
       (err) => {
         console.warn('Firestore gallery subscription notice:', err);
-        setImages(INITIAL_GALLERY);
+        setImages([]);
         setLoading(false);
       }
     );
@@ -131,152 +126,165 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
           </div>
         </div>
 
-        {/* VIEW MODE 1: SLIDESHOW */}
-        {viewMode === 'slideshow' && currentImage && (
-          <div className="space-y-4">
-            {/* Main Stage Container */}
-            <div className="relative aspect-16/9 sm:aspect-21/9 w-full max-h-[620px] rounded-3xl overflow-hidden bg-[#0A1612] shadow-2xl border border-[#E5ECE8] group">
-              <img
-                src={currentImage.url}
-                alt={currentImage.title}
-                className="w-full h-full object-cover transition-opacity duration-500"
-              />
-
-              {/* Gradient Overlays for Controls Readability */}
-              <div className="absolute inset-0 bg-linear-to-t from-black/75 via-transparent to-black/30 pointer-events-none" />
-
-              {/* Top Bar: Counter & Fullscreen */}
-              <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
-                <div className="bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full text-white text-xs font-mono font-bold border border-white/20">
-                  <span dir="ltr">{currentIndex + 1} / {total}</span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsPlaying(!isPlaying)}
-                    className="w-9 h-9 rounded-full bg-black/60 backdrop-blur-md hover:bg-black/80 text-white flex items-center justify-center transition-colors border border-white/20"
-                    title={isPlaying ? 'Pause Autoplay' : 'Start Autoplay'}
-                  >
-                    {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsFullscreen(true)}
-                    className="w-9 h-9 rounded-full bg-black/60 backdrop-blur-md hover:bg-black/80 text-white flex items-center justify-center transition-colors border border-white/20"
-                    title="Fullscreen"
-                  >
-                    <Maximize2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Navigation Arrows: Left & Right */}
-              <button
-                type="button"
-                onClick={nextSlide}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-all border border-white/20 hover:scale-105 shadow-lg z-20"
-                aria-label="Next image"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-
-              <button
-                type="button"
-                onClick={prevSlide}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-all border border-white/20 hover:scale-105 shadow-lg z-20"
-                aria-label="Previous image"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-
-              {/* Bottom Caption Bar */}
-              <div className="absolute bottom-4 left-4 right-4 z-20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-white">
-                <div>
-                  <h3 className="text-base sm:text-lg font-bold font-thaana drop-shadow-md">
-                    {currentImage.title}
-                  </h3>
-                </div>
-                <div className="text-xs font-thaana text-emerald-300">
-                  ހެޔޮބިންގާ ޖަމްޢިއްޔާ
-                </div>
-              </div>
-            </div>
-
-            {/* Thumbnail Navigation Strip */}
-            <div className="bg-white p-3 rounded-2xl border border-[#E5ECE8] shadow-xs">
-              <div className="flex items-center gap-3 overflow-x-auto pb-1 pt-1 no-scrollbar scroll-smooth">
-                {images.map((img, idx) => {
-                  const isSelected = idx === currentIndex;
-                  return (
-                    <button
-                      key={img.id}
-                      type="button"
-                      onClick={() => {
-                        setCurrentIndex(idx);
-                        setIsPlaying(false);
-                      }}
-                      className={`relative shrink-0 w-20 sm:w-24 aspect-16/10 rounded-xl overflow-hidden border-2 transition-all ${
-                        isSelected
-                          ? 'border-[#1B6B52] ring-2 ring-[#1B6B52]/30 scale-105 shadow-md'
-                          : 'border-transparent opacity-65 hover:opacity-100 hover:scale-102'
-                      }`}
-                    >
-                      <img
-                        src={img.url}
-                        alt={img.title}
-                        className="w-full h-full object-cover"
-                      />
-                      {isSelected && (
-                        <div className="absolute inset-0 bg-[#1B6B52]/15 pointer-events-none" />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+        {/* Empty State when no photos in gallery */}
+        {total === 0 ? (
+          <div className="text-center py-24 bg-white rounded-3xl border border-[#E5ECE8] p-8 space-y-3 shadow-xs">
+            <Film className="w-12 h-12 text-[#1B6B52]/40 mx-auto" />
+            <h3 className="font-bold text-lg text-[#1C2622]">އަދި އެއްވެސް ތަޞްވީރެއް އަޕްލޯޑްކުރެވިފައެއް ނުވެއެވެ</h3>
+            <p className="text-xs sm:text-sm text-[#556660] max-w-md mx-auto">
+              ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ އެޑްމިން ޕެނަލް މެދުވެރިކޮށް ގެލެރީއަށް އައު ތަޞްވީރުތައް އަޕްލޯޑް ކުރެވޭނެއެވެ.
+            </p>
           </div>
-        )}
+        ) : (
+          <>
+            {/* VIEW MODE 1: SLIDESHOW */}
+            {viewMode === 'slideshow' && currentImage && (
+              <div className="space-y-4">
+                {/* Main Stage Container */}
+                <div className="relative aspect-16/9 sm:aspect-21/9 w-full max-h-[620px] rounded-3xl overflow-hidden bg-[#0A1612] shadow-2xl border border-[#E5ECE8] group">
+                  <img
+                    src={currentImage.url}
+                    alt={currentImage.title}
+                    className="w-full h-full object-cover transition-opacity duration-500"
+                  />
 
-        {/* VIEW MODE 2: RESPONSIVE PHOTO GRID */}
-        {viewMode === 'grid' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {images.map((img, idx) => (
-              <div
-                key={img.id}
-                onClick={() => {
-                  setCurrentIndex(idx);
-                  setViewMode('slideshow');
-                  window.scrollTo({ top: 120, behavior: 'smooth' });
-                }}
-                className="group relative aspect-4/3 rounded-2xl overflow-hidden bg-[#0A1612] cursor-pointer shadow-sm hover:shadow-xl transition-all border border-[#E5ECE8] hover:-translate-y-1"
-              >
-                <img
-                  src={img.url}
-                  alt={img.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity" />
+                  {/* Gradient Overlays for Controls Readability */}
+                  <div className="absolute inset-0 bg-linear-to-t from-black/75 via-transparent to-black/30 pointer-events-none" />
 
-                <div className="absolute bottom-3 left-3 right-3 text-white">
-                  <span className="text-[11px] font-mono text-emerald-300 block mb-0.5" dir="ltr">
-                    #{idx + 1}
-                  </span>
-                  <h4 className="text-xs sm:text-sm font-bold truncate">
-                    {img.title}
-                  </h4>
+                  {/* Top Bar: Counter & Fullscreen */}
+                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
+                    <div className="bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full text-white text-xs font-mono font-bold border border-white/20">
+                      <span dir="ltr">{currentIndex + 1} / {total}</span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsPlaying(!isPlaying)}
+                        className="w-9 h-9 rounded-full bg-black/60 backdrop-blur-md hover:bg-black/80 text-white flex items-center justify-center transition-colors border border-white/20"
+                        title={isPlaying ? 'Pause Autoplay' : 'Start Autoplay'}
+                      >
+                        {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setIsFullscreen(true)}
+                        className="w-9 h-9 rounded-full bg-black/60 backdrop-blur-md hover:bg-black/80 text-white flex items-center justify-center transition-colors border border-white/20"
+                        title="Fullscreen"
+                      >
+                        <Maximize2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Navigation Arrows: Left & Right */}
+                  <button
+                    type="button"
+                    onClick={nextSlide}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-all border border-white/20 hover:scale-105 shadow-lg z-20"
+                    aria-label="Next image"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={prevSlide}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white flex items-center justify-center transition-all border border-white/20 hover:scale-105 shadow-lg z-20"
+                    aria-label="Previous image"
+                  >
+                    <ChevronRight className="w-6 h-6" />
+                  </button>
+
+                  {/* Bottom Caption Bar */}
+                  <div className="absolute bottom-4 left-4 right-4 z-20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-white">
+                    <div>
+                      <h3 className="text-base sm:text-lg font-bold font-thaana drop-shadow-md">
+                        {currentImage.title}
+                      </h3>
+                    </div>
+                    <div className="text-xs font-thaana text-emerald-300">
+                      ހެޔޮބިންގާ ޖަމްޢިއްޔާ
+                    </div>
+                  </div>
                 </div>
 
-                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="p-1.5 rounded-lg bg-black/60 text-white backdrop-blur-xs">
-                    <Maximize2 className="w-3.5 h-3.5" />
+                {/* Thumbnail Navigation Strip */}
+                <div className="bg-white p-3 rounded-2xl border border-[#E5ECE8] shadow-xs">
+                  <div className="flex items-center gap-3 overflow-x-auto pb-1 pt-1 no-scrollbar scroll-smooth">
+                    {images.map((img, idx) => {
+                      const isSelected = idx === currentIndex;
+                      return (
+                        <button
+                          key={img.id}
+                          type="button"
+                          onClick={() => {
+                            setCurrentIndex(idx);
+                            setIsPlaying(false);
+                          }}
+                          className={`relative shrink-0 w-20 sm:w-24 aspect-16/10 rounded-xl overflow-hidden border-2 transition-all ${
+                            isSelected
+                              ? 'border-[#1B6B52] ring-2 ring-[#1B6B52]/30 scale-105 shadow-md'
+                              : 'border-transparent opacity-65 hover:opacity-100 hover:scale-102'
+                          }`}
+                        >
+                          <img
+                            src={img.url}
+                            alt={img.title}
+                            className="w-full h-full object-cover"
+                          />
+                          {isSelected && (
+                            <div className="absolute inset-0 bg-[#1B6B52]/15 pointer-events-none" />
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+            )}
+
+            {/* VIEW MODE 2: RESPONSIVE PHOTO GRID */}
+            {viewMode === 'grid' && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {images.map((img, idx) => (
+                  <div
+                    key={img.id}
+                    onClick={() => {
+                      setCurrentIndex(idx);
+                      setViewMode('slideshow');
+                      window.scrollTo({ top: 120, behavior: 'smooth' });
+                    }}
+                    className="group relative aspect-4/3 rounded-2xl overflow-hidden bg-[#0A1612] cursor-pointer shadow-sm hover:shadow-xl transition-all border border-[#E5ECE8] hover:-translate-y-1"
+                  >
+                    <img
+                      src={img.url}
+                      alt={img.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-95 transition-opacity" />
+
+                    <div className="absolute bottom-3 left-3 right-3 text-white">
+                      <span className="text-[11px] font-mono text-emerald-300 block mb-0.5" dir="ltr">
+                        #{idx + 1}
+                      </span>
+                      <h4 className="text-xs sm:text-sm font-bold truncate">
+                        {img.title}
+                      </h4>
+                    </div>
+
+                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="p-1.5 rounded-lg bg-black/60 text-white backdrop-blur-xs">
+                        <Maximize2 className="w-3.5 h-3.5" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 

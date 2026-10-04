@@ -13,6 +13,7 @@ import VideoPlayerModal from './components/VideoPlayerModal';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import MediaArchivePage from './pages/MediaArchivePage';
+import ArticlesPage from './pages/ArticlesPage';
 import GalleryPage from './pages/GalleryPage';
 import ProgramsPage from './pages/ProgramsPage';
 import EventsPage from './pages/EventsPage';
@@ -80,6 +81,10 @@ export default function App() {
         title: 'Videos & Media | Heyo Bingaa NGO',
         description: 'ދާރިސް ޓީވީއާއި ގުޅިގެން ތައްޔާރުކުރެވިފައިވާ އިޝާރާތުގެ ބަހުރުވައިގެ ވީޑިއޯތަކާއި ހެޔޮބިންގާގެ މީޑިއާ އާކައިވް.'
       },
+      articles: {
+        title: 'Articles | Heyo Bingaa NGO (ދީނީ ލިޔުންތައް)',
+        description: 'ހެޔޮބިންގާ ޖަމްޢިއްޔާއިން ޝާއިޢުކުރާ ދީނީ، ތަރުބަވީ އަދި ޢިލްމީ ލިޔުންތަކާއި ދިރާސާތައް.'
+      },
       gallery: {
         title: 'Photo Gallery | Heyo Bingaa NGO',
         description: 'ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ ދީނީ އަދި އިޖުތިމާޢީ ޙަރަކާތްތަކުގެ ފޮޓޯ ގެލެރީ އަދި ސްލައިޑްޝޯ.'
@@ -139,6 +144,7 @@ export default function App() {
     }
     if (h === '#/admin' || h === '#admin') return 'admin';
     if (h === '#/about' || h === '#about') return 'about';
+    if (h.startsWith('#/articles') || h.startsWith('#articles')) return 'articles';
     if (h === '#/videos' || h === '#videos' || h === '#/media' || h === '#media') return 'videos';
     if (h === '#/gallery' || h === '#gallery') return 'gallery';
     if (h === '#/programs' || h === '#programs') return 'programs';
@@ -256,6 +262,10 @@ export default function App() {
               mediaList={mediaList}
               onSelectMedia={(media) => handleOpenMediaModal(media)}
             />
+          )}
+
+          {currentTab === 'articles' && (
+            <ArticlesPage onNavigate={handleNavigate} />
           )}
 
           {currentTab === 'gallery' && (

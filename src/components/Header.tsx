@@ -14,7 +14,8 @@ import {
   Facebook, 
   Instagram, 
   Youtube, 
-  Mail 
+  Mail,
+  FileText 
 } from 'lucide-react';
 import { NGO_CONTACT } from '../data/initialData';
 import AccessibilityMenu from './AccessibilityMenu';
@@ -105,6 +106,7 @@ export default function Header({ currentTab, onSelectTab, onOpenDonateModal }: H
   const navItems: { id: NavigationTab; label: string; icon: React.ReactNode }[] = [
     { id: 'home', label: 'ފުރަތަމަ ޞަފްޙާ', icon: <Home className="w-4 h-4" /> },
     { id: 'about', label: 'ތަޢާރަފް', icon: <BookOpen className="w-4 h-4" /> },
+    { id: 'articles', label: 'ލިޔުންތައް', icon: <FileText className="w-4 h-4" /> },
     { id: 'videos', label: 'ވީޑިއޯ', icon: <Video className="w-4 h-4" /> },
     { id: 'gallery', label: 'ގެލެރީ', icon: <Images className="w-4 h-4" /> },
     { id: 'programs', label: 'ޕްރޮގްރާމްތައް', icon: <Users className="w-4 h-4" /> },

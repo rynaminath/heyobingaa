@@ -1,4 +1,4 @@
-import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg, GalleryItem, HeroSlide, RecordedActivitySection } from '../types';
+import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg, GalleryItem, HeroSlide, RecordedActivitySection, ArticleItem, AuthorProfile } from '../types';
 
 export const NGO_CONTACT = {
   viberNumber: '+9607522778',
@@ -816,19 +816,7 @@ export const PROGRAMS: ProgramItem[] = [
   }
 ];
 
-export const INITIAL_GALLERY: GalleryItem[] = Array.from({ length: 13 }, (_, i) => {
-  const num = i + 1;
-  const filename = `gallery (${num}).jpg`;
-  return {
-    id: `gallery-${num}`,
-    url: `/images/${encodeURIComponent(filename)}`,
-    filename,
-    title: `ހެޔޮބިންގާ ޙަރަކާތްތައް • ތަޞްވީރު ${num}`,
-    order: num,
-    category: 'community',
-    createdAt: '2026-03-01T00:00:00.000Z'
-  };
-});
+export const INITIAL_GALLERY: GalleryItem[] = [];
 
 export const INITIAL_HERO_SLIDES: HeroSlide[] = [
   {
@@ -943,4 +931,45 @@ export const RECORDED_ACTIVITIES: RecordedActivitySection[] = [
     ]
   }
 ];
+
+export const INITIAL_AUTHORS: AuthorProfile[] = [
+  {
+    id: 'author-bootstrap-admin',
+    email: 'ryn@azmans.com',
+    name: 'ހެޔޮބިންގާ އިދާރާ',
+    title: 'އިސް މުދައްރިސް & އެޑްމިނިސްޓްރޭޓަރ',
+    bio: 'ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ އިދާރީ އަދި ތަރުބަވީ ކޮންޓެންޓް ބެލެހެއްޓެވުން.',
+    status: 'active',
+    addedAt: '2026-01-15T00:00:00.000Z'
+  },
+  {
+    id: 'author-sheikh-abdussalam',
+    email: 'sheikh.abdussalam@example.com',
+    name: 'އައްޝައިޚް ޢަބްދުއްސަލާމް ދާއޫދު',
+    title: 'ދީނީ ޢިލްމުވެރިޔާ & ދާޢީ',
+    bio: 'އިސްލާމީ ޝަރީޢާގެ ޢިލްމުވެރިއެއް، ދީނީ ދަރުސް ދެއްވުމާއި ޢާއިލީ މައްސަލަތަކަށް އިސްލާމީ ޙައްލު ހޯއްދަވައިދެއްވުން.',
+    status: 'active',
+    addedAt: '2026-02-01T00:00:00.000Z'
+  },
+  {
+    id: 'author-team-knowledge',
+    email: 'team@heyobingaa.org',
+    name: 'ހެޔޮބިންގާ ޢިލްމީ ޓީމު',
+    title: 'ދީނީ އަދި އިޖުތިމާޢީ ކޮންޓެންޓް ޔުނިޓް',
+    bio: 'އަޑުއިވުމުން މަޙްރޫމްވެފައިވާ ކުދިންނަށާއި އުޚުތުންނަށް ޚާއްޞަ އިސްލާމީ މައުލޫމާތު ދިރާސާކޮށް ޝާއިޢުކުރާ ޓީމު.',
+    status: 'active',
+    addedAt: '2026-02-10T00:00:00.000Z'
+  },
+  {
+    id: 'author-fathimath-nahida',
+    email: 'writer.fathimath@example.com',
+    name: 'ފާޠިމަތު ނާހިދާ',
+    title: 'އިޖުތިމާޢީ ލިޔުންތެރިޔާ & ޓީޗަރ',
+    bio: 'ކުޑަކުދިންގެ ތަރުބިއްޔަތާއި ޢާއިލީ ދުޅަހެޔޮކަމާ ގުޅޭގޮތުން ލިޔުއްވާ ލިޔުންތެރިއެއް.',
+    status: 'active',
+    addedAt: '2026-02-15T00:00:00.000Z'
+  }
+];
+
+export const INITIAL_ARTICLES: ArticleItem[] = [];
 

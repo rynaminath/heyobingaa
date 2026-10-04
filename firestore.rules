@@ -31,7 +31,48 @@ service cloud.firestore {
       );
     }
 
+    function isAuthor() {
+      return isSignedIn() && (
+        isAdmin() ||
+        exists(/databases/$(database)/documents/authors/$(request.auth.uid))
+      );
+    }
+
     // Entity Validation Helpers
+    function isValidAuthor(data) {
+      return data.email is string && data.email.size() > 0 && data.email.size() <= 100 &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 120 &&
+             data.status in ['active', 'suspended'] &&
+             (!('title' in data) || (data.title is string && data.title.size() <= 120)) &&
+             (!('bio' in data) || (data.bio is string && data.bio.size() <= 1000)) &&
+             (!('avatarUrl' in data) || (data.avatarUrl is string && data.avatarUrl.size() <= 500)) &&
+             (!('addedAt' in data) || (data.addedAt is string && data.addedAt.size() <= 50)) &&
+             (!('addedBy' in data) || (data.addedBy is string && data.addedBy.size() <= 128)) &&
+             (!('id' in data) || (data.id is string && data.id.size() <= 128));
+    }
+
+    function isValidArticle(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 250 &&
+             data.excerpt is string && data.excerpt.size() > 0 && data.excerpt.size() <= 500 &&
+             data.content is string && data.content.size() > 0 && data.content.size() <= 50000 &&
+             data.featuredImage is string && data.featuredImage.size() > 0 && data.featuredImage.size() <= 800000 &&
+             data.authorName is string && data.authorName.size() > 0 && data.authorName.size() <= 120 &&
+             data.category in ['tawheed', 'fiqh', 'family', 'youth', 'seerah', 'ramadan', 'general'] &&
+             data.status in ['draft', 'pending_approval', 'published', 'rejected'] &&
+             (!('categoryLabel' in data) || (data.categoryLabel is string && data.categoryLabel.size() <= 100)) &&
+             (!('authorId' in data) || (data.authorId is string && data.authorId.size() <= 128)) &&
+             (!('authorEmail' in data) || (data.authorEmail is string && data.authorEmail.size() <= 100)) &&
+             (!('authorRole' in data) || (data.authorRole is string && data.authorRole.size() <= 100)) &&
+             (!('publishedAt' in data) || (data.publishedAt is string && data.publishedAt.size() <= 50)) &&
+             (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 50)) &&
+             (!('updatedAt' in data) || (data.updatedAt is string && data.updatedAt.size() <= 50)) &&
+             (!('readingTimeMinutes' in data) || data.readingTimeMinutes is number) &&
+             (!('approvedBy' in data) || (data.approvedBy is string && data.approvedBy.size() <= 128)) &&
+             (!('approvedAt' in data) || (data.approvedAt is string && data.approvedAt.size() <= 50)) &&
+             (!('rejectionReason' in data) || (data.rejectionReason is string && data.rejectionReason.size() <= 1000)) &&
+             (!('viewsCount' in data) || data.viewsCount is number) &&
+             (!('id' in data) || (data.id is string && data.id.size() <= 128));
+    }
     function isValidEvent(data) {
       return data.title is string && data.title.size() > 0 && data.title.size() <= 200 &&
              data.speaker is string && data.speaker.size() > 0 && data.speaker.size() <= 120 &&
@@ -109,7 +150,10 @@ service cloud.firestore {
              data.url is string && data.url.size() > 0 && data.url.size() <= 800000 &&
              (!('filename' in data) || (data.filename is string && data.filename.size() <= 200)) &&
              (!('category' in data) || (data.category is string && data.category.size() <= 100)) &&
-             (!('order' in data) || data.order is number);
+             (!('date' in data) || (data.date is string && data.date.size() <= 50)) &&
+             (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 50)) &&
+             (!('order' in data) || data.order is number) &&
+             (!('id' in data) || (data.id is string && data.id.size() <= 128));
     }
 
     // Collection Rules
@@ -119,6 +163,37 @@ service cloud.firestore {
       allow get: if isSignedIn();
       allow list: if isAdmin();
       allow write: if isAdmin();
+    }
+
+    // 2. Authors Collection - Public read, Admin write, signed-in users can get own
+    match /authors/{authorId} {
+      allow get: if isSignedIn();
+      allow list: if true;
+      allow create: if isAdmin() && isValidId(authorId) && isValidAuthor(incoming());
+      allow update: if isAdmin() && isValidAuthor(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // 3. Articles Collection - Public read published, Admin write all, Author write limited to articles
+    match /articles/{articleId} {
+      allow get: if resource.data.status == 'published' ||
+                    isAdmin() ||
+                    (isSignedIn() && resource.data.authorId == request.auth.uid);
+      allow list: if true;
+      allow create: if isValidId(articleId) && isValidArticle(incoming()) && (
+        isAdmin() ||
+        (isAuthor() &&
+         incoming().authorId == request.auth.uid &&
+         incoming().status in ['draft', 'pending_approval'])
+      );
+      allow update: if isValidArticle(incoming()) && (
+        isAdmin() ||
+        (isAuthor() &&
+         resource.data.authorId == request.auth.uid &&
+         incoming().authorId == resource.data.authorId &&
+         incoming().status in ['draft', 'pending_approval'])
+      );
+      allow delete: if isAdmin() || (isAuthor() && resource.data.authorId == request.auth.uid);
     }
 
     // 2. Events Collection - Public read, Admin write

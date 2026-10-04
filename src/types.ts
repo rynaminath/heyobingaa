@@ -1,6 +1,7 @@
 export type NavigationTab = 
   | 'home' 
   | 'about' 
+  | 'articles'
   | 'videos'
   | 'media' // alias for backwards compatibility
   | 'gallery'
@@ -153,3 +154,42 @@ export interface RecordedActivitySection {
   category: string;
   items: RecordedActivityItem[];
 }
+
+export type ArticleStatus = 'draft' | 'pending_approval' | 'published' | 'rejected';
+
+export interface AuthorProfile {
+  id: string; // auth uid or custom author id
+  email: string; // Google email
+  name: string; // Author name in Dhivehi (or English)
+  title?: string; // e.g. ދީނީ ލިޔުންތެރިޔާ, ޢިލްމީ މުދައްރިސް
+  bio?: string;
+  avatarUrl?: string;
+  status: 'active' | 'suspended';
+  addedAt: string;
+  addedBy?: string;
+}
+
+export interface ArticleItem {
+  id: string;
+  title: string;
+  slug?: string;
+  excerpt: string;
+  content: string;
+  featuredImage: string; // Standardized 16:9 aspect ratio image URL / Data URI
+  category: 'tawheed' | 'fiqh' | 'family' | 'youth' | 'seerah' | 'ramadan' | 'general';
+  categoryLabel: string;
+  authorId?: string; // UID of submitter or author
+  authorEmail?: string;
+  authorName: string; // Displayed author name (admins can customize author name)
+  authorRole?: string;
+  status: ArticleStatus;
+  publishedAt?: string;
+  createdAt: string;
+  updatedAt?: string;
+  readingTimeMinutes?: number;
+  approvedBy?: string;
+  approvedAt?: string;
+  rejectionReason?: string;
+  viewsCount?: number;
+}
+
