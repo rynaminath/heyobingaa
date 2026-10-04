@@ -1,5 +1,7 @@
-import { EventItem, MediaItem, NavigationTab } from '../types';
+import { useState, useEffect } from 'react';
+import { EventItem, MediaItem, NavigationTab, ArticleItem } from '../types';
 import { BANK_GROUPS } from '../data/initialData';
+import { subscribeToPublishedArticles } from '../services/firestoreService';
 import BankCard from '../components/BankCard';
 import HeroSlideshowBanner from '../components/HeroSlideshowBanner';
 import logoImg from '../images/logo.png';
@@ -10,7 +12,9 @@ import {
   Sparkles, 
   Users, 
   CheckCircle2,
-  BookOpen
+  BookOpen,
+  FileText,
+  Clock
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -19,12 +23,26 @@ interface HomePageProps {
   onSelectMedia?: (media: MediaItem) => void;
   featuredEvent?: EventItem | null;
   featuredMediaList?: MediaItem[];
+  articlesList?: ArticleItem[];
 }
 
 export default function HomePage({
   onNavigate,
-  onOpenDonateModal
+  onOpenDonateModal,
+  articlesList
 }: HomePageProps) {
+  const [liveArticles, setLiveArticles] = useState<ArticleItem[]>(articlesList || []);
+
+  useEffect(() => {
+    if (articlesList && articlesList.length > 0) {
+      setLiveArticles(articlesList);
+      return;
+    }
+    const unsub = subscribeToPublishedArticles((items) => {
+      setLiveArticles(items || []);
+    });
+    return () => unsub();
+  }, [articlesList]);
 
   return (
     <div className="space-y-16 pb-12 font-thaana">

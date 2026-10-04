@@ -570,7 +570,7 @@ export default function WysiwygEditor({
             onInput={handleEditorInput}
             onKeyUp={updateActiveFormats}
             onMouseUp={updateActiveFormats}
-            className="p-4 sm:p-6 outline-none font-thaana text-right text-base leading-[2.3] text-[#1C2622] focus:ring-0 overflow-y-auto [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#1B6B52] [&_h2]:my-4 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#1C2622] [&_h3]:my-3 [&_p]:my-2.5 [&_ul]:list-disc [&_ul]:pr-6 [&_ul]:my-3 [&_ol]:list-decimal [&_ol]:pr-6 [&_ol]:my-3 [&_li]:my-1.5 [&_blockquote]:border-r-4 [&_blockquote]:border-[#1B6B52] [&_blockquote]:bg-[#EBF5F0]/70 [&_blockquote]:p-4 [&_blockquote]:rounded-2xl [&_blockquote]:font-semibold [&_blockquote]:my-4 [&_a]:text-[#1B6B52] [&_a]:underline"
+            className="p-4 sm:p-6 outline-none font-thaana text-right text-base leading-[1.25] text-[#1C2622] focus:ring-0 overflow-y-auto [&_*]:leading-[1.25] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#1B6B52] [&_h2]:my-3 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#1C2622] [&_h3]:my-2 [&_p]:my-2 [&_ul]:list-disc [&_ul]:pr-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:pr-6 [&_ol]:my-2 [&_li]:my-1 [&_blockquote]:border-r-4 [&_blockquote]:border-[#1B6B52] [&_blockquote]:bg-[#EBF5F0]/70 [&_blockquote]:p-4 [&_blockquote]:rounded-2xl [&_blockquote]:font-semibold [&_blockquote]:my-3 [&_a]:text-[#1B6B52] [&_a]:underline"
             style={{ minHeight }}
             data-placeholder={placeholder}
           />
@@ -612,7 +612,7 @@ export default function WysiwygEditor({
 
               {htmlContent ? (
                 <div
-                  className="prose prose-lg max-w-none text-[#2A3B34] font-thaana space-y-4 text-base sm:text-lg leading-[2.3] text-right [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#1C2622] [&_h2]:mt-6 [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#1C2622] [&_h3]:mt-4 [&_h3]:mb-2 [&_p]:my-3 [&_blockquote]:border-r-4 [&_blockquote]:border-[#1B6B52] [&_blockquote]:bg-[#EBF5F0]/70 [&_blockquote]:p-5 [&_blockquote]:rounded-2xl [&_blockquote]:font-semibold [&_blockquote]:my-4 [&_ul]:list-disc [&_ul]:pr-6 [&_ul]:my-3 [&_ol]:list-decimal [&_ol]:pr-6 [&_ol]:my-3 [&_a]:text-[#1B6B52] [&_a]:underline"
+                  className="w-full text-[#2A3B34] font-thaana space-y-4 text-base sm:text-lg leading-[1.25] text-right [&_*]:leading-[1.25] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#1C2622] [&_h2]:mt-5 [&_h2]:mb-2 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-[#1C2622] [&_h3]:mt-3 [&_h3]:mb-1.5 [&_p]:my-2 [&_blockquote]:border-r-4 [&_blockquote]:border-[#1B6B52] [&_blockquote]:bg-[#EBF5F0]/70 [&_blockquote]:p-5 [&_blockquote]:rounded-2xl [&_blockquote]:font-semibold [&_blockquote]:my-3.5 [&_ul]:list-disc [&_ul]:pr-6 [&_ul]:my-2 [&_ol]:list-decimal [&_ol]:pr-6 [&_ol]:my-2 [&_a]:text-[#1B6B52] [&_a]:underline"
                   dangerouslySetInnerHTML={{ __html: htmlContent }}
                 />
               ) : (

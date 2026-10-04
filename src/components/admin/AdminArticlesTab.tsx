@@ -93,8 +93,12 @@ export default function AdminArticlesTab({
       ? 'ހެޔޮބިންގާ ޢިލްމީ ޓީމު'
       : authorProfile?.name || 'ލިޔުންތެރިޔާ';
 
+    // Easy short numeric/alphanumeric code
+    const nextSlug = (articles.length + 1).toString();
+
     setEditingArticle({
-      id: `art-${Date.now()}`,
+      id: `art-${nextSlug}`,
+      slug: nextSlug,
       title: '',
       excerpt: '',
       content: '',
@@ -161,13 +165,15 @@ export default function AdminArticlesTab({
 
     const finalStatus: ArticleStatus = targetStatus || editingArticle.status || (isAdmin ? 'published' : 'pending_approval');
 
+    const cleanSlug = (editingArticle.slug || '')
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]/g, '') || (articles.length + 1).toString();
+
     const payload: ArticleItem = {
-      id: editingArticle.id || `art-${Date.now()}`,
+      id: editingArticle.id || `art-${cleanSlug}`,
       title: editingArticle.title.trim(),
-      slug: editingArticle.title
-        .toLowerCase()
-        .replace(/[^a-zA-Z0-9\u0780-\u07BF]+/g, '-')
-        .replace(/^-|-$/g, '') || `art-${Date.now()}`,
+      slug: cleanSlug,
       excerpt: editingArticle.excerpt.trim(),
       content: editingArticle.content.trim(),
       featuredImage: editingArticle.featuredImage,
@@ -505,8 +511,33 @@ export default function AdminArticlesTab({
                 />
               </div>
 
-              {/* Category & Reading Time */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Slug / Short URL, Category & Reading Time */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-[#556660] mb-1">
+                    ކުރު ލިންކް ކޯޑު (Short URL) *
+                  </label>
+                  <div className="flex items-center">
+                    <span className="px-2.5 py-2.5 bg-[#F4F7F5] border border-l-0 border-[#E5ECE8] rounded-r-xl text-xs font-mono text-[#556660] select-none" dir="ltr">
+                      #/a/
+                    </span>
+                    <input
+                      type="text"
+                      dir="ltr"
+                      required
+                      value={editingArticle.slug || ''}
+                      onChange={(e) => {
+                        setFormError(null);
+                        setEditingArticle({
+                          ...editingArticle,
+                          slug: e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, '')
+                        });
+                      }}
+                      className="w-full px-3 py-2.5 rounded-l-xl border border-[#E5ECE8] focus:border-[#1B6B52] outline-none font-mono text-xs font-bold text-[#1B6B52]"
+                      placeholder="1"
+                    />
+                  </div>
+                </div>
                 <div>
                   <label className="block text-xs font-bold text-[#556660] mb-1">ކެޓަގަރީ (Category) *</label>
                   <select
