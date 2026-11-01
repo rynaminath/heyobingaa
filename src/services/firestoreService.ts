@@ -12,7 +12,7 @@ import {
 } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { db, auth, handleFirestoreError, OperationType } from '../lib/firebase';
-import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem, ArticleItem, AuthorProfile } from '../types';
+import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem, ArticleItem, AuthorProfile, HeroSlide } from '../types';
 import {
   INITIAL_EVENTS,
   INITIAL_MEDIA,
@@ -20,20 +20,23 @@ import {
   NGO_CONTACT,
   INITIAL_GALLERY,
   INITIAL_AUTHORS,
-  INITIAL_ARTICLES
+  INITIAL_ARTICLES,
+  INITIAL_HERO_SLIDES
 } from '../data/initialData';
 
 // Bootstrapped admin email
 export const BOOTSTRAP_ADMIN_EMAIL = 'ryn@azmans.com';
+export const BOOTSTRAP_ADMIN_EMAILS = ['ryn@azmans.com', 'azman@azmans.com'];
 
 /**
  * Check if the given authenticated user is an administrator
  */
 export async function checkUserIsAdmin(user: User | null): Promise<boolean> {
-  if (!user) return false;
+  if (!user || !user.email) return false;
 
   // Direct check for bootstrapped admin
-  if (user.email?.toLowerCase() === BOOTSTRAP_ADMIN_EMAIL.toLowerCase()) {
+  const userEmail = user.email.toLowerCase();
+  if (BOOTSTRAP_ADMIN_EMAILS.some(e => e.toLowerCase() === userEmail)) {
     return true;
   }
 
@@ -701,6 +704,7 @@ export async function seedInitialDataToFirestore(): Promise<{
   galleryCount: number;
   articlesCount: number;
   authorsCount: number;
+  slidesCount?: number;
 }> {
   let eventsCount = 0;
   let mediaCount = 0;
@@ -745,7 +749,14 @@ export async function seedInitialDataToFirestore(): Promise<{
     articlesCount++;
   }
 
-  // 7. Seed site settings
+  // 7. Seed Hero Slides
+  let slidesCount = 0;
+  for (const slide of INITIAL_HERO_SLIDES) {
+    await setDoc(doc(db, 'heroSlides', slide.id), { ...slide, status: 'active', updatedAt: new Date().toISOString() }, { merge: true });
+    slidesCount++;
+  }
+
+  // 8. Seed site settings
   await setDoc(
     doc(db, 'siteSettings', 'global'),
     {
@@ -755,7 +766,7 @@ export async function seedInitialDataToFirestore(): Promise<{
     { merge: true }
   );
 
-  return { eventsCount, mediaCount, programsCount, galleryCount, articlesCount, authorsCount };
+  return { eventsCount, mediaCount, programsCount, galleryCount, articlesCount, authorsCount, slidesCount };
 }
 
 /**
@@ -961,6 +972,158 @@ export async function deleteAuthorFromFirestore(authorId: string): Promise<void>
   } catch (error) {
     handleFirestoreError(error, OperationType.DELETE, path);
     throw error;
+  }
+}
+
+const HERO_SLIDES_STORAGE_KEY = 'heyobingaa_hero_slides_v1';
+
+export function getStoredHeroSlides(): HeroSlide[] {
+  try {
+    const raw = localStorage.getItem(HERO_SLIDES_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.warn('Error reading stored hero slides:', err);
+  }
+  return INITIAL_HERO_SLIDES;
+}
+
+export function saveStoredHeroSlides(slides: HeroSlide[]): void {
+  try {
+    localStorage.setItem(HERO_SLIDES_STORAGE_KEY, JSON.stringify(slides));
+  } catch (err) {
+    console.warn('Error saving stored hero slides:', err);
+  }
+}
+
+/**
+ * Realtime subscribe to Hero Slides (Public / Admin)
+ * Reads from siteSettings/heroSlides (pre-authorized in live Firestore rules),
+ * with localStorage cache and INITIAL_HERO_SLIDES fallback.
+ */
+export function subscribeToHeroSlides(
+  onData: (slides: HeroSlide[]) => void,
+  onError?: (err: unknown) => void
+) {
+  // Immediately emit cached/default slides so the UI renders instantly
+  const initial = getStoredHeroSlides();
+  onData(initial);
+
+  const docRef = doc(db, 'siteSettings', 'heroSlides');
+  return onSnapshot(
+    docRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data();
+        if (data && Array.isArray(data.slides) && data.slides.length > 0) {
+          const sorted = [...data.slides].sort((a, b) => Number(a.order ?? 999) - Number(b.order ?? 999));
+          saveStoredHeroSlides(sorted);
+          onData(sorted);
+          return;
+        }
+      }
+      onData(getStoredHeroSlides());
+    },
+    (error) => {
+      console.warn('Hero slides subscription notice (using local/initial data):', error.message || error);
+      if (onError) onError(error);
+      onData(getStoredHeroSlides());
+    }
+  );
+}
+
+/**
+ * Admin: Save or update a Hero Slide in Firestore & local storage
+ */
+export async function saveHeroSlideToFirestore(slide: HeroSlide): Promise<void> {
+  const slideId = slide.id || `slide-${Date.now()}`;
+  const payload: HeroSlide = {
+    ...slide,
+    id: slideId,
+    status: slide.status || 'active',
+    updatedAt: new Date().toISOString()
+  };
+
+  // 1. Update local storage
+  const currentSlides = getStoredHeroSlides();
+  const existingIdx = currentSlides.findIndex((s) => s.id === slideId);
+  let updatedSlides: HeroSlide[];
+  if (existingIdx >= 0) {
+    updatedSlides = [...currentSlides];
+    updatedSlides[existingIdx] = payload;
+  } else {
+    updatedSlides = [...currentSlides, payload];
+  }
+  updatedSlides.sort((a, b) => Number(a.order ?? 999) - Number(b.order ?? 999));
+  saveStoredHeroSlides(updatedSlides);
+
+  // 2. Persist to Firestore siteSettings/heroSlides
+  try {
+    await setDoc(doc(db, 'siteSettings', 'heroSlides'), {
+      slides: updatedSlides,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+  } catch (error) {
+    console.warn('Firestore write warning for hero slides (saved locally):', error);
+  }
+}
+
+/**
+ * Admin: Delete a Hero Slide from Firestore & local storage
+ */
+export async function deleteHeroSlideFromFirestore(slideId: string): Promise<void> {
+  const currentSlides = getStoredHeroSlides();
+  const updatedSlides = currentSlides.filter((s) => s.id !== slideId);
+  saveStoredHeroSlides(updatedSlides);
+
+  try {
+    await setDoc(doc(db, 'siteSettings', 'heroSlides'), {
+      slides: updatedSlides,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+  } catch (error) {
+    console.warn('Firestore delete warning for hero slides (deleted locally):', error);
+  }
+}
+
+/**
+ * Admin: Reorder Hero Slides in Firestore & local storage
+ */
+export async function reorderHeroSlidesInFirestore(slides: HeroSlide[]): Promise<void> {
+  const updated = slides.map((s, idx) => ({
+    ...s,
+    order: idx + 1,
+    updatedAt: new Date().toISOString()
+  }));
+  saveStoredHeroSlides(updated);
+
+  try {
+    await setDoc(doc(db, 'siteSettings', 'heroSlides'), {
+      slides: updated,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+  } catch (error) {
+    console.warn('Firestore reorder warning for hero slides (reordered locally):', error);
+  }
+}
+
+/**
+ * Admin: Reset Hero Slides to original defaults
+ */
+export async function resetHeroSlidesToDefaultsInFirestore(): Promise<void> {
+  saveStoredHeroSlides(INITIAL_HERO_SLIDES);
+
+  try {
+    await setDoc(doc(db, 'siteSettings', 'heroSlides'), {
+      slides: INITIAL_HERO_SLIDES,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+  } catch (error) {
+    console.warn('Firestore reset warning for hero slides (reset locally):', error);
   }
 }
 

@@ -142,6 +142,8 @@ export interface HeroSlide {
   secondaryCtaText?: string;
   secondaryCtaLink?: NavigationTab;
   order?: number;
+  status?: 'active' | 'archived';
+  updatedAt?: string;
 }
 
 export interface RecordedActivityItem {

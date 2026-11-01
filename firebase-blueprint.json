@@ -563,9 +563,74 @@
         }
       },
       "required": ["title", "excerpt", "content", "featuredImage", "authorName", "status", "category"]
+    },
+    "heroSlide": {
+      "title": "Hero Slide",
+      "description": "Featured homepage hero banner slides with cinematic images and call-to-actions.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Main heading text of the slide.",
+          "maxLength": 250
+        },
+        "caption": {
+          "type": "string",
+          "description": "Descriptive subtitle or statement.",
+          "maxLength": 1000
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "High resolution image URL or Data URI.",
+          "maxLength": 800000
+        },
+        "badge": {
+          "type": "string",
+          "description": "Context badge or category label.",
+          "maxLength": 120
+        },
+        "ctaText": {
+          "type": "string",
+          "description": "Primary action button label.",
+          "maxLength": 100
+        },
+        "ctaLink": {
+          "type": "string",
+          "description": "Primary action target tab.",
+          "maxLength": 50
+        },
+        "secondaryCtaText": {
+          "type": "string",
+          "description": "Secondary action button label.",
+          "maxLength": 100
+        },
+        "secondaryCtaLink": {
+          "type": "string",
+          "description": "Secondary action target tab.",
+          "maxLength": 50
+        },
+        "order": {
+          "type": "number",
+          "description": "Display order index."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "archived"],
+          "description": "Slide visibility status."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last updated timestamp."
+        }
+      },
+      "required": ["title", "caption", "imageUrl"]
     }
   },
   "firestore": {
+    "/heroSlides/{slideId}": {
+      "schema": "heroSlide",
+      "description": "Homepage feature banner slides with full admin customization."
+    },
     "/admins/{adminId}": {
       "schema": "admin",
       "description": "List of authorized administrator users."

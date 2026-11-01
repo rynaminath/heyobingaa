@@ -27,7 +27,7 @@ service cloud.firestore {
     function isAdmin() {
       return isSignedIn() && (
         exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
-        (request.auth.token.email == 'ryn@azmans.com' && request.auth.token.email_verified == true)
+        (request.auth.token.email in ['ryn@azmans.com', 'azman@azmans.com'] && request.auth.token.email_verified == true)
       );
     }
 
@@ -156,7 +156,30 @@ service cloud.firestore {
              (!('id' in data) || (data.id is string && data.id.size() <= 128));
     }
 
+    function isValidHeroSlide(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 250 &&
+             data.caption is string && data.caption.size() > 0 && data.caption.size() <= 1000 &&
+             data.imageUrl is string && data.imageUrl.size() > 0 && data.imageUrl.size() <= 800000 &&
+             (!('badge' in data) || (data.badge is string && data.badge.size() <= 120)) &&
+             (!('ctaText' in data) || (data.ctaText is string && data.ctaText.size() <= 100)) &&
+             (!('ctaLink' in data) || (data.ctaLink is string && data.ctaLink.size() <= 50)) &&
+             (!('secondaryCtaText' in data) || (data.secondaryCtaText is string && data.secondaryCtaText.size() <= 100)) &&
+             (!('secondaryCtaLink' in data) || (data.secondaryCtaLink is string && data.secondaryCtaLink.size() <= 50)) &&
+             (!('order' in data) || data.order is number) &&
+             (!('status' in data) || data.status in ['active', 'archived']) &&
+             (!('updatedAt' in data) || (data.updatedAt is string && data.updatedAt.size() <= 50)) &&
+             (!('id' in data) || (data.id is string && data.id.size() <= 128));
+    }
+
     // Collection Rules
+
+    // 0. Hero Slides Collection - Public read, Admin write
+    match /heroSlides/{slideId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidId(slideId) && isValidHeroSlide(incoming());
+      allow update: if isAdmin() && isValidHeroSlide(incoming());
+      allow delete: if isAdmin();
+    }
 
     // 1. Admins Collection
     match /admins/{adminId} {

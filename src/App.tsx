@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { NavigationTab, MediaItem, EventItem, ProgramItem } from './types';
+import { NavigationTab, MediaItem, EventItem, ProgramItem, HeroSlide } from './types';
 import { AuthProvider } from './context/AuthContext';
 import { AccessibilityProvider } from './context/AccessibilityContext';
-import { subscribeToEvents, subscribeToMedia, subscribeToPrograms } from './services/firestoreService';
-import { INITIAL_MEDIA } from './data/initialData';
+import { subscribeToEvents, subscribeToMedia, subscribeToPrograms, subscribeToHeroSlides } from './services/firestoreService';
+import { INITIAL_MEDIA, INITIAL_EVENTS, PROGRAMS, INITIAL_HERO_SLIDES } from './data/initialData';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -26,15 +26,20 @@ export default function App() {
   const [isDonateModalOpen, setIsDonateModalOpen] = useState(false);
   const [activeMediaModal, setActiveMediaModal] = useState<MediaItem | null>(null);
 
-  // Pure Firestore real-time state driven by database with complete initial channel media
-  const [events, setEvents] = useState<EventItem[]>([]);
+  // Firestore real-time state with initial data fallback
+  const [events, setEvents] = useState<EventItem[]>(INITIAL_EVENTS);
   const [mediaList, setMediaList] = useState<MediaItem[]>(INITIAL_MEDIA);
-  const [programs, setPrograms] = useState<ProgramItem[]>([]);
+  const [programs, setPrograms] = useState<ProgramItem[]>(PROGRAMS);
+  const [heroSlides, setHeroSlides] = useState<HeroSlide[]>(INITIAL_HERO_SLIDES);
 
   // Live Firebase Subscriptions
   useEffect(() => {
     const unsubEvents = subscribeToEvents((data) => {
-      setEvents(data || []);
+      if (data && data.length > 0) {
+        setEvents(data);
+      } else {
+        setEvents(INITIAL_EVENTS);
+      }
     });
     const unsubMedia = subscribeToMedia((data) => {
       if (data && data.length >= INITIAL_MEDIA.length) {
@@ -48,13 +53,25 @@ export default function App() {
       }
     });
     const unsubPrograms = subscribeToPrograms((data) => {
-      setPrograms(data || []);
+      if (data && data.length > 0) {
+        setPrograms(data);
+      } else {
+        setPrograms(PROGRAMS);
+      }
+    });
+    const unsubSlides = subscribeToHeroSlides((data) => {
+      if (data && data.length > 0) {
+        setHeroSlides(data);
+      } else {
+        setHeroSlides(INITIAL_HERO_SLIDES);
+      }
     });
 
     return () => {
       unsubEvents();
       unsubMedia();
       unsubPrograms();
+      unsubSlides();
     };
   }, []);
 
@@ -250,6 +267,7 @@ export default function App() {
               onSelectMedia={(media) => handleOpenMediaModal(media)}
               featuredEvent={featuredEvent}
               featuredMediaList={mediaList}
+              slides={heroSlides}
             />
           )}
 

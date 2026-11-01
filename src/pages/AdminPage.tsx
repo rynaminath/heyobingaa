@@ -31,11 +31,13 @@ import {
   Check,
   MapPin,
   UserCheck,
-  FileText
+  FileText,
+  Layers
 } from 'lucide-react';
 import ImageCropperModal from '../components/ImageCropperModal';
 import AdminArticlesTab from '../components/admin/AdminArticlesTab';
 import AdminAuthorsTab from '../components/admin/AdminAuthorsTab';
+import AdminBannerTab from '../components/admin/AdminBannerTab';
 import { useAuth } from '../context/AuthContext';
 import {
   subscribeToEvents,
@@ -46,6 +48,7 @@ import {
   subscribeToVolunteers,
   subscribeToAllArticles,
   subscribeToAuthors,
+  subscribeToHeroSlides,
   saveEventToFirestore,
   deleteEventFromFirestore,
   saveMediaToFirestore,
@@ -65,10 +68,10 @@ import {
   saveAuthorToFirestore,
   deleteAuthorFromFirestore
 } from '../services/firestoreService';
-import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem, ArticleItem, AuthorProfile } from '../types';
+import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem, ArticleItem, AuthorProfile, HeroSlide } from '../types';
 import { NGO_CONTACT } from '../data/initialData';
 
-type AdminTab = 'events' | 'media' | 'programs' | 'gallery' | 'articles' | 'authors' | 'slips' | 'volunteers';
+type AdminTab = 'events' | 'media' | 'programs' | 'gallery' | 'articles' | 'authors' | 'slips' | 'volunteers' | 'banner';
 
 export default function AdminPage() {
   const { user, isAdmin, isAuthor, authorProfile, loading, loginWithGoogle, logout, adminEmail } = useAuth();
@@ -81,6 +84,7 @@ export default function AdminPage() {
   const [galleryList, setGalleryList] = useState<GalleryItem[]>([]);
   const [articlesList, setArticlesList] = useState<ArticleItem[]>([]);
   const [authorsList, setAuthorsList] = useState<AuthorProfile[]>([]);
+  const [bannerSlides, setBannerSlides] = useState<HeroSlide[]>([]);
   const [slips, setSlips] = useState<DonationSlip[]>([]);
   const [volunteers, setVolunteers] = useState<VolunteerApplication[]>([]);
 
@@ -126,6 +130,7 @@ export default function AdminPage() {
     const unsubGallery = subscribeToGallery(setGalleryList);
     const unsubArticles = subscribeToAllArticles(setArticlesList);
     const unsubAuthors = subscribeToAuthors(setAuthorsList);
+    const unsubSlides = subscribeToHeroSlides(setBannerSlides);
 
     let unsubSlips = () => {};
     let unsubVolunteers = () => {};
@@ -142,6 +147,7 @@ export default function AdminPage() {
       unsubGallery();
       unsubArticles();
       unsubAuthors();
+      unsubSlides();
       unsubSlips();
       unsubVolunteers();
     };
@@ -692,6 +698,18 @@ export default function AdminPage() {
         ) : (
           <>
             <button
+              onClick={() => setActiveTab('banner')}
+              className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
+                activeTab === 'banner'
+                  ? 'bg-[#1B6B52] text-white shadow-sm'
+                  : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
+              }`}
+            >
+              <Layers className="w-4 h-4" />
+              <span>ފީޗަރ ބެނާ ({bannerSlides.length})</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('events')}
               className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
                 activeTab === 'events'
@@ -794,6 +812,14 @@ export default function AdminPage() {
           </>
         )}
       </div>
+
+      {/* TAB CONTENT: 0. FEATURE BANNER */}
+      {effectiveIsAdmin && activeTab === 'banner' && (
+        <AdminBannerTab
+          slides={bannerSlides}
+          onRefresh={() => {}}
+        />
+      )}
 
       {/* TAB CONTENT: 1. EVENTS */}
       {activeTab === 'events' && (

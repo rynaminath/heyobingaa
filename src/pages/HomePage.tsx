@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { EventItem, MediaItem, NavigationTab, ArticleItem } from '../types';
+import { EventItem, MediaItem, NavigationTab, ArticleItem, HeroSlide } from '../types';
 import { BANK_GROUPS } from '../data/initialData';
 import { subscribeToPublishedArticles } from '../services/firestoreService';
 import BankCard from '../components/BankCard';
@@ -24,12 +24,14 @@ interface HomePageProps {
   featuredEvent?: EventItem | null;
   featuredMediaList?: MediaItem[];
   articlesList?: ArticleItem[];
+  slides?: HeroSlide[];
 }
 
 export default function HomePage({
   onNavigate,
   onOpenDonateModal,
-  articlesList
+  articlesList,
+  slides
 }: HomePageProps) {
   const [liveArticles, setLiveArticles] = useState<ArticleItem[]>(articlesList || []);
 
@@ -45,9 +47,32 @@ export default function HomePage({
   }, [articlesList]);
 
   return (
-    <div className="space-y-16 pb-12 font-thaana">
-      {/* 1. HERO SLIDESHOW BANNER (With Jamiyyaage Maqsad Box integrated into right side green) */}
-      <HeroSlideshowBanner onNavigate={onNavigate} />
+    <div className="space-y-8 sm:space-y-12 pb-12 font-thaana pt-4 sm:pt-6">
+      {/* 1. CINEMATIC HERO SLIDESHOW BANNER */}
+      <HeroSlideshowBanner slides={slides} onNavigate={onNavigate} />
+
+      {/* 2. JAMIYYAAGE MAQSAD HIGHLIGHT RIBBON */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-3xl p-5 sm:p-7 border border-[#E2E9E5] shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-right">
+          <div className="space-y-1.5 flex-1">
+            <div className="inline-flex items-center gap-1.5 text-xs text-[#1B6B52] font-bold">
+              <Sparkles className="w-3.5 h-3.5 text-[#1B6B52]" />
+              <span>ޖަމިއްޔާގެ މަޤުޞަދު</span>
+            </div>
+            <p className="text-sm sm:text-base font-bold text-[#1C2622] leading-relaxed">
+              "މި ޖަމިއްޔާގެ މަޤްޞަދަކީ އިޖުތިމާއީ، ޢިލްމީ، ދީނީ، ތަރުބަވީ އަދި ފަންނީ ރަނގަޅު ޖީލެއް އުފައްދާ ހެޔޮ މުޖުތަމައުއެއް ބިނާކުރުމަށް މަސައްކަތް ކުރުމެވެ."
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => onNavigate('about')}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#EBF5F0] hover:bg-[#D4EDE0] text-[#145541] text-xs font-bold shrink-0 transition-colors cursor-pointer"
+          >
+            <span>އިތުރަށް ކިޔުއްވާ</span>
+            <ArrowLeft className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </section>
 
       {/* 2. ABOUT SNIPPET: Sisters-led NGO with 13+ years community contribution */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
