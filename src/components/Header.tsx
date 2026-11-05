@@ -15,7 +15,8 @@ import {
   Instagram, 
   Youtube, 
   Mail,
-  FileText 
+  FileText,
+  Sparkles
 } from 'lucide-react';
 import { NGO_CONTACT } from '../data/initialData';
 import AccessibilityMenu from './AccessibilityMenu';

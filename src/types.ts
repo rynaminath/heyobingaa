@@ -6,6 +6,7 @@ export type NavigationTab =
   | 'media' // alias for backwards compatibility
   | 'gallery'
   | 'programs' 
+  | 'challenges'
   | 'events' 
   | 'volunteer' 
   | 'donate'
@@ -194,4 +195,53 @@ export interface ArticleItem {
   rejectionReason?: string;
   viewsCount?: number;
 }
+
+export interface Challenge {
+  id: string;               // e.g. "no-backbiting-30"
+  slug: string;             // "30-day-no-backbiting"
+  title: string;            // "30 ދުވަހުގެ ޣީބަ ނުބުނުމުގެ ޗެލެންޖް"
+  titleEn?: string;         // "30-Day No Backbiting Challenge"
+  subtitle?: string;        // Optional sub-heading
+  tagline: string;          // "ދޫ ރައްކާތެރިކުރުމާއި ހިތް ޠާހިރުކުރުމުގެ މަހެއް"
+  targetAudience?: string;  // e.g. "އުޚްތުންނަށް ޚާއްޞަ"
+  description: string;      // Detailed mission text
+  startDate: string;        // "2026-11-02"
+  durationDays: number;     // 30
+  scheduleText: string;     // "ހަފްތާއަކު 2 ޕޯސްޓް: ކޮންމެ ހޯމަ އަދި ބުރާސްފަތި ދުވަހަކު"
+  scheduleDays: string[];   // ["monday", "thursday"]
+  bannerImage?: string;     // Poster image
+  status: 'active' | 'upcoming' | 'completed';
+  postsCount?: number;
+  order?: number;
+  updatedAt?: string;
+}
+
+export interface ChallengePostQuote {
+  type: 'ayah' | 'hadith' | 'quote';
+  arabic?: string;
+  translation: string;
+  reference: string;
+}
+
+export interface ChallengePost {
+  id: string;               // e.g. "nb-post-1"
+  challengeId: string;      // "no-backbiting-30"
+  weekNumber: number;       // 1, 2, 3, 4
+  postNumber: number;       // 1, 2, 3, ...
+  dayOfWeek: string;        // "Monday" / "ހޯމަ"
+  publishDate: string;      // "2026-11-02"
+  title: string;            // Post title / theme
+  imageUrl?: string;        // "/src/images/nobackbite1.jpg"
+  quote?: ChallengePostQuote;
+  content: string;          // Main reflective body
+  reflectionQuestions?: string[];
+  commitmentText: string;   // Actionable pledge
+  hashtags: string[];       // ["#30DayNoBackbitingChallenge", "#HeyoBingaa"]
+  isPublished: boolean;
+  order: number;
+  likesCount?: number;
+  pledgesCount?: number;
+  updatedAt?: string;
+}
+
 

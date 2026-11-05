@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { EventItem, MediaItem, NavigationTab, ArticleItem, HeroSlide } from '../types';
-import { BANK_GROUPS } from '../data/initialData';
+import { BANK_GROUPS, nobackbite1Img } from '../data/initialData';
 import { subscribeToPublishedArticles } from '../services/firestoreService';
 import BankCard from '../components/BankCard';
 import HeroSlideshowBanner from '../components/HeroSlideshowBanner';
@@ -175,6 +175,81 @@ export default function HomePage({
             {BANK_GROUPS.map((bank) => (
               <BankCard key={bank.id} bankGroup={bank} />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3.5 ONGOING PROGRAM HIGHLIGHT: 30-Day No Backbiting Challenge */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-br from-[#124b3b] via-[#1B6B52] to-[#0f3d30] rounded-3xl p-6 sm:p-8 lg:p-10 text-white shadow-lg border border-[#145541] text-right font-thaana space-y-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            {/* Poster Graphic Thumbnail */}
+            <div className="w-full md:w-56 shrink-0 flex justify-center md:justify-start">
+              <div 
+                onClick={() => onNavigate('challenges')}
+                className="relative group rounded-2xl overflow-hidden border border-white/20 shadow-md bg-stone-900/40 aspect-[3/4] max-h-64 cursor-pointer hover:scale-102 transition-transform"
+              >
+                <img
+                  src={nobackbite1Img}
+                  alt="30-Day No Backbiting Challenge"
+                  className="w-full h-full object-contain"
+                />
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="px-3 py-1 rounded-lg bg-white/90 text-stone-900 text-xs font-bold shadow-xs">
+                    ބައްލަވާ
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Info & Call to Action */}
+            <div className="flex-1 space-y-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-[#A7F3D0] text-xs font-bold border border-white/20">
+                  <Sparkles className="w-3.5 h-3.5 text-[#FDE68A]" />
+                  <span>މިހާރު ކުރިއަށްދާ ޚާއްޞަ ކެމްޕޭން</span>
+                </span>
+
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-200 text-xs font-bold border border-amber-400/30">
+                  <span>30 ދުވަހުގެ ޗެލެންޖް</span>
+                </span>
+
+                <span className="text-xs text-emerald-100 font-mono" dir="ltr">
+                  Every Mon & Thu
+                </span>
+              </div>
+
+              <div className="space-y-1.5">
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-white leading-tight">
+                  30-Day No Backbiting Challenge (30 ދުވަހުގެ ނޯ ބެކްބައިޓިންގ ޗެލެންޖް)
+                </h3>
+                <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed max-w-2xl">
+                  ދޫ ރައްކާތެރިކުރުމާއި، އުޚްތުންގެ އަބުރު ޙިމާޔަތްކުރުމަށްޓަކައި ހަފްތާއަކު ދެ ދުވަހު (ހޯމަ އަދި ބުރާސްފަތި) ޤުރްއާނާއި ޙަދީޘްގެ އަލީގައި ގެނެސްދެވޭ ތަރުބަވީ އާޔަތްތަކާއި މިއަދުގެ ޢަޒުމް.
+                </p>
+              </div>
+
+              {/* Quranic Ayah Quote snippet */}
+              <div className="p-3.5 rounded-2xl bg-black/20 border border-white/10 text-xs text-emerald-50 space-y-1 max-w-2xl">
+                <span className="font-bold text-[#A7F3D0] block">ކީރިތި ޤުރްއާން (49:12):</span>
+                <p className="leading-relaxed line-clamp-2">
+                  "އަދި އެއްބަޔަކު އަނެއްބަޔަކަށް ޣީބަތް ނުބުނާށެވެ! ތިޔަބައިމީހުންގެ ތެރެއިން އެކަކުވެސް އޭނާގެ މަރުވެފައިވާ އަޚާގެ މަސްކެއުމަށް ލޯބިކުރާނެ ހެއްޔެވެ؟"
+                </p>
+              </div>
+
+              {/* Action Button */}
+              <div className="pt-1 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => onNavigate('challenges')}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-stone-100 text-[#145541] font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer"
+                >
+                  <span>ޗެލެންޖް ޕޯސްޓްތައް ބައްލަވާ & ޢަޒުމުގައި ބައިވެރިވެވަޑައިގަންނަވާ</span>
+                  <ArrowLeft className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>

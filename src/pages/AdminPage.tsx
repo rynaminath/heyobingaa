@@ -32,12 +32,14 @@ import {
   MapPin,
   UserCheck,
   FileText,
-  Layers
+  Layers,
+  Sparkles
 } from 'lucide-react';
 import ImageCropperModal from '../components/ImageCropperModal';
 import AdminArticlesTab from '../components/admin/AdminArticlesTab';
 import AdminAuthorsTab from '../components/admin/AdminAuthorsTab';
 import AdminBannerTab from '../components/admin/AdminBannerTab';
+import AdminChallengesTab from '../components/admin/AdminChallengesTab';
 import { useAuth } from '../context/AuthContext';
 import {
   subscribeToEvents,
@@ -49,6 +51,8 @@ import {
   subscribeToAllArticles,
   subscribeToAuthors,
   subscribeToHeroSlides,
+  subscribeToChallenges,
+  subscribeToChallengePosts,
   saveEventToFirestore,
   deleteEventFromFirestore,
   saveMediaToFirestore,
@@ -68,10 +72,10 @@ import {
   saveAuthorToFirestore,
   deleteAuthorFromFirestore
 } from '../services/firestoreService';
-import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem, ArticleItem, AuthorProfile, HeroSlide } from '../types';
+import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem, ArticleItem, AuthorProfile, HeroSlide, Challenge, ChallengePost } from '../types';
 import { NGO_CONTACT } from '../data/initialData';
 
-type AdminTab = 'events' | 'media' | 'programs' | 'gallery' | 'articles' | 'authors' | 'slips' | 'volunteers' | 'banner';
+type AdminTab = 'events' | 'media' | 'programs' | 'gallery' | 'articles' | 'authors' | 'slips' | 'volunteers' | 'banner' | 'challenges';
 
 export default function AdminPage() {
   const { user, isAdmin, isAuthor, authorProfile, loading, loginWithGoogle, logout, adminEmail } = useAuth();
@@ -85,6 +89,8 @@ export default function AdminPage() {
   const [articlesList, setArticlesList] = useState<ArticleItem[]>([]);
   const [authorsList, setAuthorsList] = useState<AuthorProfile[]>([]);
   const [bannerSlides, setBannerSlides] = useState<HeroSlide[]>([]);
+  const [challengesList, setChallengesList] = useState<Challenge[]>([]);
+  const [challengePosts, setChallengePosts] = useState<ChallengePost[]>([]);
   const [slips, setSlips] = useState<DonationSlip[]>([]);
   const [volunteers, setVolunteers] = useState<VolunteerApplication[]>([]);
 
@@ -131,6 +137,8 @@ export default function AdminPage() {
     const unsubArticles = subscribeToAllArticles(setArticlesList);
     const unsubAuthors = subscribeToAuthors(setAuthorsList);
     const unsubSlides = subscribeToHeroSlides(setBannerSlides);
+    const unsubChallenges = subscribeToChallenges(setChallengesList);
+    const unsubChallengePosts = subscribeToChallengePosts(setChallengePosts);
 
     let unsubSlips = () => {};
     let unsubVolunteers = () => {};
@@ -148,6 +156,8 @@ export default function AdminPage() {
       unsubArticles();
       unsubAuthors();
       unsubSlides();
+      unsubChallenges();
+      unsubChallengePosts();
       unsubSlips();
       unsubVolunteers();
     };
@@ -746,6 +756,18 @@ export default function AdminPage() {
             </button>
 
             <button
+              onClick={() => setActiveTab('challenges')}
+              className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
+                activeTab === 'challenges'
+                  ? 'bg-[#1B6B52] text-white shadow-sm'
+                  : 'text-[#556660] hover:bg-[#EBF5F0] hover:text-[#1B6B52]'
+              }`}
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>ޗެލެންޖް & ކެމްޕޭންތައް ({challengePosts.length})</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('gallery')}
               className={`px-4 py-2.5 rounded-xl font-bold text-base flex items-center gap-2 transition-all shrink-0 ${
                 activeTab === 'gallery'
@@ -817,6 +839,15 @@ export default function AdminPage() {
       {effectiveIsAdmin && activeTab === 'banner' && (
         <AdminBannerTab
           slides={bannerSlides}
+          onRefresh={() => {}}
+        />
+      )}
+
+      {/* TAB CONTENT: CHALLENGES */}
+      {effectiveIsAdmin && activeTab === 'challenges' && (
+        <AdminChallengesTab
+          challenges={challengesList}
+          posts={challengePosts}
           onRefresh={() => {}}
         />
       )}

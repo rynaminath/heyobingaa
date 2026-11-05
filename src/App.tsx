@@ -121,6 +121,10 @@ export default function App() {
       admin: {
         title: 'Admin Portal | Heyo Bingaa NGO',
         description: 'ހެޔޮބިންގާ ޖަމްޢިއްޔާގެ ވެބްސައިޓް ކޮންޓެންޓާއި ޑޭޓާ ބެލެހެއްޓެވުމުގެ އެޑްމިން ޕެނަލް.'
+      },
+      challenges: {
+        title: '30-Day No Backbiting Challenge | Heyo Bingaa NGO (30 ދުވަހުގެ ނޯ ބެކްބައިޓިންގ ޗެލެންޖް)',
+        description: 'ހެޔޮބިންގާގެ 30 ދުވަހުގެ ނޯ ބެކްބައިޓިންގ ޗެލެންޖް: ހަފްތާއަކު 2 ދުވަހު އާޔަތާއި ޢަޒުމް، ދޫ ރައްކާތެރިކުރުމާއި އުޚްތުންގެ އަބުރު ޙިމާޔަތްކުރުން.'
       }
     };
 
@@ -165,6 +169,7 @@ export default function App() {
     if (h === '#/videos' || h === '#videos' || h === '#/media' || h === '#media') return 'videos';
     if (h === '#/gallery' || h === '#gallery') return 'gallery';
     if (h === '#/programs' || h === '#programs') return 'programs';
+    if (h === '#/challenges' || h === '#challenges' || h.startsWith('#/challenge')) return 'challenges';
     if (h === '#/events' || h === '#events') return 'events';
     if (h === '#/volunteer' || h === '#volunteer') return 'volunteer';
     return 'home';
@@ -294,6 +299,15 @@ export default function App() {
             <ProgramsPage
               onNavigate={handleNavigate}
               onOpenDonateModal={handleOpenDonateModal}
+              initialView="challenge"
+            />
+          )}
+
+          {currentTab === 'challenges' && (
+            <ProgramsPage
+              onNavigate={handleNavigate}
+              onOpenDonateModal={handleOpenDonateModal}
+              initialView="challenge"
             />
           )}
 

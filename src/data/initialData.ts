@@ -1,4 +1,6 @@
-import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg, GalleryItem, HeroSlide, RecordedActivitySection, ArticleItem, AuthorProfile } from '../types';
+import { BankAccount, BankGroup, EventItem, MediaItem, ProgramItem, PartnerOrg, GalleryItem, HeroSlide, RecordedActivitySection, ArticleItem, AuthorProfile, Challenge, ChallengePost } from '../types';
+import nobackbite1Img from '../images/nobackbite1.jpg';
+export { nobackbite1Img };
 
 export const NGO_CONTACT = {
   viberNumber: '+9607522778',
@@ -972,4 +974,66 @@ export const INITIAL_AUTHORS: AuthorProfile[] = [
 ];
 
 export const INITIAL_ARTICLES: ArticleItem[] = [];
+
+export const INITIAL_CHALLENGES: Challenge[] = [
+  {
+    id: '30-day-no-backbiting',
+    slug: '30-day-no-backbiting',
+    title: '30-Day No Backbiting Challenge',
+    titleEn: '30-Day No Backbiting Challenge',
+    tagline: 'Guarding our tongues, purifying our hearts, and seeking the pleasure of Allah',
+    description: 'މިއީ އެކަކު އަނެކަކަށް ފާޑުކިޔައި ޙުކުމް ކުރުމުގެ ޗެލެންޖެއް ނޫނެވެ. މިއީ އަޅުގަނޑުމެންގެ އަމިއްލަ ނަފްސު އިޞްލާޙުކޮށް، މާތް ﷲ ގެ ފުއްސެވުމަށް އެދި، އުޚްތުންގެ ޢިއްޒަތާއި އަބުރު ރައްކާތެރިކުރުމުގެ މަތިވެރި ޢަޒުމެކެވެ. މަޤްޞަދަކީ ހަމައެކަނި އެއް މަސްދުވަހަށް ޣީބަ ބުނުން ހުއްޓާލުމެއް ނޫނެވެ. އަދި ކިއެއްތަ، އެކަކު އަނެކެއްގެ އަބުރު ރައްކާތެރިކުރުމާއި، ދެބައޮޑުވުމުން ދުރުހެލިވެ، ދުލުން ބުނާ ބަސްތަކަށް ސަމާލުވުމުގެ ދާއިމީ ހެޔޮ އާދައެއް އަށަގެންނެވުމެވެ.',
+    startDate: '2026-11-02',
+    durationDays: 30,
+    scheduleText: 'Weekly twice: Mondays & Thursdays (ހަފްތާއަކު 2 ޕޯސްޓް: ކޮންމެ ހޯމަ & ބުރާސްފަތި ދުވަހަކު)',
+    scheduleDays: ['monday', 'thursday'],
+    bannerImage: nobackbite1Img,
+    status: 'active',
+    postsCount: 1,
+    order: 1
+  }
+];
+
+export const INITIAL_CHALLENGE_POSTS: ChallengePost[] = [
+  {
+    id: 'nb-week1-post1',
+    challengeId: '30-day-no-backbiting',
+    weekNumber: 1,
+    postNumber: 1,
+    dayOfWeek: 'Monday',
+    publishDate: '2026-11-02',
+    title: '30-DAY NO BACKBITING CHALLENGE',
+    imageUrl: nobackbite1Img,
+    quote: {
+      type: 'ayah',
+      arabic: 'يَا أَيُّهَا الَّذِينَ آمَنُوا اجْتَنِبُوا كَثِيرًا مِّنَ الظَّنِّ إِنَّ بَعْضَ الظَّنِّ إِثْمٌ ۖ وَلَا تَجَسَّسُوا وَلَا يَغْتَب بَّعْضُكُم بَعْضًا ۚ أَيُحِبُّ أَحَدُكُمْ أَن يَأْكُلَ لَحْمَ أَخِيهِ مَيْتًا فَكَرِهْتُمُوهُ ۚ وَاتَّقُوا اللَّهَ ۚ إِنَّ اللَّهَ تَوَّابٌ رَّحِيمٌ',
+      translation: '“O you who have believed, avoid much [negative] assumption. Indeed, some assumption is sin. And do not spy or backbite each other. Would one of you like to eat the flesh of his brother when dead? You would detest it. And fear Allah; indeed, Allah is Accepting of repentance and Merciful.”',
+      reference: 'Qur\'an (49:12)'
+    },
+    content: `Assalamu Alaikum wa Rahmatullahi wa Barakatuh, dear sisters! 🤍
+
+Have we ever left a conversation feeling guilty about what we said about someone who wasn't there?
+
+Have we ever discussed someone's mistakes, appearance, family, marriage, habits or personal matters without thinking twice?
+
+Sometimes backbiting (gheebah) becomes so common that we forget how serious it is in the sight of Allah.
+
+✨ For the next 30 days, let us make a sincere effort to guard our tongues and our hearts.
+
+This is not a challenge to judge one another. It is a challenge to improve ourselves, seek Allah's forgiveness and protect the honour of our sisters, guarding our tongues, purifying our hearts, and seeking the pleasure of Allah.
+
+The aim is not merely to stop speaking ill of others for one month, but to build a lasting habit of protecting one another's honour, avoiding gossip, and becoming more conscious of what we say.`,
+    reflectionQuestions: [
+      'Have we ever left a conversation feeling guilty about what we said about someone who wasn\'t there?',
+      'Are we actively guarding our tongues and protecting our sisters\' honour in everyday gatherings?'
+    ],
+    commitmentText: '“I will try my best to protect the honour of others, just as I would want them to protect mine.”',
+    hashtags: ['#30DayNoBackbitingChallenge', '#HeyoBingaa', '#GuardingTheTongue'],
+    isPublished: true,
+    order: 1,
+    likesCount: 24,
+    pledgesCount: 48
+  }
+];
+
 

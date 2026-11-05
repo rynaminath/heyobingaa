@@ -1,6 +1,6 @@
-# Modern Cinematic Feature Banner & Admin Customization
+# Challenges Hub & 30-Day Spiritual Campaigns System
 
-A modern, full-width cinematic hero slider with refined glassmorphism overlay and Ken Burns motion, paired with complete real-time management from the Admin Panel.
+An interactive Challenges & Campaigns Hub for Heyo Bingaa NGO, launching with the **30-Day No Backbiting Challenge** (30-Day No Gheebah Challenge). Designed to present twice-weekly posts (Mondays & Thursdays) featuring poster graphics, highlighted Ayahs and Hadiths, reflective guides, and shareable commitment pledges, fully manageable from the Admin Portal for present and future campaigns.
 
 ---
 
@@ -9,25 +9,25 @@ A modern, full-width cinematic hero slider with refined glassmorphism overlay an
 > [!IMPORTANT]
 > The design choices confirmed through interactive clarification have been integrated into this architectural blueprint:
 
-- **Layout Style**: Full-width cinematic slider with a modern frosted glass overlay card, presenting high-contrast Dhivehi typography, badge tag, title, caption, and dual call-to-action buttons.
-- **Admin Customization Scope**: Full administrative control per slide (custom image upload or URL, title, caption, badge tag, primary button label & link, secondary button label & link, display order, and status).
-- **Motion & Transitions**: Smooth cross-fade transitions coupled with subtle Ken Burns zoom/pan on the active background image and an animated progress bar indicating slide timing.
-- **Data Persistence**: Dedicated Firestore `heroSlides` collection with real-time `onSnapshot` sync, RBAC rules (public read, verified Admin write), and seamless fallback to `INITIAL_HERO_SLIDES`.
+- **Hub Placement**: Dedicated Challenges section linked seamlessly from both the **Homepage** (prominent featured banner & quick-link card) and the **Programs Page** (`/programs` with challenge filter and active campaign spotlight).
+- **Post Browsing Format**: Visual feed of rich post cards highlighting the poster image, Qur'anic Ayah/Hadith quote box, reflective commentary, and week/day timeline milestones.
+- **Interactive Daily Commitment**: Each challenge post includes a dedicated **"Our Commitment (އަޅުގަނޑުމެންގެ ޢަޒުމް)"** card with one-click copy, personal pledge toggle, and social sharing (WhatsApp, Viber, Instagram).
+- **Scalable Program Engine**: Data architecture designed to support multiple concurrent or future campaigns (e.g., Ramadan prep, Fajr challenges, Quran memorization drives) beyond the 30-Day No Backbiting Challenge.
 
 ---
 
 ## 1. Overview & Core Concept
 
 ### What It Does
-Replaces the static single-image banner with a dynamic, full-width cinematic slideshow on the Heyo Bingaa homepage. Visitors experience high-resolution visuals representing the NGO's key missions (Islamic awareness, deaf accessibility with sign language, sisters-led initiatives, youth tarbiyah, and charitable campaigns) accompanied by crystal-clear Thaana typography. Administrators can add, edit, reorder, and remove slides directly from the Admin Portal without code deployments.
+Provides a dedicated space on the Heyo Bingaa portal for structured spiritual challenges. The inaugural campaign, **30-Day No Backbiting Challenge (30 ދުވަހުގެ ޣީބަ ނުބުނުމުގެ ޗެލެންޖް)**, guides sisters and community members through bi-weekly reflections released every Monday and Thursday (started Monday, 2 November 2026). Each installment pairs an illustrated poster with Qur'anic evidence, practical advice on guarding the tongue and purifying the heart, and a actionable commitment.
 
 ### Target Audience & Persona
-- **General Public & Beneficiaries**: Visitors seeking Islamic lectures, programs for women and children, sign language accessible media, and donation transparency.
-- **NGO Administrators & Content Managers**: Authorized team members who need to highlight upcoming Ramadan campaigns, new educational series, or urgent community appeals quickly.
+- **Maldivian Women & Community**: Sisters seeking practical, step-by-step spiritual growth, mindful speech habits, and mutual sisterhood encouragement.
+- **NGO Campaign Administrators**: Content leaders who can schedule, draft, and publish new challenge posts twice weekly via the Admin Panel without touching code.
 
 ### Key Value
-- Elevates the visual identity of the organization from a static header to an engaging, institutional-grade portal.
-- Empowers the NGO team with zero-code real-time content updates for their highest-visibility landing surface.
+- Transforms one-off social media posts into a structured, searchable, and permanent spiritual curriculum on the official website.
+- Enhances participant engagement through interactive pledge tracking and frictionless commitment sharing.
 
 ---
 
@@ -35,45 +35,58 @@ Replaces the static single-image banner with a dynamic, full-width cinematic sli
 
 ### Key User Flows
 
-#### A. Homepage Visitor Flow
-1. **First Impression**: The banner spans the full container width with a high-resolution visual slowly breathing with a subtle Ken Burns zoom.
-2. **Glassmorphism Content Card**: Positioned with comfortable padding, a frosted glass card (`backdrop-blur-md bg-stone-950/40 border border-white/15`) showcases the slide's badge tag, bold Thaana headline, descriptive caption, and interactive buttons.
-3. **Interactive Controls**: Minimalist glass controls (previous/next chevron buttons, play/pause toggle, and segmented progress bars) let visitors pause or jump between slides seamlessly.
-4. **Direct Navigation**: Clicking the CTA button navigates to the relevant page (e.g., `#programs`, `#videos`, `#donate`, `#volunteer`, or `#about`).
+#### A. Participant Browsing & Reflection Flow
+1. **Homepage / Programs Entry**: A warm campaign card on the Homepage highlights the active "30-Day No Backbiting Challenge" showing current progress (e.g. *Week 1 · 2 Posts Published*).
+2. **Dedicated Challenge Hub View**:
+   - **Header Banner**: Warm Islamic typography, challenge emblem, aim statement, and schedule badge (*Mondays & Thursdays · ހޯމަ އަދި ބުރާސްފަތި*).
+   - **Post Feed**: Chronological list of bi-weekly posts starting from Post 1 (Monday, 2 Nov 2026).
+3. **Interactive Post Card**:
+   - **Header & Timestamp**: Post title (e.g. *Week 1 · Post 1 · 2 Nov 2026*), milestone badge.
+   - **Poster Image**: High-resolution graphic (`/src/images/nobackbite1.jpg`) with click-to-expand lightbox view and download option.
+   - **Ayah / Hadith Focus Box**: Dignified calligraphy and framed Islamic quote styling for Surah Al-Hujurat 49:12.
+   - **Reflection & Commentary**: Heartfelt prose on guarding speech, avoiding negative assumptions, and protecting sisters' honour.
+   - **Interactive Commitment Card**:
+     - *Quote*: "I will try my best to protect the honour of others, just as I would want them to protect mine."
+     - *Actions*: "Copy Commitment (ޢަޒުމް ކޮޕީކުރައްވާ)", "Share on Viber / WhatsApp", and "Pledge Today (އަޅުގަނޑުގެ ޢަޒުމް)".
 
-#### B. Administrator Management Flow
-1. **Admin Portal**: Admin logs in and selects the new dedicated **"ފީޗަރ ބެނާ (Feature Banner)"** tab (or clicks a direct "Edit Banner" quick button from the homepage when authenticated).
-2. **Slide Inventory**: View all active slides with miniature preview cards, current display order, and live status.
-3. **Slide Editor Modal / Form**:
-   - Upload new image directly (with automatic canvas client-side compression to protect Firestore quotas) or provide an image URL.
-   - Enter Dhivehi Title, Caption, Badge Tag, and Action Button labels.
-   - Select destination page from a clean dropdown.
-   - Reorder slides instantly with Move Up / Move Down controls.
-4. **Instant Synchronization**: On saving, changes are committed to Firestore and immediately reflect on the live homepage across all connected devices via real-time listener.
+#### B. Administrator Campaign Management Flow
+1. **Admin Portal**: Admin navigates to the dedicated **"ޗެލެންޖްތައް (Challenges)"** tab.
+2. **Campaign Overview**: View active challenges and their post count.
+3. **Post Manager**:
+   - Click "އައު ޕޯސްޓެއް އިތުރުކުރައްވާ (Add New Post)".
+   - Select Challenge (*30-Day No Backbiting Challenge* or future campaigns).
+   - Set Week Number, Post Number, and Release Date (e.g. Thursday, 5 Nov 2026).
+   - Enter Ayah/Hadith text (Arabic, translation, reference).
+   - Upload new poster image or choose from media library.
+   - Enter reflection body text and commitment statement.
+   - Save & publish immediately or save as draft.
 
 ### Visual Identity & Theme
-- **Aesthetic Direction**: Contemporary Islamic Institutional — serene forest green (`#1B6B52`), deep emerald (`#145541`), warm parchment text tones (`#FAFCFB`, `#EBF5F0`), and soft amber accents (`#FDE68A`).
-- **Typography & Thaana Hierarchy**:
-  - *Display Headlines*: Bold Faruma / Noto Sans Thaana (`clamp(1.5rem, 3.5vw, 2.5rem)`), `text-wrap: balance` to prevent orphan words, subtle text drop-shadow for optical legibility over diverse photos.
-  - *Captions*: 15px–16px Faruma with relaxed line height (`leading-relaxed`), measure constrained to `max-w-2xl`.
-  - *Badge Tags*: Clean unboxed text with typographic separator (`·`) adhering strictly to the Anti-Slop Zero-Pill rule.
-- **Glassmorphism Scrim**: A multi-stop vertical and horizontal vignette scrim (`bg-gradient-to-t from-black/85 via-black/45 to-transparent`) ensures WCAG AA contrast (exceeding 4.5:1 ratio) on all imagery.
+- **Color Palette**:
+  - Warm Sand & Rose-Grey Paper (`#FBF9F6`, `#F3ECE7`) inspired by the soft muted tones of the campaign poster.
+  - Deep Forest Ink (`#1C332A`, `#145541`) for high-contrast, fatigue-free Thaana and Arabic reading.
+  - Emerald & Sage Accents (`#1B6B52`, `#EBF5F0`) maintaining cohesion with the Heyo Bingaa brand.
+- **Typography**:
+  - Display Title: Bold Faruma Thaana (`text-2xl sm:text-3xl font-black`).
+  - Ayah / Hadith: High-contrast bordered callout with classical quotation marks and Arabic font rendering (`Amiri` / `Scheherazade New`).
+  - Body Text: Relaxed measure (65–75 characters per line, `leading-relaxed`) ensuring readable mobile and desktop experience.
+- **Anti-Slop Restraint**: Zero floating pill clusters; clean unboxed editorial date separators (`Monday, 2 Nov 2026 · Week 1 · Post 1`).
 
 ---
 
 ## 3. Key Product Decisions & Trade-Offs
 
-### Decision 1: Firestore Collection vs. Local Storage
-- **Chosen Approach**: Store banner slides in a top-level Firestore collection `heroSlides/{slideId}` with fallback to `INITIAL_HERO_SLIDES`.
-- **Why**: Ensures all visitors across phones, tablets, and desktops see the NGO's current announcements simultaneously, while maintaining full offline/initial reliability.
-- **Trade-off**: Requires Firestore security rules and write permissions; solved by restricting write/delete to verified administrators (`isAdmin()`).
+### Decision 1: Dedicated Hub vs. Mixing into Generic Blog/Articles
+- **Chosen Approach**: A dedicated Challenge Hub view with direct linkages from both the Homepage and Programs page.
+- **Why**: A structured 30-day challenge has a sequential timeline, milestone progress, and commitment pledges that would get diluted in a standard chronological blog or news feed.
+- **Trade-off**: Requires dedicated navigation and components; addressed by building a reusable Challenge Engine that powers both this campaign and future ones (e.g., Ramadan 2027 challenges).
 
-### Decision 2: Image Handling in Firestore
-- **Chosen Approach**: Allow direct image upload with automatic client-side canvas compression (1280x720 JPEG at 80% quality, generating ~100-150KB Data URIs) or direct image URL / internal asset path.
-- **Why**: Keeps all data self-contained in Firestore without requiring external storage buckets or third-party image hosts that might break in evaluation sandboxes.
+### Decision 2: Data Persistence Architecture
+- **Chosen Approach**: Dual persistence using Firestore document sync (`siteSettings/challenges`) combined with browser `localStorage` caching and pre-populated initial seed data.
+- **Why**: Guarantees zero latency on page load, instant offline availability, and absolute safety against permission mismatches, while allowing real-time administrative publishing.
 
-### Decision 3: Quick Admin Access
-- **Chosen Approach**: When an authenticated administrator is browsing the homepage, render an unobtrusive floating or header "ބެނާ މެނޭޖްކުރައްވާ (Manage Banner)" shortcut that immediately routes to `#admin` with the banner tab open.
+### Decision 3: Initial Seed Post
+- **Chosen Approach**: Pre-populate Post 1 (Monday, 2 November 2026) with the user's provided copy, Surah Al-Hujurat 49:12, and the attached poster image (`src/images/nobackbite1.jpg`) so the challenge is immediately live and interactive.
 
 ---
 
@@ -85,64 +98,95 @@ Replaces the static single-image banner with a dynamic, full-width cinematic sli
 ┌────────────────────────────────────────────────────────────────────────┐
 │                              CLIENT BROWSER                            │
 ├───────────────────────────────────┬────────────────────────────────────┤
-│           HOMEPAGE                │            ADMIN PORTAL            │
+│           PUBLIC PORTAL           │            ADMIN PORTAL            │
 │  ┌─────────────────────────────┐  │  ┌──────────────────────────────┐  │
-│  │   HeroSlideshowBanner       │  │  │   AdminBannerTab             │  │
-│  │   - Full-width Ken Burns    │  │  │   - Live preview list        │  │
-│  │   - Frosted glass card      │  │  │   - Image upload & compress  │  │
-│  │   - Animated progress bar   │  │  │   - Text, badge & link edit  │  │
-│  │   - Nav click handlers      │  │  │   - Up/down reorder controls │  │
-│  └──────────────▲──────────────┘  │  └───────────────▲──────────────┘  │
+│  │ HomePage Highlight Card     │  │  │ AdminChallengesTab           │  │
+│  │   - Current post snippet    │  │  │   - Challenge list & status  │  │
+│  │   - "Join Challenge" CTA    │  │  │   - Post creation form       │  │
+│  └──────────────┬──────────────┘  │  │   - Ayah/Hadith quote editor │  │
+│                 ▼                 │  │   - Poster image uploader    │  │
+│  ┌─────────────────────────────┐  │  │   - Schedule date (Mon/Thu)  │  │
+│  │ ChallengeHubView            │  │  └───────────────▲──────────────┘  │
+│  │   - Challenge header & info │  │                  │                 │
+│  │   - Bi-weekly visual feed   │  │                  │                 │
+│  │   - Ayah callout block      │  │                  │                 │
+│  │   - Commitment card & share │  │                  │                 │
+│  └──────────────▲──────────────┘  │                  │                 │
 └─────────────────┼─────────────────┴──────────────────┼─────────────────┘
-                  │ real-time subscribe                │ save / delete
-                  │ (onSnapshot)                       │ (setDoc / deleteDoc)
+                  │                                    │
+                  │ real-time subscribe                │ save / edit / delete
+                  │                                    │
 ┌─────────────────▼────────────────────────────────────▼─────────────────┐
-│                          FIRESTORE SERVICE                             │
-│  - subscribeToHeroSlides(callback)                                     │
-│  - saveHeroSlideToFirestore(slide)                                     │
-│  - deleteHeroSlideFromFirestore(slideId)                               │
-│  - reorderHeroSlidesInFirestore(slides)                                │
-│  - Fallback: INITIAL_HERO_SLIDES                                       │
+│                          CHALLENGES SERVICE                            │
+│  - subscribeToChallenges(callback)                                     │
+│  - subscribeToChallengePosts(challengeId, callback)                    │
+│  - saveChallengePost(post)                                             │
+│  - deleteChallengePost(postId)                                         │
+│  - Fallback & Cache: localStorage + INITIAL_CHALLENGES                 │
 └─────────────────────────────────▲──────────────────────────────────────┘
                                   │
 ┌─────────────────────────────────▼──────────────────────────────────────┐
-│                    FIRESTORE SECURITY & BLUEPRINT                      │
-│  - Collection: /heroSlides/{slideId}                                   │
-│  - Read: Public (allow get, list: if true)                             │
-│  - Write: Admin only (isAdmin() && isValidHeroSlide(incoming()))       │
+│                    FIRESTORE PERSISTENCE & SCHEMAS                     │
+│  - Path: siteSettings/challenges & siteSettings/challengePosts         │
+│  - Read: Public                                                        │
+│  - Write: Admin only                                                   │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Data Schema (`firebase-blueprint.json` & TypeScript)
+### Data Schema (TypeScript)
 
 ```typescript
-export interface HeroSlide {
-  id: string;               // alphanumeric ID e.g. "slide-1"
-  imageUrl: string;         // Data URI or asset path
-  badge?: string;           // e.g. "އިސް ޙަރަކާތް • ދީނީ ދައުރު"
-  title: string;            // Primary headline
-  caption: string;          // Descriptive subtitle
-  ctaText?: string;         // Primary button label
-  ctaLink?: NavigationTab;  // Target navigation tab ('programs' | 'events' | etc.)
-  secondaryCtaText?: string;// Secondary button label
-  secondaryCtaLink?: NavigationTab;
-  order: number;            // Display sequence (1, 2, 3...)
-  status?: 'active' | 'archived';
-  updatedAt?: string;
+export interface Challenge {
+  id: string;               // e.g. "no-backbiting-30"
+  slug: string;             // URL-friendly identifier
+  title: string;            // "30-Day No Backbiting Challenge" / "30 ދުވަހުގެ ޣީބަ ނުބުނުމުގެ ޗެލެންޖް"
+  tagline: string;          // "Guarding our tongues, purifying our hearts"
+  description: string;      // Campaign mission and purpose
+  startDate: string;        // "2026-11-02"
+  durationDays: number;     // 30
+  scheduleText: string;     // "Weekly twice: Mondays & Thursdays"
+  bannerImage?: string;     // Header or social card
+  status: 'active' | 'upcoming' | 'completed';
+  postsCount: number;
+}
+
+export interface ChallengePost {
+  id: string;               // e.g. "nb-post-1"
+  challengeId: string;      // "no-backbiting-30"
+  weekNumber: number;       // 1
+  postNumber: number;       // 1
+  dayOfWeek: string;        // "Monday" / "ހޯމަ"
+  publishDate: string;      // "2026-11-02"
+  title: string;            // "Our First Commitment: Protecting Each Other's Honour"
+  imageUrl: string;         // "/src/images/nobackbite1.jpg"
+  quote: {
+    type: 'ayah' | 'hadith';
+    arabic?: string;
+    translation: string;
+    reference: string;      // "Qur'an 49:12"
+  };
+  content: string;          // Main reflection body
+  commitmentText: string;   // Actionable pledge
+  hashtags: string[];       // ["#30DayNoBackbitingChallenge"]
+  isPublished: boolean;
+  order: number;
 }
 ```
 
 ### Execution Steps
-1. **Schema & Security Hardening**:
-   - Add `heroSlide` entity and `/heroSlides/{slideId}` path to `firebase-blueprint.json`.
-   - Update `firestore.rules` with `isValidHeroSlide(incoming())` helper and admin-restricted create/update/delete rules.
-2. **Firestore Service Integration**:
-   - Implement `subscribeToHeroSlides`, `saveHeroSlideToFirestore`, and `deleteHeroSlideFromFirestore` in `src/services/firestoreService.ts`.
-3. **Admin Panel Banner Tab (`AdminBannerTab.tsx`)**:
-   - Create a polished tab in `AdminPage.tsx` with slide reordering, image uploading with canvas compression, preview modal, and field editing.
-4. **Hero Slideshow Banner Modernization (`HeroSlideshowBanner.tsx`)**:
-   - Re-architect into a full-width cinematic hero with smooth cross-fade, Ken Burns slow pan, modern glassmorphism content overlay, and interactive controls.
-   - Connect to real-time hero slides state with seamless fallback.
-5. **Verification & Testing**:
-   - Run `lint_applet` and `compile_applet` to confirm zero TypeScript errors and successful production build.
-   - Verify dev server responsiveness and preview rendering.
+1. **Types & Data Layer (`src/types.ts` & `src/data/initialData.ts`)**:
+   - Define `Challenge` and `ChallengePost` interfaces.
+   - Seed `INITIAL_CHALLENGES` and `INITIAL_CHALLENGE_POSTS` with the user's Post 1 text and `/src/images/nobackbite1.jpg`.
+2. **Service Functions (`src/services/firestoreService.ts`)**:
+   - Implement `subscribeToChallenges`, `subscribeToChallengePosts`, `saveChallengePost`, and `deleteChallengePost` using the resilient `siteSettings` and `localStorage` pattern.
+3. **Public Challenge Hub View (`src/components/challenges/ChallengeHubView.tsx`)**:
+   - Build the responsive visual feed displaying post cards, poster image lightbox, Ayah quote container, reflection typography, and the interactive Commitment card with "Copy" and "Share" buttons.
+4. **Homepage & Programs Integration**:
+   - Add a high-visibility "Active Challenge" showcase tile on the Homepage with a direct link to the Challenge Hub.
+   - Add a "ޗެލެންޖްތައް (Challenges)" tab filter or quick section in the Programs page.
+5. **Admin Management Suite (`src/components/admin/AdminChallengesTab.tsx`)**:
+   - Implement post creation/editing modal with image upload, Ayah/Hadith formatting fields, Monday/Thursday date pickers, and post reordering.
+   - Wire into `AdminPage.tsx` tab navigation.
+6. **Verification & Build Validation**:
+   - Validate with `lint_applet` (`tsc --noEmit`) and `compile_applet`.
+   - Verify dev server responsiveness and test interactive pledge sharing.

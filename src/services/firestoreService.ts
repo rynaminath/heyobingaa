@@ -12,7 +12,7 @@ import {
 } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { db, auth, handleFirestoreError, OperationType } from '../lib/firebase';
-import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem, ArticleItem, AuthorProfile, HeroSlide } from '../types';
+import { EventItem, MediaItem, ProgramItem, DonationSlip, VolunteerApplication, GalleryItem, ArticleItem, AuthorProfile, HeroSlide, Challenge, ChallengePost } from '../types';
 import {
   INITIAL_EVENTS,
   INITIAL_MEDIA,
@@ -21,7 +21,9 @@ import {
   INITIAL_GALLERY,
   INITIAL_AUTHORS,
   INITIAL_ARTICLES,
-  INITIAL_HERO_SLIDES
+  INITIAL_HERO_SLIDES,
+  INITIAL_CHALLENGES,
+  INITIAL_CHALLENGE_POSTS
 } from '../data/initialData';
 
 // Bootstrapped admin email
@@ -1126,4 +1128,292 @@ export async function resetHeroSlidesToDefaultsInFirestore(): Promise<void> {
     console.warn('Firestore reset warning for hero slides (reset locally):', error);
   }
 }
+
+// ==========================================
+// CHALLENGES & 30-DAY CAMPAIGNS SERVICE
+// ==========================================
+
+const CHALLENGES_STORAGE_KEY = 'heyobingaa_challenges_v1';
+const CHALLENGE_POSTS_STORAGE_KEY = 'heyobingaa_challenge_posts_v1';
+
+export function getStoredChallenges(): Challenge[] {
+  try {
+    const raw = localStorage.getItem(CHALLENGES_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.warn('Error reading stored challenges:', err);
+  }
+  return INITIAL_CHALLENGES;
+}
+
+export function saveStoredChallenges(challenges: Challenge[]): void {
+  try {
+    localStorage.setItem(CHALLENGES_STORAGE_KEY, JSON.stringify(challenges));
+  } catch (err) {
+    console.warn('Error saving stored challenges:', err);
+  }
+}
+
+export function getStoredChallengePosts(): ChallengePost[] {
+  try {
+    const raw = localStorage.getItem(CHALLENGE_POSTS_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.warn('Error reading stored challenge posts:', err);
+  }
+  return INITIAL_CHALLENGE_POSTS;
+}
+
+export function saveStoredChallengePosts(posts: ChallengePost[]): void {
+  try {
+    localStorage.setItem(CHALLENGE_POSTS_STORAGE_KEY, JSON.stringify(posts));
+  } catch (err) {
+    console.warn('Error saving stored challenge posts:', err);
+  }
+}
+
+/**
+ * Realtime subscribe to Challenges (Public / Admin)
+ */
+export function subscribeToChallenges(
+  onData: (challenges: Challenge[]) => void,
+  onError?: (err: unknown) => void
+) {
+  const initial = getStoredChallenges();
+  onData(initial);
+
+  const docRef = doc(db, 'siteSettings', 'challenges');
+  return onSnapshot(
+    docRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data();
+        if (data && Array.isArray(data.items) && data.items.length > 0) {
+          const sorted = [...data.items].sort((a, b) => Number(a.order ?? 999) - Number(b.order ?? 999));
+          saveStoredChallenges(sorted);
+          onData(sorted);
+          return;
+        }
+      }
+      onData(getStoredChallenges());
+    },
+    (error) => {
+      console.warn('Challenges subscription notice (using local data):', error.message || error);
+      if (onError) onError(error);
+      onData(getStoredChallenges());
+    }
+  );
+}
+
+/**
+ * Realtime subscribe to Challenge Posts (Public / Admin)
+ * Optionally filter by specific challengeId
+ */
+export function subscribeToChallengePosts(
+  challengeIdOrOnData: string | ((posts: ChallengePost[]) => void),
+  onDataOrOnError?: ((posts: ChallengePost[]) => void) | ((err: unknown) => void),
+  onErrorFn?: (err: unknown) => void
+) {
+  let challengeId: string | undefined;
+  let callback: (posts: ChallengePost[]) => void;
+  let onError: ((err: unknown) => void) | undefined;
+
+  if (typeof challengeIdOrOnData === 'function') {
+    callback = challengeIdOrOnData;
+    onError = onDataOrOnError as ((err: unknown) => void) | undefined;
+  } else {
+    challengeId = challengeIdOrOnData;
+    callback = (onDataOrOnError as (posts: ChallengePost[]) => void) || (() => {});
+    onError = onErrorFn;
+  }
+
+  const filterPosts = (allPosts: ChallengePost[]) => {
+    if (!challengeId) return allPosts;
+    return allPosts.filter((p) => p.challengeId === challengeId);
+  };
+
+  const initial = filterPosts(getStoredChallengePosts());
+  callback(initial);
+
+  const docRef = doc(db, 'siteSettings', 'challengePosts');
+  return onSnapshot(
+    docRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data();
+        if (data && Array.isArray(data.items) && data.items.length > 0) {
+          saveStoredChallengePosts(data.items);
+          const filtered = filterPosts(data.items);
+          // Sort chronological by postNumber / publishDate
+          filtered.sort((a, b) => Number(a.order ?? a.postNumber ?? 0) - Number(b.order ?? b.postNumber ?? 0));
+          callback(filtered);
+          return;
+        }
+      }
+      callback(filterPosts(getStoredChallengePosts()));
+    },
+    (error) => {
+      console.warn('Challenge posts subscription notice (using local data):', error.message || error);
+      if (onError) onError(error);
+      callback(filterPosts(getStoredChallengePosts()));
+    }
+  );
+}
+
+/**
+ * Admin: Save or update a Challenge
+ */
+export async function saveChallengeToFirestore(challenge: Challenge): Promise<void> {
+  const current = getStoredChallenges();
+  const idx = current.findIndex((c) => c.id === challenge.id);
+  let updated: Challenge[];
+  if (idx >= 0) {
+    updated = [...current];
+    updated[idx] = { ...challenge, updatedAt: new Date().toISOString() };
+  } else {
+    updated = [...current, { ...challenge, updatedAt: new Date().toISOString() }];
+  }
+  saveStoredChallenges(updated);
+
+  try {
+    await setDoc(doc(db, 'siteSettings', 'challenges'), {
+      items: updated,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+  } catch (error) {
+    console.warn('Firestore write warning for challenges (saved locally):', error);
+  }
+}
+
+/**
+ * Admin: Save or update a Challenge Post
+ */
+export async function saveChallengePostToFirestore(post: ChallengePost): Promise<void> {
+  const postId = post.id || `post-${Date.now()}`;
+  const payload: ChallengePost = {
+    ...post,
+    id: postId,
+    updatedAt: new Date().toISOString()
+  };
+
+  const current = getStoredChallengePosts();
+  const idx = current.findIndex((p) => p.id === postId);
+  let updated: ChallengePost[];
+  if (idx >= 0) {
+    updated = [...current];
+    updated[idx] = payload;
+  } else {
+    updated = [...current, payload];
+  }
+  updated.sort((a, b) => Number(a.order ?? a.postNumber ?? 0) - Number(b.order ?? b.postNumber ?? 0));
+  saveStoredChallengePosts(updated);
+
+  // Update post count on challenge
+  const challenges = getStoredChallenges();
+  const chIdx = challenges.findIndex((c) => c.id === post.challengeId);
+  if (chIdx >= 0) {
+    const count = updated.filter((p) => p.challengeId === post.challengeId && p.isPublished).length;
+    challenges[chIdx].postsCount = count;
+    saveStoredChallenges(challenges);
+    try {
+      await setDoc(doc(db, 'siteSettings', 'challenges'), {
+        items: challenges,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    } catch {
+      // Ignore
+    }
+  }
+
+  try {
+    await setDoc(doc(db, 'siteSettings', 'challengePosts'), {
+      items: updated,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+  } catch (error) {
+    console.warn('Firestore write warning for challenge posts (saved locally):', error);
+  }
+}
+
+/**
+ * Admin: Delete a Challenge Post
+ */
+export async function deleteChallengePostFromFirestore(postId: string): Promise<void> {
+  const current = getStoredChallengePosts();
+  const postToDelete = current.find((p) => p.id === postId);
+  const updated = current.filter((p) => p.id !== postId);
+  saveStoredChallengePosts(updated);
+
+  if (postToDelete) {
+    const challenges = getStoredChallenges();
+    const chIdx = challenges.findIndex((c) => c.id === postToDelete.challengeId);
+    if (chIdx >= 0) {
+      challenges[chIdx].postsCount = updated.filter((p) => p.challengeId === postToDelete.challengeId && p.isPublished).length;
+      saveStoredChallenges(challenges);
+    }
+  }
+
+  try {
+    await setDoc(doc(db, 'siteSettings', 'challengePosts'), {
+      items: updated,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+  } catch (error) {
+    console.warn('Firestore delete warning for challenge post (deleted locally):', error);
+  }
+}
+
+/**
+ * Admin: Delete a Challenge Program and its associated posts
+ */
+export async function deleteChallengeFromFirestore(challengeId: string): Promise<void> {
+  const challenges = getStoredChallenges().filter((c) => c.id !== challengeId);
+  saveStoredChallenges(challenges);
+
+  const posts = getStoredChallengePosts().filter((p) => p.challengeId !== challengeId);
+  saveStoredChallengePosts(posts);
+
+  try {
+    await setDoc(doc(db, 'siteSettings', 'challenges'), {
+      items: challenges,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+    await setDoc(doc(db, 'siteSettings', 'challengePosts'), {
+      items: posts,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+  } catch (error) {
+    console.warn('Firestore delete warning for challenge (deleted locally):', error);
+  }
+}
+
+/**
+ * Participant: Toggle pledge on a post
+ */
+export function toggleChallengePostPledge(postId: string, pledged: boolean): void {
+  const current = getStoredChallengePosts();
+  const idx = current.findIndex((p) => p.id === postId);
+  if (idx >= 0) {
+    const post = current[idx];
+    const prevCount = post.pledgesCount || 0;
+    post.pledgesCount = pledged ? prevCount + 1 : Math.max(0, prevCount - 1);
+    saveStoredChallengePosts(current);
+
+    setDoc(doc(db, 'siteSettings', 'challengePosts'), {
+      items: current,
+      updatedAt: new Date().toISOString()
+    }, { merge: true }).catch(() => {});
+  }
+}
+
 
