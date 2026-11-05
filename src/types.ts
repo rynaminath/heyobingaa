@@ -235,7 +235,7 @@ export interface ChallengePost {
   quote?: ChallengePostQuote;
   content: string;          // Main reflective body
   reflectionQuestions?: string[];
-  commitmentText: string;   // Actionable pledge
+  commitmentText?: string;  // Actionable pledge (optional)
   hashtags: string[];       // ["#30DayNoBackbitingChallenge", "#HeyoBingaa"]
   isPublished: boolean;
   order: number;

@@ -1004,12 +1004,6 @@ export const INITIAL_CHALLENGE_POSTS: ChallengePost[] = [
     publishDate: '2026-11-02',
     title: '30-DAY NO BACKBITING CHALLENGE',
     imageUrl: nobackbite1Img,
-    quote: {
-      type: 'ayah',
-      arabic: 'يَا أَيُّهَا الَّذِينَ آمَنُوا اجْتَنِبُوا كَثِيرًا مِّنَ الظَّنِّ إِنَّ بَعْضَ الظَّنِّ إِثْمٌ ۖ وَلَا تَجَسَّسُوا وَلَا يَغْتَب بَّعْضُكُم بَعْضًا ۚ أَيُحِبُّ أَحَدُكُمْ أَن يَأْكُلَ لَحْمَ أَخِيهِ مَيْتًا فَكَرِهْتُمُوهُ ۚ وَاتَّقُوا اللَّهَ ۚ إِنَّ اللَّهَ تَوَّابٌ رَّحِيمٌ',
-      translation: '“O you who have believed, avoid much [negative] assumption. Indeed, some assumption is sin. And do not spy or backbite each other. Would one of you like to eat the flesh of his brother when dead? You would detest it. And fear Allah; indeed, Allah is Accepting of repentance and Merciful.”',
-      reference: 'Qur\'an (49:12)'
-    },
     content: `Assalamu Alaikum wa Rahmatullahi wa Barakatuh, dear sisters! 🤍
 
 Have we ever left a conversation feeling guilty about what we said about someone who wasn't there?
@@ -1020,19 +1014,21 @@ Sometimes backbiting (gheebah) becomes so common that we forget how serious it i
 
 ✨ For the next 30 days, let us make a sincere effort to guard our tongues and our hearts.
 
+Allah ﷻ says:
+“O you who have believed, avoid much [negative] assumption. Indeed, some assumption is sin. And do not spy or backbite each other. Would one of you like to eat the flesh of his brother when dead? You would detest it. And fear Allah; indeed, Allah is Accepting of repentance and Merciful.”
+(Qur'an 49:12)
+
 This is not a challenge to judge one another. It is a challenge to improve ourselves, seek Allah's forgiveness and protect the honour of our sisters, guarding our tongues, purifying our hearts, and seeking the pleasure of Allah.
 
-The aim is not merely to stop speaking ill of others for one month, but to build a lasting habit of protecting one another's honour, avoiding gossip, and becoming more conscious of what we say.`,
-    reflectionQuestions: [
-      'Have we ever left a conversation feeling guilty about what we said about someone who wasn\'t there?',
-      'Are we actively guarding our tongues and protecting our sisters\' honour in everyday gatherings?'
-    ],
-    commitmentText: '“I will try my best to protect the honour of others, just as I would want them to protect mine.”',
-    hashtags: ['#30DayNoBackbitingChallenge', '#HeyoBingaa', '#GuardingTheTongue'],
+The aim is not merely to stop speaking ill of others for one month, but to build a lasting habit of protecting one another's honour, avoiding gossip, and becoming more conscious of what we say.
+
+🌸 Our first commitment:
+“I will try my best to protect the honour of others, just as I would want them to protect mine.”
+
+#30DayNoBackbitingChallenge`,
+    hashtags: ['#30DayNoBackbitingChallenge', '#HeyoBingaa'],
     isPublished: true,
-    order: 1,
-    likesCount: 24,
-    pledgesCount: 48
+    order: 1
   }
 ];
 

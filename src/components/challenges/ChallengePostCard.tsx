@@ -6,11 +6,8 @@ import {
   Share2, 
   Calendar, 
   Sparkles, 
-  BookOpen, 
-  Heart, 
   Maximize2
 } from 'lucide-react';
-import { toggleChallengePostPledge } from '../../services/firestoreService';
 
 interface ChallengePostCardProps {
   post: ChallengePost;
@@ -19,20 +16,19 @@ interface ChallengePostCardProps {
 
 export default function ChallengePostCard({ post, onOpenLightbox }: ChallengePostCardProps) {
   const [copied, setCopied] = useState(false);
-  const [pledged, setPledged] = useState(false);
-  const [pledgeCount, setPledgeCount] = useState(post.pledgesCount || 0);
   const [shareSuccess, setShareSuccess] = useState(false);
 
-  // Copy commitment text to clipboard
-  const handleCopyCommitment = async () => {
+  // Copy full post text to clipboard
+  const handleCopyPostText = async () => {
+    const textToCopy = `${post.title}\n\n${post.content}\n\n${(post.hashtags || []).join(' ')}`;
     try {
-      await navigator.clipboard.writeText(post.commitmentText);
+      await navigator.clipboard.writeText(textToCopy);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
       // Fallback
       const ta = document.createElement('textarea');
-      ta.value = post.commitmentText;
+      ta.value = textToCopy;
       document.body.appendChild(ta);
       ta.select();
       document.execCommand('copy');
@@ -42,19 +38,11 @@ export default function ChallengePostCard({ post, onOpenLightbox }: ChallengePos
     }
   };
 
-  // Toggle personal commitment pledge
-  const handleTogglePledge = () => {
-    const nextState = !pledged;
-    setPledged(nextState);
-    setPledgeCount(prev => nextState ? prev + 1 : Math.max(0, prev - 1));
-    toggleChallengePostPledge(post.id, nextState);
-  };
-
   // Share post via Web Share API or copy link
   const handleShare = async () => {
     const shareData = {
       title: `${post.title} - 30-Day No Backbiting Challenge`,
-      text: `${post.title}\n\n${post.commitmentText}\n\n#30DayNoBackbitingChallenge #HeyoBingaa`,
+      text: `${post.title}\n\n${post.content}`,
       url: window.location.href
     };
 
@@ -62,10 +50,9 @@ export default function ChallengePostCard({ post, onOpenLightbox }: ChallengePos
       try {
         await navigator.share(shareData);
       } catch {
-        // User cancelled or share dismissed
+        // User cancelled
       }
     } else {
-      // Fallback copy full post link & text
       try {
         await navigator.clipboard.writeText(`${shareData.title}\n\n${shareData.text}\n\n${shareData.url}`);
         setShareSuccess(true);
@@ -107,7 +94,7 @@ export default function ChallengePostCard({ post, onOpenLightbox }: ChallengePos
         </h3>
       </div>
 
-      {/* Grid: Poster Image & Content */}
+      {/* Grid: Poster Image & Accompanying Content */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
         
         {/* Left: Poster Graphic with click-to-expand */}
@@ -138,130 +125,48 @@ export default function ChallengePostCard({ post, onOpenLightbox }: ChallengePos
           </div>
         )}
 
-        {/* Right: Ayah / Hadith, Reflection Body, and Commitment */}
+        {/* Right: Accompanying Post Content Body */}
         <div className={`${post.imageUrl ? 'lg:col-span-7' : 'lg:col-span-12'} space-y-5`}>
           
-          {/* Qur'anic Ayah / Hadith Highlight Box */}
-          {post.quote && (
-            <div className="rounded-2xl p-5 sm:p-6 bg-[#F8FAF9] border-l-4 border-l-[#1B6B52] border border-[#E2E9E5] space-y-3.5 shadow-xs">
-              <div className="flex items-center justify-between border-b border-[#E2E9E5] pb-2 text-xs">
-                <span className="font-bold text-[#1B6B52] inline-flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
-                  <BookOpen className="w-4 h-4" />
-                  <span>{post.quote.type === 'ayah' ? 'Qur\'an Verse' : post.quote.type === 'hadith' ? 'Hadith' : 'Quote'}</span>
-                </span>
-                <span className="text-[#556660] font-medium text-xs">
-                  {post.quote.reference}
-                </span>
-              </div>
-
-              {/* Arabic Text if provided */}
-              {post.quote.arabic && (
-                <div 
-                  dir="rtl" 
-                  className="text-base sm:text-lg lg:text-xl font-serif text-[#1C2622] leading-loose text-right font-medium pt-1"
-                >
-                  «{post.quote.arabic}»
-                </div>
-              )}
-
-              {/* English Translation */}
-              <p className="text-xs sm:text-sm text-[#33443E] leading-relaxed italic">
-                {post.quote.translation}
-              </p>
-            </div>
-          )}
-
-          {/* Reflection Body Prose (English LTR) */}
-          <div className="text-sm sm:text-base text-[#3C4A45] leading-relaxed whitespace-pre-line font-sans space-y-3">
+          {/* Post Content (English LTR) */}
+          <div className="text-sm sm:text-base text-[#2C3833] leading-relaxed whitespace-pre-line font-sans">
             {post.content}
           </div>
 
-          {/* Reflection Guiding Questions (if present) */}
-          {post.reflectionQuestions && post.reflectionQuestions.length > 0 && (
-            <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 space-y-2">
-              <span className="text-xs font-bold text-amber-900 block uppercase tracking-wider">
-                Points for Reflection:
-              </span>
-              <ul className="space-y-1.5 text-xs sm:text-sm text-amber-950 pl-5 list-disc list-outside">
-                {post.reflectionQuestions.map((q, idx) => (
-                  <li key={idx} className="leading-relaxed">
-                    {q}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {/* Action Bar & Sharing */}
+          <div className="pt-4 border-t border-[#E2E9E5] flex flex-wrap items-center justify-between gap-3">
+            
+            {/* Copy Post Text Button */}
+            <button
+              type="button"
+              onClick={handleCopyPostText}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#F8FAF9] hover:bg-[#EBF5F0] text-[#145541] border border-[#C8E0D5] text-xs font-bold transition-all cursor-pointer shadow-2xs active:scale-95"
+              title="Copy post text to clipboard"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-4 h-4 text-emerald-600" />
+                  <span className="text-emerald-700">Copied to Clipboard!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4 text-[#1B6B52]" />
+                  <span>Copy Post Text</span>
+                </>
+              )}
+            </button>
 
-          {/* Interactive Commitment Box (English LTR) */}
-          <div className="rounded-2xl p-5 sm:p-6 bg-[#FAF5F2] border border-[#ECDCD3] space-y-4 shadow-xs">
-            <div className="flex items-center justify-between border-b border-[#ECDCD3] pb-2.5">
-              <div className="inline-flex items-center gap-2 text-xs font-bold text-[#8A4A32] uppercase tracking-wider">
-                <Sparkles className="w-4 h-4 text-[#C26B4A]" />
-                <span>Our Daily Commitment</span>
-              </div>
-              <span className="text-[11px] text-[#8A4A32]/80 font-mono font-bold">#Commitment</span>
-            </div>
+            {/* Share Button */}
+            <button
+              type="button"
+              onClick={handleShare}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1B6B52] hover:bg-[#145541] text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+              title="Share this challenge post"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+              <span>{shareSuccess ? 'Link Copied!' : 'Share Post'}</span>
+            </button>
 
-            {/* Commitment Statement */}
-            <blockquote className="text-sm sm:text-base font-semibold text-[#3B251D] leading-relaxed whitespace-pre-line">
-              {post.commitmentText}
-            </blockquote>
-
-            {/* Action Bar */}
-            <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-[#ECDCD3]">
-              
-              {/* Pledge Toggle Button */}
-              <button
-                type="button"
-                onClick={handleTogglePledge}
-                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  pledged
-                    ? 'bg-[#1B6B52] text-white shadow-xs'
-                    : 'bg-white hover:bg-stone-100 text-[#3B251D] border border-[#ECDCD3]'
-                }`}
-              >
-                <Heart className={`w-3.5 h-3.5 ${pledged ? 'fill-white text-white' : 'text-[#C26B4A]'}`} />
-                <span>{pledged ? 'I Took This Pledge!' : 'I Commit to This'}</span>
-                {pledgeCount > 0 && (
-                  <span className="font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-black/10">
-                    {pledgeCount}
-                  </span>
-                )}
-              </button>
-
-              {/* Copy & Share Buttons */}
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={handleCopyCommitment}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-stone-100 text-stone-700 border border-[#ECDCD3] text-xs font-bold transition-colors cursor-pointer"
-                  title="Copy commitment text"
-                >
-                  {copied ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-700">Copied!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5 text-stone-500" />
-                      <span>Copy</span>
-                    </>
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleShare}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#8A4A32] hover:bg-[#723C28] text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
-                  title="Share with sisters"
-                >
-                  <Share2 className="w-3.5 h-3.5" />
-                  <span>{shareSuccess ? 'Copied Link!' : 'Share'}</span>
-                </button>
-              </div>
-
-            </div>
           </div>
 
           {/* Hashtags */}

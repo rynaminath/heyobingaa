@@ -1134,7 +1134,7 @@ export async function resetHeroSlidesToDefaultsInFirestore(): Promise<void> {
 // ==========================================
 
 const CHALLENGES_STORAGE_KEY = 'heyobingaa_challenges_v1';
-const CHALLENGE_POSTS_STORAGE_KEY = 'heyobingaa_challenge_posts_v1';
+const CHALLENGE_POSTS_STORAGE_KEY = 'heyobingaa_challenge_posts_v2';
 
 export function getStoredChallenges(): Challenge[] {
   try {

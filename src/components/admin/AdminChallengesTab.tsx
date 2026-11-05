@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Challenge, ChallengePost, ChallengePostQuote } from '../../types';
+import { Challenge, ChallengePost } from '../../types';
 import { 
   saveChallengePostToFirestore, 
   deleteChallengePostFromFirestore,
@@ -14,13 +14,11 @@ import {
   Calendar, 
   Clock, 
   Sparkles, 
-  BookOpen, 
   Image as ImageIcon, 
   Upload, 
   X, 
   Check, 
   Layers, 
-  Heart,
   Eye,
   CheckCircle,
   AlertCircle,
@@ -224,19 +222,10 @@ export default function AdminChallengesTab({
       postNumber: nextPostNumber,
       dayOfWeek: isOdd ? 'Monday' : 'Thursday',
       publishDate: new Date().toISOString().split('T')[0],
-      quote: {
-        type: 'ayah',
-        arabic: '',
-        translation: '',
-        reference: ''
-      },
       content: '',
-      commitmentText: '“I will try my best to protect the honour of others, just as I would want them to protect mine.”',
-      reflectionQuestions: [],
       hashtags: [`#${currentChallenge?.title?.replace(/[^a-zA-Z0-9]/g, '') || 'Challenge'}`, '#HeyoBingaa'],
       isPublished: true,
-      order: nextPostNumber,
-      pledgesCount: 0
+      order: nextPostNumber
     });
     setIsPostModalOpen(true);
   };
@@ -278,14 +267,10 @@ export default function AdminChallengesTab({
         publishDate: editingPost.publishDate || new Date().toISOString().split('T')[0],
         title: editingPost.title,
         imageUrl: editingPost.imageUrl || '',
-        quote: editingPost.quote || undefined,
         content: editingPost.content || '',
-        commitmentText: editingPost.commitmentText || '',
-        reflectionQuestions: editingPost.reflectionQuestions || [],
         hashtags: editingPost.hashtags || ['#30DayNoBackbitingChallenge', '#HeyoBingaa'],
         isPublished: editingPost.isPublished !== false,
-        order: Number(editingPost.order || editingPost.postNumber || 1),
-        pledgesCount: editingPost.pledgesCount || 0
+        order: Number(editingPost.order || editingPost.postNumber || 1)
       };
 
       await saveChallengePostToFirestore(postToSave);
@@ -542,15 +527,11 @@ export default function AdminChallengesTab({
                           {post.title}
                         </h4>
 
-                        {post.quote && (
-                          <p className="text-xs text-[#556660] line-clamp-1 font-sans text-left" dir="ltr">
-                            <span className="font-bold text-[#1B6B52]">{post.quote.reference}:</span> {post.quote.translation}
+                        {post.content && (
+                          <p className="text-xs text-[#556660] line-clamp-2 font-sans text-left leading-relaxed" dir="ltr">
+                            {post.content}
                           </p>
                         )}
-
-                        <p className="text-xs text-[#8A4A32] line-clamp-1 italic font-sans text-left" dir="ltr">
-                          Commitment: "{post.commitmentText}"
-                        </p>
                       </div>
                     </div>
 
@@ -941,131 +922,23 @@ export default function AdminChallengesTab({
                 )}
               </div>
 
-              {/* Qur'anic Ayah / Hadith Box */}
-              <div className="p-4 rounded-2xl bg-[#F0F7F4] border border-[#C8E0D5] space-y-3">
-                <div className="flex items-center justify-between border-b border-[#C8E0D5] pb-2">
-                  <div className="inline-flex items-center gap-2 text-xs font-bold text-[#145541]">
-                    <BookOpen className="w-4 h-4 text-[#1B6B52]" />
-                    <span>އާޔަތް ނުވަތަ ޙަދީޘް ބަސްފުޅު (Ayah / Hadith Quote)</span>
-                  </div>
-                  <select
-                    value={editingPost.quote?.type || 'ayah'}
-                    onChange={(e) => setEditingPost({
-                      ...editingPost,
-                      quote: {
-                        type: e.target.value as 'ayah' | 'hadith',
-                        arabic: editingPost.quote?.arabic || '',
-                        translation: editingPost.quote?.translation || '',
-                        reference: editingPost.quote?.reference || ''
-                      }
-                    })}
-                    className="text-xs px-2.5 py-1 rounded-lg border border-[#C8E0D5] bg-white font-thaana"
-                  >
-                    <option value="ayah">ޤުރްއާނުގެ އާޔަތް (Ayah)</option>
-                    <option value="hadith">ޙަދީޘް ބަސްފުޅު (Hadith)</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-[#1C2622] block">
-                    ޢަރަބި ލަފްޒުތައް (Arabic Text)
-                  </label>
-                  <textarea
-                    dir="rtl"
-                    rows={2}
-                    value={editingPost.quote?.arabic || ''}
-                    onChange={(e) => setEditingPost({
-                      ...editingPost,
-                      quote: {
-                        type: editingPost.quote?.type || 'ayah',
-                        arabic: e.target.value,
-                        translation: editingPost.quote?.translation || '',
-                        reference: editingPost.quote?.reference || ''
-                      }
-                    })}
-                    placeholder="يَا أَيُّهَا الَّذِينَ آمَنُوا اجْتَنِبُوا كَثِيرًا مِّنَ الظَّنِّ..."
-                    className="w-full px-4 py-2 rounded-xl border border-[#C8E0D5] text-sm font-serif focus:border-[#1B6B52] outline-hidden bg-white text-right"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-[#1C2622] block">
-                      ތަރުޖަމާ (English Translation)
-                    </label>
-                    <textarea
-                      rows={3}
-                      dir="ltr"
-                      value={editingPost.quote?.translation || ''}
-                      onChange={(e) => setEditingPost({
-                        ...editingPost,
-                        quote: {
-                          type: editingPost.quote?.type || 'ayah',
-                          arabic: editingPost.quote?.arabic || '',
-                          translation: e.target.value,
-                          reference: editingPost.quote?.reference || ''
-                        }
-                      })}
-                      placeholder="“O you who have believed, avoid much [negative] assumption...”"
-                      className="w-full px-3 py-2 rounded-xl border border-[#C8E0D5] text-xs font-sans text-left focus:border-[#1B6B52] outline-hidden bg-white"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-[#1C2622] block">
-                      ޙަވާލާ (Reference Source)
-                    </label>
-                    <input
-                      type="text"
-                      dir="ltr"
-                      value={editingPost.quote?.reference || ''}
-                      onChange={(e) => setEditingPost({
-                        ...editingPost,
-                        quote: {
-                          type: editingPost.quote?.type || 'ayah',
-                          arabic: editingPost.quote?.arabic || '',
-                          translation: editingPost.quote?.translation || '',
-                          reference: e.target.value
-                        }
-                      })}
-                      placeholder="Qur'an (49:12)"
-                      className="w-full px-3 py-2 rounded-xl border border-[#C8E0D5] text-xs font-sans text-left focus:border-[#1B6B52] outline-hidden bg-white"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Accompanying Reflection Text Body (English LTR) */}
+              {/* Accompanying Post Content Text Body (English LTR) */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-[#1C2622] block">
-                  ޕޯސްޓްގެ މައިގަނޑު ލިޔުން (Reflection Content in English) *
+                  ޕޯސްޓްގެ ލިޔުން (Post Text / Caption in English) *
                 </label>
                 <textarea
                   required
-                  rows={6}
+                  rows={10}
                   dir="ltr"
                   value={editingPost.content || ''}
                   onChange={(e) => setEditingPost({ ...editingPost, content: e.target.value })}
                   placeholder="Assalamu Alaikum wa Rahmatullahi wa Barakatuh, dear sisters! 🤍..."
                   className="w-full px-4 py-3 rounded-xl border border-[#E2E9E5] text-xs sm:text-sm font-sans text-left leading-relaxed focus:border-[#1B6B52] outline-hidden"
                 />
-              </div>
-
-              {/* Daily Commitment Statement (English LTR) */}
-              <div className="p-4 rounded-2xl bg-[#FAF5F2] border border-[#ECDCD3] space-y-2">
-                <label className="text-xs font-bold text-[#8A4A32] flex items-center justify-between">
-                  <span>އަޅުގަނޑުމެންގެ ޢަޒުމް (Daily Commitment Statement) *</span>
-                  <span className="text-[11px] font-normal text-[#8A4A32]/70">English pledge</span>
-                </label>
-                <textarea
-                  required
-                  rows={2}
-                  dir="ltr"
-                  value={editingPost.commitmentText || ''}
-                  onChange={(e) => setEditingPost({ ...editingPost, commitmentText: e.target.value })}
-                  placeholder="“I will try my best to protect the honour of others, just as I would want them to protect mine.”"
-                  className="w-full px-3 py-2 rounded-xl border border-[#ECDCD3] text-xs sm:text-sm font-sans font-semibold text-[#3B251D] text-left focus:border-[#C26B4A] outline-hidden bg-white"
-                />
+                <p className="text-[11px] text-[#556660]">
+                  މުޅި ޕޯސްޓްގެ ލިޔުން (އާޔަތްތަކާއި، ނަޞޭޙަތާއި، ޢަޒުމާއި ހޭޝްޓެގް ހިމެނޭހެން) މިތަނުގައި ލިޔުއްވާ ނުވަތަ ޕޭސްޓްކުރައްވާ.
+                </p>
               </div>
 
               {/* Hashtags & Publish Status */}
